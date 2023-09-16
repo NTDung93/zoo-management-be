@@ -1,6 +1,4 @@
-﻿using API.Model.DTOs;
-using API.Model.Entities;
-using AutoMapper;
+﻿using AutoMapper;
 
 namespace API.Helpers
 {
@@ -8,7 +6,8 @@ namespace API.Helpers
     {
         public ApplicationMapper()
         {
-            CreateMap<Animal, AnimalDto>();
+            // mapping between entities stored in Models and Dtos
+            // using ReverseMap() to map both ways
         }
     }
 }

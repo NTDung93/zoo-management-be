@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj": {}
+    "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj": {}
   },
   "projects": {
-    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj": {
+    "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj",
+        "projectUniqueName": "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj",
-        "packagesPath": "C:\\Users\\dung\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\obj\\",
+        "projectPath": "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj",
+        "packagesPath": "C:\\Users\\vulon\\.nuget\\packages\\",
+        "outputPath": "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\vulon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,8 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -46,7 +44,7 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "AutoMapper": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[12.0.1, )"
             },
@@ -58,11 +56,21 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.2, )"
+              "version": "[7.0.10, )"
             },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[7.0.2, )"
+              "version": "[7.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.10, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -88,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
