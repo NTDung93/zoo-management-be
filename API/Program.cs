@@ -1,4 +1,8 @@
+using API.Controllers;
+using API.IRepositories;
 using API.Middleware;
+using API.Models;
+using API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,10 +16,12 @@ builder.Services.AddSwaggerGen();
 
 // Add the data context in the<>
 // remember to uncomment it
-//builder.Services.AddDbContext<>(options =>
-//{
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-//});
+builder.Services.AddDbContext<ElectricStoreDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<BuggyController>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
