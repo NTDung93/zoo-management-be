@@ -1,8 +1,8 @@
 using API.Controllers;
-using API.IRepositories;
-using API.Middleware;
+using API.Helpers;
 using API.Models;
 using API.Repositories;
+using API.Repositories.Impl;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,13 +16,13 @@ builder.Services.AddSwaggerGen();
 
 // Add the data context in the<>
 // remember to uncomment it
-builder.Services.AddDbContext<ElectricStoreDbContext>(options =>
+builder.Services.AddDbContext<ZooManagementContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<BuggyController>();
-builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
 
 var app = builder.Build();
 
