@@ -25,15 +25,15 @@ namespace API.Controllers
         [HttpGet("validation-error")]
         public ActionResult GetValidationError()
         {
-            ModelState.AddModelError("Problem 1", "This is the 1st error");
-            ModelState.AddModelError("Problem 2", "This is the 2nd error");
+            ModelState.AddModelError("Error 1", "Duplicate of ID!");
+            ModelState.AddModelError("Error 2", "Field is required!");
             return ValidationProblem();
         }
 
-        [HttpGet("server-error")]
-        public ActionResult GetServerError()
+        [HttpGet("unprocessable")]
+        public ActionResult GetUnprocessable()
         {
-            throw new Exception("This is a server error!");
+            return GetUnprocessable();
         }
     }
 }
