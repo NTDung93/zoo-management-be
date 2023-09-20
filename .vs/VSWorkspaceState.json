@@ -2,9 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\API",
-    "\\API\\Data",
-    "\\API\\Properties"
+    "\\API\\Controllers",
+    "\\API\\Dtos",
+    "\\API\\Helpers",
+    "\\API\\IRepositories",
+    "\\API\\Middleware",
+    "\\API\\Models",
+    "\\API\\Properties",
+    "\\API\\Repositories"
   ],
-  "SelectedNode": "\\API\\API.csproj",
+  "SelectedNode": "\\AmaZoo.sln",
   "PreviewInSolutionExplorer": false
 }

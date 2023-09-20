@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj": {}
+    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj": {}
   },
   "projects": {
-    "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj": {
+    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj",
+        "projectUniqueName": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj",
         "projectName": "API",
-        "projectPath": "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\API.csproj",
-        "packagesPath": "C:\\Users\\vulon\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT_SE\\v\\SWP_Backend\\zoo-management-be\\API\\obj\\",
+        "projectPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj",
+        "packagesPath": "C:\\Users\\dung\\.nuget\\packages\\",
+        "outputPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\vulon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dung\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -100,7 +102,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }
