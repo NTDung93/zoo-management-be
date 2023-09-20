@@ -3,7 +3,7 @@
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/electric-store")]
+    [Route("api/zoo-management")]
     public class BaseApiController : ControllerBase
     {
         // implemented this when creating a new controller

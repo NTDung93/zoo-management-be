@@ -3,14 +3,13 @@
     "",
     "\\API",
     "\\API\\Controllers",
-    "\\API\\Dtos",
     "\\API\\Helpers",
-    "\\API\\IRepositories",
-    "\\API\\Middleware",
     "\\API\\Models",
+    "\\API\\Models\\Dtos",
+    "\\API\\Models\\Entities",
     "\\API\\Properties",
-    "\\API\\Repositories"
+    "\\API\\Repositories",
+    "\\API\\Repositories\\Impl"
   ],
-  "SelectedNode": "\\AmaZoo.sln",
   "PreviewInSolutionExplorer": false
 }
