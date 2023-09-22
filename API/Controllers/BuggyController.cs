@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace API.Controllers
 {
     public class BuggyController : BaseApiController
     {
         [HttpGet("not-found")]
-        public ActionResult GetNotFound()
+        public ActionResult GetNotFound(string message)
         {
-            return NotFound();
+            return NotFound(message);
         }
 
         [HttpGet("bad-request")]
-        public ActionResult GetBadRequest()
+        public ActionResult GetBadRequest(string message)
         {
-            return BadRequest(new ProblemDetails { Title = "This is a bad request!"});
+            return BadRequest(new ProblemDetails { Title = message});
         }
 
         [HttpGet("unauthorized")]
@@ -23,10 +24,9 @@ namespace API.Controllers
         }
 
         [HttpGet("validation-error")]
-        public ActionResult GetValidationError()
+        public ActionResult GetValidationError(string message)
         {
-            ModelState.AddModelError("Error 1", "Duplicate of ID!");
-            ModelState.AddModelError("Error 2", "Field is required!");
+            ModelState.AddModelError("", message);
             return ValidationProblem();
         }
 
