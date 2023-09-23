@@ -11,6 +11,8 @@ namespace API.Helpers
             // mapping between entities stored in Models and Dtos
             // using ReverseMap() to map both ways
             CreateMap<Animal, AnimalDto>().ReverseMap();
+            CreateMap<Area, AreaDto>().ReverseMap();
+            CreateMap<Cage, CageDto>().ReverseMap();
         }
     }
 }

@@ -38,18 +38,18 @@ namespace API.Controllers
         }
 
         // GET: api/Animals/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Animal>> GetAnimal(string id)
-        //{
-        //    var animal = await _context.Animals.FindAsync(id);
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AnimalDto>> GetAnimal(string id)
+        {
+            var animal = await _animalRepo.GetAnimalById(id);
 
-        //    if (animal == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return animal;
-        //}
+            if (animal == null)
+            {
+                return NotFound();
+            }
+            var animalDto = _mapper.Map<AnimalDto>(animal);
+            return animalDto;
+        }
 
         // PUT: api/Animals/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

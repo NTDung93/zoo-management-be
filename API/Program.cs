@@ -23,6 +23,8 @@ builder.Services.AddDbContext<ZooManagementContext>(options =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<BuggyController>();
 builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
+builder.Services.AddScoped<IAreasRepository, AreasRepository>();
+builder.Services.AddScoped<ICagesRepository, CagesRepository>();
 
 var app = builder.Build();
 

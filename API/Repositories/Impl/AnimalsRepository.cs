@@ -17,5 +17,10 @@ namespace API.Repositories.Impl
         {
             return await _context.Animals.OrderBy(a => a.Id).ToListAsync();
         }
+
+        public async Task<Animal> GetAnimalById(String id)
+        {
+            return await _context.Animals.FindAsync(id);
+        }
     }
 }
