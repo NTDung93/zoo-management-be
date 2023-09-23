@@ -8,9 +8,8 @@ namespace API.Helpers
     {
         public ApplicationMapper()
         {
-            // mapping between entities stored in Models and Dtos
-            // using ReverseMap() to map both ways
             CreateMap<Animal, AnimalDto>().ReverseMap();
+            CreateMap<News, NewsDto>().ReverseMap();
         }
     }
 }

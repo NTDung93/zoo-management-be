@@ -32,7 +32,7 @@ namespace API.Controllers
         {
             var animals = await _animalRepo.GetAnimals();
             if (!ModelState.IsValid)
-                return _buggy.GetBadRequest();
+                return BadRequest(ModelState);
             var animaslDto = _mapper.Map<IEnumerable<AnimalDto>>(animals);
             return Ok(animaslDto);
         }

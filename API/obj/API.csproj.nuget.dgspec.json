@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj": {}
+    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj": {}
   },
   "projects": {
-    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj": {
+    "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj",
+        "projectUniqueName": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj",
+        "projectPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj",
         "packagesPath": "C:\\Users\\dung\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\obj\\",
+        "outputPath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

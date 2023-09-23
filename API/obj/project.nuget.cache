@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JxSzadakvKIxWRjkJJDXZlh71qMrUUeXn8UrOaOqIywrEVpaM5QAtKoQ5JEcXp+9ZFSf3ASQRVMGefohmp8fDQ==",
+  "dgSpecHash": "/BKdZRjzoksWCz3upENaUHgKf4o58knQZhDkPu3D6wV4XZLS+CXKdpQecjhlL8zSWluxH2wDONHD+7QVdpajFA==",
   "success": true,
-  "projectFilePath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\api\\API.csproj",
+  "projectFilePath": "D:\\FPT\\Half_05\\SWP391\\zoo-management\\zoo-management-be\\API\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dung\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\dung\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
