@@ -27,21 +27,19 @@ namespace API.Controllers
             _buggy = buggy;
         }
 
-        // POST: api/News
         [HttpPost("post-news")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<NewsDto>> PostNews([FromBody]NewsDto newsDto)
+        public async Task<ActionResult<NewsDto>> PostNews([FromBody] NewsDto newsDto)
         {
             var news = _mapper.Map<News>(newsDto);
             await _newsRepo.CreateNews(news);
+            var listNews = await _newsRepo.GetNews();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return CreatedAtRoute("GetNews", new { id = news.Id }, news);
-            //return Ok(_mapper.Map<NewsDto>(news));
+            return CreatedAtRoute("GetNews", _mapper.Map<IEnumerable<NewsDto>>(listNews));
         }
 
-        // GET: api/News
-        [HttpGet("load-news")]
+        [HttpGet("load-news", Name = "GetNews")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<NewsDto>>> GetNews()
         {
@@ -52,82 +50,81 @@ namespace API.Controllers
             return Ok(newsDto);
         }
 
-        //enpoint to search news by title
         [HttpGet("search")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<NewsDto>>> SearchNewsByTitle([FromQuery] string title)
         {
             var news = await _newsRepo.SearchNewsByTitle(title);
+            if (!news.Any())
+            {
+                return NotFound();
+            }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var newsDto = _mapper.Map<IEnumerable<NewsDto>>(news);
             return Ok(newsDto);
         }
 
-        // DELETE: api/News/5
-        [HttpDelete("delete")]
-        [ProducesResponseType(200)]
-        public async Task DeleteNews([FromQuery]int id)
+        [HttpGet("get-news")]
+        public async Task<ActionResult<NewsDto>> GetNews([FromQuery] int id)
         {
-            await _newsRepo.DeleteNews(id);
+            var news = await _newsRepo.GetNewsById(id);
             if (!ModelState.IsValid)
-                BadRequest(ModelState);
+                return BadRequest(ModelState);
+            if (news == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var newsDto = _mapper.Map<NewsDto>(news);
+                return Ok(newsDto);
+            }
         }
 
+        [HttpPut("update")]
+        public async Task<IActionResult> PutNews([FromQuery] int id, [FromBody] NewsDto newsDto)
+        {
+            if (id != newsDto.Id || newsDto == null)
+            {
+                return BadRequest("Invalid news data or mismatched IDs.");
+            }
 
+            var currentNews = await _newsRepo.GetNewsById(id);
 
-        //// GET: api/News/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<News>> GetNews(int id)
-        //{
-        //    var news = await _context.News.FindAsync(id);
+            if (currentNews == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    await _newsRepo.UpdateNews(id, newsDto);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
 
-        //    if (news == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Ok("Update news successfully.");
+        }
 
-        //    return news;
-        //}
-
-        //// PUT: api/News/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutNews(int id, News news)
-        //{
-        //    if (id != news.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(news).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!NewsExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-
-
-
-
-        //private bool NewsExists(int id)
-        //{
-        //    return _context.News.Any(e => e.Id == id);
-        //}
+        [HttpDelete("delete")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> DeleteNews([FromQuery] int id)
+        {
+            var news = await _newsRepo.GetNewsById(id);
+            if (news == null)
+            {
+                return BadRequest(new ProblemDetails { Title = "News not found!"});
+            }
+            await _newsRepo.DeleteNews(id);
+            var listNews = await _newsRepo.GetNews();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return CreatedAtRoute("GetNews", _mapper.Map<IEnumerable<NewsDto>>(listNews));
+        }
     }
 }

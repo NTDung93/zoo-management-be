@@ -9,5 +9,6 @@ namespace API.Repositories
         Task<News> GetNewsById(int id);
         Task DeleteNews(int id);
         Task CreateNews(News news);
+        Task UpdateNews(int id, NewsDto newsDto);
     }
 }

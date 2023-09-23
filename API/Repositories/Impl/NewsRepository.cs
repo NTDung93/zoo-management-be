@@ -39,5 +39,18 @@ namespace API.Repositories.Impl
         {
             return await _context.News.Where(a => a.Title.ToLower().Contains(title.Trim().ToLower())).ToListAsync();
         }
+
+        public async Task UpdateNews(int id, NewsDto newsDto)
+        {
+            var currentNews = GetNewsById(id);
+            currentNews.Result.Title = newsDto.Title;
+            currentNews.Result.Content = newsDto.Content;
+            currentNews.Result.Image = newsDto.Image;
+            currentNews.Result.WritingDate = newsDto.WritingDate;
+            currentNews.Result.SpeciesId = newsDto.SpeciesId;
+            currentNews.Result.AnimalId = newsDto.AnimalId;
+            currentNews.Result.EmpId = newsDto.EmpId;
+            await _context.SaveChangesAsync();
+        }
     }
 }
