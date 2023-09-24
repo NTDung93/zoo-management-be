@@ -407,3 +407,18 @@ FodyWeavers.xsd
 /.vs/
 /API/obj/
 
+/.vs/AmaZoo/DesignTimeBuild/.dtbcache.v2
+/.vs/AmaZoo/v17/.futdcache.v2
+/.vs/AmaZoo/v17/.suo
+/.vs/ProjectEvaluation/amazoo.metadata.v7.bin
+/.vs/ProjectEvaluation/amazoo.projects.v7.bin
+/.vs/slnx.sqlite
+/.vs/zoo-management-be/v17/.wsuo
+/API/bin/Debug/net7.0/API.dll
+/API/bin/Debug/net7.0/API.pdb
+/API/obj/Debug/net7.0/API.csproj.CoreCompileInputs.cache
+/API/obj/Debug/net7.0/API.dll
+/API/obj/Debug/net7.0/API.MvcApplicationPartsAssemblyInfo.cs
+/API/obj/Debug/net7.0/API.pdb
+/API/obj/Debug/net7.0/ref/API.dll
+/API/obj/Debug/net7.0/refint/API.dll
