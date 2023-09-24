@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace API.Models.Entities;
 
@@ -24,7 +25,7 @@ public partial class Animal
     public string Rarity { get; set; }
 
     public byte? IsDeleted { get; set; }
-
+    
     public string EmpId { get; set; }
 
     public string CageId { get; set; }
