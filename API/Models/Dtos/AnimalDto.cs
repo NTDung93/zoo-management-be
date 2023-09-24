@@ -22,7 +22,7 @@
 
         public byte? IsDeleted { get; set; }
 
-        public string EmpId { get; set; }
+        public string EmpId { get; set; } = null;
 
         public string CageId { get; set; }
     }

@@ -9,6 +9,7 @@ using API.Models;
 using AutoMapper;
 using API.Repositories;
 using API.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -16,40 +17,40 @@ namespace API.Controllers
     {
         private readonly IAnimalsRepository _animalRepo;
         private readonly IMapper _mapper;
-        private readonly BuggyController _buggy;
+        //private readonly BuggyController _buggy;
 
-        public AnimalsController(IAnimalsRepository animalRepo, IMapper mapper, BuggyController buggy)
+        public AnimalsController(IAnimalsRepository animalRepo, IMapper mapper)
         {
             _animalRepo = animalRepo;
             _mapper = mapper;
-            _buggy = buggy;
         }
 
         // GET: api/Animals
         [HttpGet("animals")]
         [ProducesResponseType(200)]
+        //[Authorize(Roles = "Trainer")]
         public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAnimals()
         {
             var animals = await _animalRepo.GetAnimals();
             if (!ModelState.IsValid)
-                return _buggy.GetBadRequest();
+                return BadRequest();
             var animaslDto = _mapper.Map<IEnumerable<AnimalDto>>(animals);
             return Ok(animaslDto);
         }
 
         // GET: api/Animals/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Animal>> GetAnimal(string id)
-        //{
-        //    var animal = await _context.Animals.FindAsync(id);
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AnimalDto>> GetAnimal(string id)
+        {
+            var animal = await _animalRepo.GetAnimalById(id);
 
-        //    if (animal == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return animal;
-        //}
+            if (animal == null)
+            {
+                return NotFound();
+            }
+            var animalDto = _mapper.Map<AnimalDto>(animal);
+            return animalDto;
+        }
 
         // PUT: api/Animals/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
