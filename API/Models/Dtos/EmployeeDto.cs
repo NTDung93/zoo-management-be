@@ -18,6 +18,6 @@
 
         public string Role { get; set; }
 
-        //public byte? IsDeleted { get; set; }
+        public byte? IsDeleted { get; set; }
     }
 }

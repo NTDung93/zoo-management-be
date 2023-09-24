@@ -28,7 +28,7 @@ namespace API.Controllers
         // GET: api/Animals
         [HttpGet("animals")]
         [ProducesResponseType(200)]
-        [Authorize(Roles = "Trainer")]
+        //[Authorize(Roles = "Trainer")]
         public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAnimals()
         {
             var animals = await _animalRepo.GetAnimals();
