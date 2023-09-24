@@ -10,6 +10,8 @@ namespace API.Helpers
         public ApplicationMapper()
         {
             CreateMap<Animal, AnimalDto>().ReverseMap();
+            CreateMap<Area, AreaDto>().ReverseMap();
+            CreateMap<Cage, CageDto>().ReverseMap();
             CreateMap<News, NewsDto>().ReverseMap();
             CreateMap<Employee, EmployeeDto>().ReverseMap();
             CreateMap<AnimalSpecy, AnimalSpeciesDto>().ReverseMap();
