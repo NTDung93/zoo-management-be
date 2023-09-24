@@ -430,7 +430,6 @@ FodyWeavers.xsd
 /API/appsettings.json
 /API/bin/Debug/net7.0/API.dll
 /API/bin/Debug/net7.0/API.pdb
-/API/bin/Debug/net7.0/appsettings.json
 /API/obj/API.csproj.nuget.dgspec.json
 /API/obj/API.csproj.nuget.g.props
 /API/obj/Debug/net7.0/API.assets.cache
