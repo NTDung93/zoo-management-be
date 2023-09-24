@@ -18,6 +18,11 @@ namespace API.Repositories.Impl
             return await _context.Animals.FindAsync(id);
         }
 
+        public Task<Animal> GetAnimalById(string id)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<IEnumerable<Animal>> GetAnimals()
         {
             return await _context.Animals.OrderBy(a => a.Id).ToListAsync();
