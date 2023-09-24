@@ -94,17 +94,21 @@ namespace API.Controllers
             {
                 return BadRequest(new ProblemDetails { Title = "CageId have a format [A-Z]{xxxx}!" });
             } 
-            else if (areas.SingleOrDefault(area => area.Id.Equals(tmp)) == null)
+            else if (areas.SingleOrDefault(area => area.Id.Equals(tmp.ToString())) == null)
             {
                 return BadRequest(new ProblemDetails { Title = $"{tmp} in {cageDto.Id} is not exist in ListAreaId" });
             }
             else if (cageDto.Id.Trim().Length == 0 || cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0) 
             { 
                 return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
-            } 
-            else if (cageDto.MaxCapacity < 0 || cageDto.MaxCapacity > 10)
+            }
+            else if (tmp.ToString().Equals(cageDto.AreaId))
             {
-                return BadRequest(new ProblemDetails { Title = "Capacity greater than 10!" });
+                return BadRequest(new ProblemDetails { Title = "CageId is not match AreaId!" });
+            }
+            else if (cageDto.MaxCapacity < 0)
+            {
+                return BadRequest(new ProblemDetails { Title = "Capacity greater than 0!" });
             }
             else if (cagebyId != null)
             {
@@ -130,13 +134,13 @@ namespace API.Controllers
         {
             var areas = await _areasRepo.GetListArea();
             var currCage = await _cagesRepo.GetCageById(cageId);
-            if (cageDto.Id.Trim().Length == 0 || cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0)
+            if (cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0)
             {
                 return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
             }
-            else if (cageDto.MaxCapacity < 0 || cageDto.MaxCapacity > 10)
+            else if (cageDto.MaxCapacity < 0)
             {
-                return BadRequest(new ProblemDetails { Title = "Capacity greater than 10!" });
+                return BadRequest(new ProblemDetails { Title = "Capacity greater than 0!" });
             }
             else if (areas.SingleOrDefault(area => area.Id.Equals(cageDto.AreaId)) == null)
             {
