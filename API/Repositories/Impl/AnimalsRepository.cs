@@ -2,6 +2,7 @@
 using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 
 namespace API.Repositories.Impl
 {
@@ -16,12 +17,12 @@ namespace API.Repositories.Impl
 
         public async Task<Animal> GetAnimalById(string id)
         {
-            return await _context.Animals.FindAsync(id);
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Emp).SingleAsync(animal => animal.Id.Equals(id.Trim()));
         }
 
         public async Task<IEnumerable<Animal>> GetAnimals()
         {
-            return await _context.Animals.OrderBy(a => a.Id).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Emp).OrderBy(a => a.Id).ToListAsync();
         }
 
         public async Task<bool> HasAnimal(string id)
@@ -30,7 +31,7 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Animal>> SearchAnimalsByName(string animalName)
         {
-            return await _context.Animals.Where(animal => animal.Name.ToLower().Contains(animalName.Trim().ToLower())).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Emp).Where(animal => animal.Name.ToLower().Contains(animalName.Trim().ToLower())).ToListAsync();
         }
         public async Task DeleteAnimal(string animalId)
         {

@@ -1,4 +1,6 @@
-﻿namespace API.Models.Dtos
+﻿using API.Models.Entities;
+
+namespace API.Models.Dtos
 {
     public class CageDto
     {
@@ -9,5 +11,8 @@
         public int? MaxCapacity { get; set; }
 
         public string AreaId { get; set; }
+        public virtual AreaDto Area { get; set; }
+
+
     }
 }
