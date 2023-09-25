@@ -32,7 +32,7 @@ namespace API.Controllers
             return Ok(cagesDto);
         }
 
-        [HttpGet("load-cages-by-areaId")]
+        [HttpGet("cages-by-id")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<CageDto>>> GetCagesByAreaId([FromQuery] string areaId)
         {

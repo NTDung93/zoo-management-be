@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,14 +14,9 @@ namespace API.Repositories.Impl
             _context = context;
         }
 
-        public async Task<Animal> GetAnimal(string id)
+        public async Task<Animal> GetAnimalById(string id)
         {
             return await _context.Animals.FindAsync(id);
-        }
-
-        public Task<Animal> GetAnimalById(string id)
-        {
-            throw new System.NotImplementedException();
         }
 
         public async Task<IEnumerable<Animal>> GetAnimals()
@@ -31,6 +27,38 @@ namespace API.Repositories.Impl
         public async Task<bool> HasAnimal(string id)
         {
             return await _context.Animals.AnyAsync(a => a.Id.Trim().Equals(id));
+        }
+        public async Task<IEnumerable<Animal>> SearchAnimalsByName(string animalName)
+        {
+            return await _context.Animals.Where(animal => animal.Name.ToLower().Contains(animalName.Trim().ToLower())).ToListAsync();
+        }
+        public async Task DeleteAnimal(string animalId)
+        {
+            var currAnimal = GetAnimalById(animalId);
+            _context.Animals.Remove(currAnimal.Result);
+            await _context.SaveChangesAsync();
+        }
+        public async Task CreateNewAnimal(Animal animal)
+        {
+            await _context.Animals.AddAsync(animal);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAnimal(string animalId, AnimalDto animalDto)
+        {
+            var currAnimal = GetAnimalById(animalId);
+            currAnimal.Result.Name = animalDto.Name;
+            currAnimal.Result.Region = animalDto.Region;
+            currAnimal.Result.Behavior = animalDto.Behavior;
+            currAnimal.Result.Gender = animalDto.Gender;
+            currAnimal.Result.BirthDate = animalDto.BirthDate;
+            currAnimal.Result.Image = animalDto.Image;
+            currAnimal.Result.HealthStatus = animalDto.HealthStatus;
+            currAnimal.Result.Rarity = animalDto.Rarity;
+            currAnimal.Result.IsDeleted = animalDto.IsDeleted;
+            currAnimal.Result.EmpId = animalDto.EmpId;
+            currAnimal.Result.CageId = animalDto.CageId;
+            await _context.SaveChangesAsync();
         }
     }
 }
