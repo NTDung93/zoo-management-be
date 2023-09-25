@@ -27,17 +27,17 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<News>> GetNews()
         {
-            return await _context.News.OrderBy(a => a.Id).ToListAsync();
+            return await _context.News.Include(x=>x.Animal).Include(y=>y.Emp).Include(z=>z.Species).OrderBy(a => a.Id).ToListAsync();
         }
 
         public async Task<News> GetNewsById(int id)
         {
-            return await _context.News.FirstOrDefaultAsync(a => a.Id == id);
+            return await _context.News.Include(x => x.Animal).Include(y => y.Emp).Include(z => z.Species).FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<IEnumerable<News>> SearchNewsByTitle(string title)
         {
-            return await _context.News.Where(a => a.Title.ToLower().Contains(title.Trim().ToLower())).ToListAsync();
+            return await _context.News.Include(x => x.Animal).Include(y => y.Emp).Include(z => z.Species).Where(a => a.Title.ToLower().Contains(title.Trim().ToLower())).ToListAsync();
         }
 
         public async Task UpdateNews(int id, NewsDto newsDto)
