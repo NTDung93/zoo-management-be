@@ -12,6 +12,7 @@
 
         public const string EMPLOYEE_ID_FORMAT = @"^E\d{3}$";
         public const string PHONE_NUMBER_FORMAT = @"^\d{10,12}$";
-
+        public const string CITIZEN_ID_FORMAT = @"^\d{9,13}$";
+        
     }
 }

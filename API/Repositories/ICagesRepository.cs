@@ -13,5 +13,6 @@ namespace API.Repositories
         Task DeleteCage(string cageId);
         Task CreateNewCage(Cage cage);
         Task UpdateCage(string cageId, CageDto cageDto);
+        Task<bool> HasCage(string cageId);
     }
 }

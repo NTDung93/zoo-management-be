@@ -1,5 +1,6 @@
 using API.Controllers;
 using API.Helpers;
+using API.Helpers.Token;
 using API.Models;
 using API.Repositories;
 using API.Repositories.Impl;
@@ -23,11 +24,6 @@ builder.Services.AddDbContext<ZooManagementContext>(options =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<BuggyController>();
 
-// For Identity
-// Can be used later
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ZooManagementContext>()
-//    .AddDefaultTokenProviders();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -50,6 +46,8 @@ builder.Services.AddScoped<ICagesRepository, CagesRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+
+builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 
 var app = builder.Build();
 
