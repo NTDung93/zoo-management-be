@@ -153,7 +153,7 @@ namespace API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var animal = await _animalsRepo.GetAnimal(animalId);
+            var animal = await _animalsRepo.GetAnimalById(animalId);
             
             if (!await _employeeRepo.AssignTrainerWithAnimal(trainerId, animal))
                 return UnprocessableEntity("An error occurs while assigning!");

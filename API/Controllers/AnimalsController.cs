@@ -10,6 +10,8 @@ using AutoMapper;
 using API.Repositories;
 using API.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using API.Models.Entities;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
@@ -26,7 +28,7 @@ namespace API.Controllers
         }
 
         // GET: api/Animals
-        [HttpGet("animals")]
+        [HttpGet("animals", Name = "GetAnimals")]
         [ProducesResponseType(200)]
         //[Authorize(Roles = "Trainer")]
         public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAnimals()
@@ -39,7 +41,7 @@ namespace API.Controllers
         }
 
         // GET: api/Animals/5
-        [HttpGet("{id}")]
+        [HttpGet("animal")]
         public async Task<ActionResult<AnimalDto>> GetAnimal(string id)
         {
             var animal = await _animalRepo.GetAnimalById(id);
@@ -52,81 +54,96 @@ namespace API.Controllers
             return animalDto;
         }
 
-        // PUT: api/Animals/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutAnimal(string id, Animal animal)
-        //{
-        //    if (id != animal.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpGet("search-animals")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<AnimalDto>>> SearchAnimalsByName([FromQuery] string animalName)
+        {
+            if (animalName.Trim().Length == 0)
+            {
+                return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
+            }
+            else
+            {
+                var animals = await _animalRepo.SearchAnimalsByName(animalName.Trim());
+                if (!animals.Any())
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var animalsDto = _mapper.Map<IEnumerable<AnimalDto>>(animals);
+                    return Ok(animalsDto);
+                }
+            }
+        }
 
-        //    _context.Entry(animal).State = EntityState.Modified;
+        [HttpDelete("delete-animal")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<AnimalDto>> DeleteAnimal([FromQuery] string animalId)
+        {
+            var currAnimal = await _animalRepo.GetAnimalById(animalId);
+            if (currAnimal != null)
+            {
+                await _animalRepo.DeleteAnimal(animalId);
+                var animals = await _animalRepo.GetAnimals();
+                var animalsDto = _mapper.Map<IEnumerable<AnimalDto>>(animals);
+                if (!ModelState.IsValid)
+                    BadRequest(ModelState);
+                return CreatedAtRoute("GetAnimals", animalsDto);
+            }
+            return NotFound();
+        }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!AnimalExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        [HttpPost("create-animal")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<AnimalDto>> CreateNewAnimals([FromBody] AnimalDto animalDto)
+        {
+            var animals = await _animalRepo.GetAnimals();
+            var id = animals.OrderByDescending(a => a.Id).First();
+            if (animalDto.Name.Trim().Length == 0 || animalDto.Region.Trim().Length == 0 || animalDto.Behavior.Length == 0)
+            {
+                return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
+            }
+            else
+            {
+                var animal = new Animal 
+                { 
+                    Id = (int.Parse(id.Id) + 1).ToString(),
+                    Name = animalDto.Name,
+                    Region = animalDto.Region,
+                    Behavior = animalDto.Behavior,
+                    Gender = animalDto.Gender,
+                    BirthDate = animalDto.BirthDate,
+                    Image = animalDto.Image,
+                    HealthStatus = animalDto.HealthStatus,
+                    Rarity = animalDto.Rarity,
+                    IsDeleted = animalDto.IsDeleted,
+                    EmpId = animalDto.EmpId,
+                    CageId = animalDto.CageId,
+                };
+                await _animalRepo.CreateNewAnimal(animal);
+                animals = await _animalRepo.GetAnimals();
+                var animalsDto = _mapper.Map<IEnumerable<AnimalDto>>(animals);
+                return CreatedAtRoute("GetAnimals", animalsDto);
+            }
+        }
 
-        //    return NoContent();
-        //}
-
-        // POST: api/Animals
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Animal>> PostAnimal(Animal animal)
-        //{
-        //    _context.Animals.Add(animal);
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (AnimalExists(animal.Id))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return CreatedAtAction("GetAnimal", new { id = animal.Id }, animal);
-        //}
-
-        // DELETE: api/Animals/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteAnimal(string id)
-        //{
-        //    var animal = await _context.Animals.FindAsync(id);
-        //    if (animal == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Animals.Remove(animal);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool AnimalExists(string id)
-        //{
-        //    return _context.Animals.Any(e => e.Id == id);
-        //}
+        [HttpPut("update-animal")]
+        [ProducesResponseType(204)]
+        public async Task<IActionResult> UpdateAnimal([FromQuery] string animalId, [FromBody] AnimalDto animalDto)
+        {
+            var areas = await _animalRepo.GetAnimals();
+            var currAnimal = await _animalRepo.GetAnimalById(animalId);
+            if (animalDto.Name.Trim().Length == 0 || animalDto.Region.Trim().Length == 0 || animalDto.Behavior.Length == 0)
+            {
+                return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
+            }
+            else if (currAnimal != null)
+            {
+                await _animalRepo.UpdateAnimal(animalId, animalDto);
+                return Ok("Update Animal Success!");
+            }
+            return NotFound();
+        }
     }
 }
