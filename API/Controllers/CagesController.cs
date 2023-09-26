@@ -102,7 +102,7 @@ namespace API.Controllers
             { 
                 return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
             }
-            else if (tmp.ToString().Equals(cageDto.AreaId))
+            else if (!tmp.ToString().Equals(cageDto.AreaId))
             {
                 return BadRequest(new ProblemDetails { Title = "CageId is not match AreaId!" });
             }
@@ -134,6 +134,8 @@ namespace API.Controllers
         {
             var areas = await _areasRepo.GetListArea();
             var currCage = await _cagesRepo.GetCageById(cageId);
+            char tmp = cageDto.Id.Substring(0, 1)[0];
+
             if (cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0)
             {
                 return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
@@ -141,6 +143,10 @@ namespace API.Controllers
             else if (cageDto.MaxCapacity < 0)
             {
                 return BadRequest(new ProblemDetails { Title = "Capacity greater than 0!" });
+            }
+            else if (!tmp.ToString().Equals(cageDto.AreaId))
+            {
+                return BadRequest(new ProblemDetails { Title = "CageId is not match AreaId!" });
             }
             else if (areas.SingleOrDefault(area => area.Id.Equals(cageDto.AreaId)) == null)
             {
