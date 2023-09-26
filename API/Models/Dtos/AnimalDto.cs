@@ -1,4 +1,6 @@
-﻿namespace API.Models.Dtos
+﻿using API.Models.Entities;
+
+namespace API.Models.Dtos
 {
     public class AnimalDto
     {
@@ -25,5 +27,9 @@
         public string EmpId { get; set; } = null;
 
         public string CageId { get; set; }
+
+        public virtual CageDto Cage { get; set; }
+
+        public virtual EmployeeDto Emp { get; set; }
     }
 }
