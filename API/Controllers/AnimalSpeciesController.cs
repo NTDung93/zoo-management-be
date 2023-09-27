@@ -81,9 +81,7 @@ namespace API.Controllers
             var speciesDto = _mapper.Map<IEnumerable<AnimalSpeciesDto>>(species);
             return Ok(speciesDto);
         }
-
-        // PUT: api/AnimalSpecies/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPut("species/resource-id")]
         public async Task<IActionResult> UpdateSpecies([FromBody] AnimalSpeciesDto species)
         {
