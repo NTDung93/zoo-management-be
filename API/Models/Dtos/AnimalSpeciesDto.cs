@@ -10,8 +10,6 @@ namespace API.Models.Dtos
 
         public string CageId { get; set; }
 
-        public virtual Cage Cage { get; set; }
-
-        public virtual ICollection<News> News { get; set; } = new List<News>();
+        public virtual CageDto Cage { get; set; }
     }
 }
