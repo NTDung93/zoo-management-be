@@ -20,6 +20,8 @@ builder.Services.AddDbContext<ZooManagementContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
+builder.Services.AddCors();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<BuggyController>();
 
@@ -63,6 +65,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication(); // added before UseAuthorization()
+
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173");
+});
+
 app.UseAuthorization();
 
 app.MapControllers();

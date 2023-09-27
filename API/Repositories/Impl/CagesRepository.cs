@@ -16,19 +16,19 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Cage>> GetListCage()
         {
-            return await _context.Cages.OrderBy(a => a.Id).ToListAsync();
+            return await _context.Cages.Include(x => x.Area).OrderBy(a => a.Id).ToListAsync();
         }
         public async Task<IEnumerable<Cage>> GetListCageByAreaId(string areaId)
         {
-            return await _context.Cages.OrderBy(a => a.Id).Where(cage => cage.AreaId.Equals(areaId)).ToListAsync();
+            return await _context.Cages.Include(x => x.Area).OrderBy(a => a.Id).Where(cage => cage.AreaId.Equals(areaId)).ToListAsync();
         }
         public async Task<IEnumerable<Cage>> SearchCageByName(string cageName)
         {
-            return await _context.Cages.Where(cage => cage.Name.ToLower().Contains(cageName.Trim().ToLower())).ToListAsync();
+            return await _context.Cages.Include(x => x.Area).Where(cage => cage.Name.ToLower().Contains(cageName.Trim().ToLower())).ToListAsync();
         }
         public async Task<Cage> GetCageById(string cageId)
         {
-            return await _context.Cages.SingleOrDefaultAsync(cage => cage.Id.ToLower().Equals(cageId.Trim().ToLower()));
+            return await _context.Cages.Include(x => x.Area).SingleOrDefaultAsync(cage => cage.Id.ToLower().Equals(cageId.Trim().ToLower()));
         }
         public async Task DeleteCage(string cageId)
         {
