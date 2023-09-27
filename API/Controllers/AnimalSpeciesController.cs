@@ -22,7 +22,7 @@ namespace API.Controllers
             _cagesRepo = cagesRepo;
         }
         
-        [HttpGet("species")]
+        [HttpGet("species", Name = "GetSpecies")]
         [ProducesResponseType(200)]
         //[Authorize(Roles = "Trainer")]
         public async Task<ActionResult<IEnumerable<AnimalSpeciesDto>>> GetSpecies()
@@ -33,21 +33,7 @@ namespace API.Controllers
             var speciesDto = _mapper.Map<IEnumerable<AnimalSpeciesDto>>(species);
             return Ok(speciesDto);
         }
-
-        //[HttpGet("animal-species/{id}")]
-        //[ProducesResponseType(200)]
-        //[Authorize(Roles = "Trainer")]
-        //public async Task<ActionResult<AnimalSpeciesDto>> GetAnimalSpecies(int id)
-        //{
-        //    if (!await _speciesRepository.HasSpecies(id))
-        //        return NotFound("Species not found!");
-        //    var species = await _speciesRepository.GetSpeciesById(id);
-        //    if (!ModelState.IsValid) 
-        //        return BadRequest();
-        //    var speciesDto = _mapper.Map<AnimalSpeciesDto>(species);
-        //    return Ok(speciesDto);
-        //}
-
+        
         [HttpGet("species/species-name")]
         [ProducesResponseType(200)]
         //[Authorize(Roles = "Trainer")]
@@ -112,7 +98,10 @@ namespace API.Controllers
             var species = _mapper.Map<AnimalSpecy>(speciesDto);
             if (!await _speciesRepository.CreateAnimalSpecies(species))
                 return UnprocessableEntity("An error occurs while creating!");
-            return CreatedAtAction("GetSpecies", new { id = species.Id }, species);
+            
+            var listSpecies = await _speciesRepository.GetSpecies();
+
+            return CreatedAtRoute("GetSpecies", _mapper.Map<IEnumerable<AnimalSpeciesDto>>(listSpecies));
         }
 
         [HttpDelete("species/resource-id")]
