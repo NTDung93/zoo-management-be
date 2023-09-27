@@ -46,6 +46,10 @@ namespace API.Controllers
             var news = await _newsRepo.GetNews();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            if (!news.Any())
+            {
+                return NotFound();
+            }
             var newsDto = _mapper.Map<IEnumerable<NewsDto>>(news);
             return Ok(newsDto);
         }
