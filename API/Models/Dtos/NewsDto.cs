@@ -1,4 +1,6 @@
-﻿using System;
+﻿using API.Models.Dtos;
+using API.Models.Entities;
+using System;
 
 public class NewsDto
 {
@@ -17,4 +19,10 @@ public class NewsDto
     public int SpeciesId { get; set; }
 
     public string AnimalId { get; set; }
+
+    public virtual AnimalDto? Animal { get; set; }
+
+    public virtual EmployeeDto? Emp { get; set; }
+
+    public virtual AnimalSpeciesDto? Species { get; set; }
 }

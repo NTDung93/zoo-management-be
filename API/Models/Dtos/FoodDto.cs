@@ -2,14 +2,10 @@
 
 namespace API.Models.Dtos
 {
-    public class AnimalSpeciesDto
+    public class FoodDto
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        public string CageId { get; set; }
-
-        public virtual CageDto Cage { get; set; }
     }
 }
