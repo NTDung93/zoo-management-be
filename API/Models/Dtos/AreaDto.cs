@@ -1,4 +1,6 @@
-﻿namespace API.Models.Dtos
+﻿using API.Models.Entities;
+
+namespace API.Models.Dtos
 {
     public class AreaDto
     {

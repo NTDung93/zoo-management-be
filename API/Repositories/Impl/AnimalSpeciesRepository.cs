@@ -30,12 +30,17 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpecies()
         {
-            return await _context.AnimalSpecies.OrderBy(ap => ap.Name).ToListAsync();
+            return await _context.AnimalSpecies.Include(ap => ap.Cage)
+                .Include(ap => ap.News)
+                .OrderBy(ap => ap.Name)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByCageId(string cageId)
         {
             return await _context.AnimalSpecies
+                .Include(ap => ap.News)
+                .Include(ap => ap.Cage)
                 .Where(ap => ap.CageId.Trim().ToLower().Equals(cageId.Trim().ToLower()))
                 .ToListAsync();
         }
@@ -47,7 +52,10 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByName(string name)
         {
-            return await _context.AnimalSpecies.OrderBy(ap => ap.Name)
+            return await _context.AnimalSpecies
+                .Include(ap => ap.Cage)
+                .Include(ap => ap.News)
+                .OrderBy(ap => ap.Name)
                 .Where(ap => ap.Name.Trim().ToLower().Contains(name.Trim().ToLower()))
                 .ToListAsync();
         }
