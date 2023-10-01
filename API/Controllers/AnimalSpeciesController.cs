@@ -40,11 +40,12 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<AnimalSpeciesDto>>> SearchSpeciesByName([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return BadRequest("Must provide the cageId!");
+                return BadRequest("Field is empty!");
 
             var species = await _speciesRepository.GetSpeciesByName(name);
             if (!species.Any())
                 return NotFound("Species not found!");
+
             if (!ModelState.IsValid)
                 return BadRequest();
 
@@ -58,12 +59,14 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<AnimalSpeciesDto>>> SearchSpeciesByCageId([FromQuery] string cageId)
         {
             if (string.IsNullOrWhiteSpace(cageId))
-                return BadRequest("Must provide the cageId!");
+                return BadRequest("Cage Id must not be empty!");
             var species = await _speciesRepository.GetSpeciesByCageId(cageId);
+           
             if (!species.Any())
                 return NotFound("Species not found!");
             if (!ModelState.IsValid)
                 return BadRequest();
+
             var speciesDto = _mapper.Map<IEnumerable<AnimalSpeciesDto>>(species);
             return Ok(speciesDto);
         }
@@ -72,7 +75,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateSpecies([FromBody] AnimalSpeciesDto species)
         {
             if (species == null) 
-                return BadRequest("Species is null!");
+                return BadRequest("Species must not be empty!");
 
             if (!await _cagesRepo.HasCage(species.CageId))
                 return NotFound("Cage not found!");

@@ -12,6 +12,5 @@ namespace API.Models.Dtos
         
         public virtual CageDto Cage { get; set; }
 
-        public virtual ICollection<NewsDto> News { get; set; } = new List<NewsDto>();
     }
 }
