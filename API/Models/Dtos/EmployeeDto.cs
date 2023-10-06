@@ -16,7 +16,7 @@
 
         public string Image { get; set; }
 
-        public string Role { get; set; }
+        //public string Role { get; set; }
 
         public byte? IsDeleted { get; set; }
     }
