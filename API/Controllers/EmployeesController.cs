@@ -5,6 +5,7 @@ using AutoMapper;
 using API.Models.Dtos;
 using API.Helpers;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
