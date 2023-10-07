@@ -13,6 +13,8 @@ namespace API.Controllers
     {
         private readonly ICagesRepository _cagesRepo;
         private readonly IAreasRepository _areasRepo;
+        private readonly IAnimalSpeciesRepository _animalSpeciesRepo;
+        private readonly IAnimalsRepository _animalsRepo;
         private readonly IMapper _mapper;
         public CagesController(ICagesRepository cagesRepo, IAreasRepository areasRepo, IMapper mapper)
         {
@@ -66,20 +68,31 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("delete-cage")]
+        [HttpDelete("delete")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<CageDto>> DeleteCages([FromQuery] string cageId)
+        public async Task<IActionResult> DeleteCage([FromQuery] string cageId)
         {
-            var currCage = await _cagesRepo.GetCageById(cageId);
-            if(currCage != null)
+            var cage = await _cagesRepo.GetCageById(cageId);
+            if (cage == null)
             {
-                await _cagesRepo.DeleteCage(cageId);
-                var cages = await _cagesRepo.GetListCage();
-                if (!ModelState.IsValid)
-                    BadRequest(ModelState);
-                return CreatedAtRoute("GetCages", cages);
+                return BadRequest(new ProblemDetails { Title = "Cage not found!" });
             }
-            return NotFound();
+            var hasAnimal = await _animalsRepo.GetAnimalByCageId(cageId);
+            if (hasAnimal.Any())
+            {
+                return BadRequest(new ProblemDetails { Title = "Cage has animal!" });
+            }
+            //var hasSpecies = await _animalSpeciesRepo.GetSpeciesByCageId(cageId);
+            //if (hasSpecies != null)
+            //{
+            //    return BadRequest(new ProblemDetails { Title = "Cage has species!" });
+            //}
+            
+            await _cagesRepo.DeleteCage(cageId);
+            var listCages = await _cagesRepo.GetListCage();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return CreatedAtRoute("GetCages", _mapper.Map<IEnumerable<CageDto>>(listCages));
         }
 
         [HttpPost("create-cage")]

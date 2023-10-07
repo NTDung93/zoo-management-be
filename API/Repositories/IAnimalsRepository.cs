@@ -12,5 +12,6 @@ namespace API.Repositories
         Task DeleteAnimal(string animalId);
         Task CreateNewAnimal(Animal animal);
         Task UpdateAnimal(string animalId, AnimalDto animalDto);
+        Task<IEnumerable<Animal>> GetAnimalByCageId(string id);
     }
 }

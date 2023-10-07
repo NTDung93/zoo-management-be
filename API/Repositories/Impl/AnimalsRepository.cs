@@ -61,5 +61,10 @@ namespace API.Repositories.Impl
             currAnimal.Result.CageId = animalDto.CageId;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Animal>> GetAnimalByCageId(string id)
+        {
+            return await _context.Animals.Include(x=>x.Cage).Where(animal => animal.CageId.ToLower().Equals(id.ToLower().Trim())).ToListAsync();
+        }
     }
 }

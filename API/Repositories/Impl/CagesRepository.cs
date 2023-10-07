@@ -28,7 +28,7 @@ namespace API.Repositories.Impl
         }
         public async Task<Cage> GetCageById(string cageId)
         {
-            return await _context.Cages.Include(x => x.Area).SingleOrDefaultAsync(cage => cage.Id.ToLower().Equals(cageId.Trim().ToLower()));
+            return await _context.Cages.FirstOrDefaultAsync(cage => cage.Id.ToLower().Equals(cageId.Trim().ToLower()));
         }
         public async Task DeleteCage(string cageId)
         {
