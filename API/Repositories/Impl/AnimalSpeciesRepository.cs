@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,26 +23,41 @@ namespace API.Repositories.Impl
         public async Task<bool> DeleteAnimalSpecies(int id)
         {
             var animalSpecies = _context.AnimalSpecies.Find(id);
-            if (animalSpecies != null) 
+            if (animalSpecies != null)
                 _context.AnimalSpecies.Remove(animalSpecies);
             return await Save();
         }
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpecies()
         {
-            return await _context.AnimalSpecies.OrderBy(ap => ap.Name).ToListAsync();
+            return await _context.AnimalSpecies.Include(ap => ap.Cage)
+                .Include(ap => ap.News)
+                .OrderBy(ap => ap.Name)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByCageId(string cageId)
         {
             return await _context.AnimalSpecies
+                .Include(ap => ap.News)
+                .Include(ap => ap.Cage)
                 .Where(ap => ap.CageId.Trim().ToLower().Equals(cageId.Trim().ToLower()))
                 .ToListAsync();
         }
 
         public async Task<AnimalSpecy> GetSpeciesById(int id)
         {
-            return await _context.AnimalSpecies.FirstOrDefaultAsync(ap => ap.Id == id);
+            return await _context.AnimalSpecies.Include(x => x.Cage).FirstOrDefaultAsync(ap => ap.Id == id);
+        }
+
+        public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByName(string name)
+        {
+            return await _context.AnimalSpecies
+                .Include(ap => ap.Cage)
+                .Include(ap => ap.News)
+                .OrderBy(ap => ap.Name)
+                .Where(ap => ap.Name.Trim().ToLower().Contains(name.Trim().ToLower()))
+                .ToListAsync();
         }
 
         public async Task<bool> HasSpecies(int id)
@@ -55,9 +71,16 @@ namespace API.Repositories.Impl
             return await saved > 0;
         }
 
-        public async Task<bool> UpdateSpecies(AnimalSpecy species)
+        public async Task<bool> UpdateSpecies(AnimalSpeciesDto species)
         {
-            _context.AnimalSpecies.Update(species);
+            var existingSpecies = await _context.AnimalSpecies.FindAsync(species.Id);
+
+            if (existingSpecies == null)
+                return false;
+            
+            existingSpecies.Name = species.Name;
+            existingSpecies.CageId = species.CageId;
+
             return await Save();
         }
     }

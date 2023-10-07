@@ -1,6 +1,6 @@
-﻿using API.Models.Dtos;
+﻿using API.Models.Authen;
+using API.Models.Dtos;
 using API.Models.Entities;
-using API.Models.Login;
 using AutoMapper;
 
 namespace API.Helpers
@@ -16,8 +16,10 @@ namespace API.Helpers
             CreateMap<News, NewsDto>().ReverseMap();
             CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
             CreateMap<Employee, EmployeeDto>().ReverseMap();
+
             CreateMap<AnimalSpecy, AnimalSpeciesDto>().ReverseMap();
-            CreateMap<AccountLogin, AdminAccount>().ReverseMap();
+            CreateMap<EmpProfileModel, Employee>().ReverseMap();
+
         }
     }
 }

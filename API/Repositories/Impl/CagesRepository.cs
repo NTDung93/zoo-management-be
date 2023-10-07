@@ -49,5 +49,10 @@ namespace API.Repositories.Impl
             currCage.Result.AreaId = cageDto.AreaId;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> HasCage(string cageId)
+        {
+            return await _context.Cages.AnyAsync(c => c.Id.ToLower().Equals(cageId.Trim().ToLower()));
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace API.Models.Dtos
 
         public byte? IsDeleted { get; set; }
 
-        public string EmpId { get; set; } = null;
+        public string EmpId { get; set; }
 
         public string CageId { get; set; }
 
