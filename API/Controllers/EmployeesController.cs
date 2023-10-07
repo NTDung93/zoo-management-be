@@ -3,9 +3,9 @@ using API.Models.Entities;
 using API.Repositories;
 using AutoMapper;
 using API.Models.Dtos;
-using Microsoft.AspNetCore.Authorization;
 using API.Helpers;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -25,7 +25,7 @@ namespace API.Controllers
             _animalsRepo = animalsRepo;
         }
         
-        [HttpGet("trainers")]
+        [HttpGet("trainers", Name = "GetTrainers")]
         [ProducesResponseType(200)]
         [Authorize(Roles = "Staff")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetTrainers()
@@ -78,7 +78,7 @@ namespace API.Controllers
             
             // check id format
             if (!Regex.IsMatch(trainerDto.Id, EmpParams.EMPLOYEE_ID_FORMAT))
-                return ValidationProblem("The format of id is Exxx, x stands for a digit!");
+                return ValidationProblem("The format of id is E[xxx], where x stands for a digit!");
             
             // check email format
             if (!EmailValidation.IsValid(trainerDto.Email))
@@ -86,15 +86,15 @@ namespace API.Controllers
             
             // check citizen id format
             if (!Regex.IsMatch(trainerDto.CitizenId, EmpParams.CITIZEN_ID_FORMAT))
-                return ValidationProblem("Invalid citizen id format!");
+                return ValidationProblem("Invalid citizen id format, it must contain [9,13] digits!");
 
             // check duplicate
             if (await _employeeRepo.HasEmployee(trainerDto.Id))
-                return Conflict("Duplicate of employee ID!");
+                return ValidationProblem("Duplicate of employee Id!");
             
             // check phone number
             if (!Regex.IsMatch(trainerDto.PhoneNumber, EmpParams.PHONE_NUMBER_FORMAT))
-                return ValidationProblem("Invalid phone number!");
+                return ValidationProblem("Invalid phone number, it must contains [10,12] digits!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -107,7 +107,9 @@ namespace API.Controllers
 
             if (!await _employeeRepo.CreateTrainer(trainer))
                 return UnprocessableEntity("An error occurs while creating!");
-            return CreatedAtAction("GetTrainer", new {id = trainer.Id}, trainer);
+            
+            var trainers = await _employeeRepo.GetTrainers();
+            return CreatedAtRoute("GetTrainers", _mapper.Map<IEnumerable<EmployeeDto>>(trainers));
         }
 
         [HttpPut("trainer/resource-id")]
@@ -116,7 +118,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateTrainer(string id, [FromBody] EmployeeDto trainerDto)
         {
             if (id != trainerDto.Id)
-                return Conflict("Trainer id is not matched!");
+                return Conflict("Trainer id does not matched!");
 
             if (trainerDto == null)
                 return BadRequest("Trainer is null!");
@@ -125,10 +127,10 @@ namespace API.Controllers
                 return ValidationProblem("Invalid email format!");
 
             if (!Regex.IsMatch(trainerDto.PhoneNumber, EmpParams.PHONE_NUMBER_FORMAT))
-                return ValidationProblem("Invalid phone number!");
+                return ValidationProblem("Invalid phone number, it must contains [10,12] digits!");
 
             if (!Regex.IsMatch(trainerDto.CitizenId, EmpParams.CITIZEN_ID_FORMAT))
-                return ValidationProblem("Invalid citizen id format!");
+                return ValidationProblem("Invalid citizen id format, it must contain [9,13] digits!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -162,7 +164,7 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("staff-accounts")]
+        [HttpGet("staff-accounts", Name = "Staff")]
         [ProducesResponseType(200)]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetStaffAccounts()
@@ -207,7 +209,7 @@ namespace API.Controllers
 
             // check duplicate
             if (await _employeeRepo.HasEmployee(staffDto.Id))
-                return Conflict("Duplicate of employee ID!");
+                return BadRequest("Duplicate of employee ID!");
 
             if (!Regex.IsMatch(staffDto.PhoneNumber, EmpParams.PHONE_NUMBER_FORMAT))
                 return ValidationProblem("Invalid phone number!");
@@ -226,7 +228,9 @@ namespace API.Controllers
 
             if (!await _employeeRepo.CreateStaff(staff))
                 return UnprocessableEntity("An error occurs while creating!");
-            return CreatedAtAction("GetStaffAccount", new { id = staff.Id }, staff);
+
+            var staffAccounts = await _employeeRepo.GetStaffAccounts();
+            return CreatedAtRoute("Staff", _mapper.Map<IEnumerable<EmployeeDto>>(staffAccounts));
         }
 
         [HttpDelete("staff/resource-id")]

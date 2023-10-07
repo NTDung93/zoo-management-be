@@ -9,7 +9,8 @@ namespace API.Models.Dtos
         public string Name { get; set; }
 
         public string CageId { get; set; }
-
+        
         public virtual CageDto Cage { get; set; }
+
     }
 }

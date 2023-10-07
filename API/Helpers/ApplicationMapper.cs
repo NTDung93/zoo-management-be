@@ -16,6 +16,7 @@ namespace API.Helpers
             CreateMap<News, NewsDto>().ReverseMap();
             CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
             CreateMap<Employee, EmployeeDto>().ReverseMap();
+
             CreateMap<AnimalSpecy, AnimalSpeciesDto>().ReverseMap();
             CreateMap<EmpProfileModel, Employee>().ReverseMap();
 
