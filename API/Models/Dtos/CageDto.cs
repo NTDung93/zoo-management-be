@@ -11,8 +11,8 @@ namespace API.Models.Dtos
         public int? MaxCapacity { get; set; }
 
         public string AreaId { get; set; }
-        public virtual AreaDto? Area { get; set; }
 
+        public virtual AreaDto Area { get; set; }
 
     }
 }

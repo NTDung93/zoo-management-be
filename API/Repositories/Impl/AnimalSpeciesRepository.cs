@@ -30,24 +30,24 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpecies()
         {
-            return await _context.AnimalSpecies.OrderBy(ap => ap.Name).ToListAsync();
+            return await _context.AnimalSpecies.Include(x => x.Cage).OrderBy(ap => ap.Name).ToListAsync();
         }
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByCageId(string cageId)
         {
-            return await _context.AnimalSpecies
+            return await _context.AnimalSpecies.Include(x => x.Cage)
                 .Where(ap => ap.CageId.Trim().ToLower().Equals(cageId.Trim().ToLower()))
                 .ToListAsync();
         }
 
         public async Task<AnimalSpecy> GetSpeciesById(int id)
         {
-            return await _context.AnimalSpecies.FirstOrDefaultAsync(ap => ap.Id == id);
+            return await _context.AnimalSpecies.Include(x => x.Cage).FirstOrDefaultAsync(ap => ap.Id == id);
         }
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByName(string name)
         {
-            return await _context.AnimalSpecies.OrderBy(ap => ap.Name)
+            return await _context.AnimalSpecies.Include(x => x.Cage).OrderBy(ap => ap.Name)
                 .Where(ap => ap.Name.Trim().ToLower().Contains(name.Trim().ToLower()))
                 .ToListAsync();
         }

@@ -27,7 +27,7 @@ namespace API.Controllers
         
         [HttpGet("trainers")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetTrainers()
         {
             if (!ModelState.IsValid) 
@@ -39,7 +39,7 @@ namespace API.Controllers
 
         [HttpGet("trainers/resource-id")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<EmployeeDto>> GetTrainer([FromQuery] string id)
         {
             if (!await _employeeRepo.HasTrainer(id))
@@ -164,7 +164,7 @@ namespace API.Controllers
 
         [HttpGet("staff-accounts")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetStaffAccounts()
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -175,7 +175,7 @@ namespace API.Controllers
 
         [HttpGet("staff/resource-id")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetStaffAccount(string id)
         {
             if (!await _employeeRepo.HasStaff(id))
