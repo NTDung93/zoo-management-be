@@ -50,7 +50,7 @@ namespace API.Controllers
             return Ok(mappedTrainer);
         }
 
-        [HttpDelete("trainer/resource-id")]
+        [HttpPut("trainer/status/resource-id")]
         [ProducesResponseType(204)]
         //[Authorize(Roles = "Staff")]
         public async Task<IActionResult> DeleteTrainer(string id)

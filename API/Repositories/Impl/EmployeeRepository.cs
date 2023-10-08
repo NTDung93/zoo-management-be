@@ -89,7 +89,8 @@ namespace API.Repositories.Impl
             var trainer = await _context.Employees.FindAsync(trainerId);
             if (trainer == null) return false;
 
-            _context.Employees.Remove(trainer);
+            trainer.IsDeleted = EmpParams.DELETED;
+            _context.Employees.Update(trainer);
             return await Save();
         }
 
