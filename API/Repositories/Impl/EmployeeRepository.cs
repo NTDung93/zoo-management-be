@@ -86,15 +86,10 @@ namespace API.Repositories.Impl
 
         public async Task<bool> DeleteTrainer(string trainerId)
         {
-            var trainer = _context.Employees.Find(trainerId);
-            if (trainer != null)
-            {
-                if (trainer.IsDeleted == EmpParams.NOT_DELETED)
-                {
-                    trainer.IsDeleted = EmpParams.DELETED;
-                    _context.Employees.Update(trainer);
-                }
-            }
+            var trainer = await _context.Employees.FindAsync(trainerId);
+            if (trainer == null) return false;
+
+            _context.Employees.Remove(trainer);
             return await Save();
         }
 
@@ -174,7 +169,7 @@ namespace API.Repositories.Impl
             return await Save();
         }
 
-        public async Task<bool> UpdateTrainer(EmployeeDto trainer)
+        public async Task<bool> UpdateTrainer(EmployeeResponse trainer)
         {
             var existingTrainer = await _context.Employees.FindAsync(trainer.Id);
             if (existingTrainer == null || !existingTrainer.Role.Equals(EmpParams.TRAINER_ROLE))
