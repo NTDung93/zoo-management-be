@@ -14,7 +14,7 @@ namespace API.Repositories
         Task<IEnumerable<Employee>> GetTrainers();
         Task<Employee> GetTrainer(string id);
         Task<bool> CreateTrainer(Employee trainer);
-        Task<bool> UpdateTrainer(EmployeeDto trainer);
+        Task<bool> UpdateTrainer(EmployeeResponse trainer);
         Task<bool> DeleteTrainer(string trainerId);
         Task<bool> AssignTrainerWithAnimal(string trainerId, Animal animal);
 
