@@ -47,7 +47,7 @@ namespace API.Repositories.Impl
 
         public async Task<AnimalSpecy> GetSpeciesById(int id)
         {
-            return await _context.AnimalSpecies.FirstOrDefaultAsync(ap => ap.Id == id);
+            return await _context.AnimalSpecies.Include(x => x.Cage).FirstOrDefaultAsync(ap => ap.Id == id);
         }
 
         public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByName(string name)

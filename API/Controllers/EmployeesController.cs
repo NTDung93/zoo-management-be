@@ -162,7 +162,7 @@ namespace API.Controllers
 
         [HttpGet("staff-accounts", Name = "Staff")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetStaffAccounts()
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -173,7 +173,7 @@ namespace API.Controllers
 
         [HttpGet("staff/resource-id")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetStaffAccount(string id)
         {
             if (!await _employeeRepo.HasStaff(id))
