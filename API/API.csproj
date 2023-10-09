@@ -34,7 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Entities\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Repositories\Impl\" />
   </ItemGroup>
 
 </Project>
