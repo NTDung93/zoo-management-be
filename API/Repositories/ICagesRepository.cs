@@ -14,5 +14,7 @@ namespace API.Repositories
         Task CreateNewCage(Cage cage);
         Task UpdateCage(string cageId, CageDto cageDto);
         Task<bool> HasCage(string cageId);
+        Task<Cage> GetCageByIdWithArea(string cageId);
+
     }
 }

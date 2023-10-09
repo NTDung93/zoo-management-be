@@ -44,7 +44,7 @@ namespace API.Repositories.Impl
         public async Task UpdateCage(string cageId, CageDto cageDto)
         {
             var currCage = GetCageById(cageId);
-            currCage.Result.Name = cageDto.Name;
+            currCage.Result.Name = cageDto.Name.Trim();
             currCage.Result.MaxCapacity = cageDto.MaxCapacity;
             currCage.Result.AreaId = cageDto.AreaId;
             await _context.SaveChangesAsync();
@@ -53,6 +53,11 @@ namespace API.Repositories.Impl
         public async Task<bool> HasCage(string cageId)
         {
             return await _context.Cages.AnyAsync(c => c.Id.ToLower().Equals(cageId.Trim().ToLower()));
+        }
+
+        public async Task<Cage> GetCageByIdWithArea(string cageId)
+        {
+            return await _context.Cages.Include(x=>x.Area).FirstOrDefaultAsync(cage => cage.Id.ToLower().Equals(cageId.Trim().ToLower()));
         }
     }
 }
