@@ -1,9 +1,4 @@
-using API.Controllers;
-using API.Helpers;
-using API.Helpers.Token;
-using API.Models;
-using API.Repositories;
-using API.Repositories.Impl;
+using API;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,16 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ZooManagementContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.EnableSensitiveDataLogging();
-});
+//builder.Services.AddDbContext<ZooManagementContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+//    options.EnableSensitiveDataLogging();
+//});
 
 builder.Services.AddCors();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<BuggyController>();
+//builder.Services.AddScoped<BuggyController>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -41,15 +36,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
-builder.Services.AddScoped<IAreasRepository, AreasRepository>();
-builder.Services.AddScoped<ICagesRepository, CagesRepository>();
-builder.Services.AddScoped<INewsRepository, NewsRepository>();
-builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+//builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
+//builder.Services.AddScoped<IAreasRepository, AreasRepository>();
+//builder.Services.AddScoped<ICagesRepository, CagesRepository>();
+//builder.Services.AddScoped<INewsRepository, NewsRepository>();
+//builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
+//builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+//builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
 
-builder.Services.AddTransient<ITokenHelper, TokenHelper>();
+//builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 
 var app = builder.Build();
 

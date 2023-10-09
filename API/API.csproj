@@ -35,6 +35,9 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\Data\" />
+    <Folder Include="Repositories\Impl\" />
     <Folder Include="Repositories\Impl\" />
   </ItemGroup>
 
