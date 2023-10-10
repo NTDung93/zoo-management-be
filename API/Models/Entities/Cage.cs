@@ -2,5 +2,14 @@
 {
     public class Cage
     {
+        public string CageId { get; set; }
+        public string Name { get; set; }
+        public int MaxCapacity { get; set; }
+        public string AreaId { get; set; }
+        public Area Area { get; set; }
+        public ICollection<Animal> Animals { get; set; }
+        public ICollection<AnimalSpecies> AnimalSpecies { get; set; }
+
+
     }
 }

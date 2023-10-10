@@ -1,6 +1,6 @@
 ﻿namespace API.Helpers
 {
-    public class EmployeeConstants
+    public class EmployeeConstraints
     {
         public const string ADMIN_ROLE = "Admin";
         public const string STAFF_ROLE = "Staff";
