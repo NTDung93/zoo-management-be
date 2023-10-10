@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using API.Models.Dtos;
+using API.Models.Entities;
+using AutoMapper;
 
 namespace API.Helpers
 {
@@ -6,7 +8,10 @@ namespace API.Helpers
     {
         public ApplicationMapper()
         {
-            
+            CreateMap<Employee, EmployeeRequest>().ReverseMap();
+            CreateMap<Employee, EmployeeResponse>().ReverseMap();
+
+
         }
     }
 }

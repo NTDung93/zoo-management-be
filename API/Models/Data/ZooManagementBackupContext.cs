@@ -64,6 +64,12 @@ namespace API.Models.Data
             modelBuilder.Entity<Ticket>().HasKey(t => t.TicketId);  
             modelBuilder.Entity<Ticket>().Property(t => t.TicketId)
                 .ValueGeneratedOnAdd();
+            
+            modelBuilder.Entity<Ticket>()
+                .Property(t => t.UnitPrice).HasConversion<double>();
+            modelBuilder.Entity<TransactionHistory>()
+                .Property(th => th.TotalPrice).HasConversion<double>();
+            
 
             modelBuilder.Entity<OrderDetail>().HasKey(od => new {od.OrderId, od.TicketId});
             modelBuilder.Entity<OrderDetail>()
@@ -167,12 +173,7 @@ namespace API.Models.Data
                 .HasOne(a => a.Cage)
                 .WithMany(c => c.Animals)
                 .HasForeignKey(a => a.CageId);
-
-            modelBuilder.Entity<AnimalSpecies>()
-                .HasOne(aspecies => aspecies.Cage)
-                .WithMany(c => c.AnimalSpecies)
-                .HasForeignKey(aspecies => aspecies.CageId);
-
+            
             modelBuilder.Entity<Animal>()
                 .HasOne(a => a.AnimalSpecies)
                 .WithMany(aspecies => aspecies.Animals)

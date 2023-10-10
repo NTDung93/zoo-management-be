@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    partial class ZooManagementBackupContextModelSnapshot : ModelSnapshot
+    [Migration("20231010134808_ModifyV2")]
+    partial class ModifyV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,10 +88,15 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpeciesId"));
 
+                    b.Property<string>("CageId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("SpeciesName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SpeciesId");
+
+                    b.HasIndex("CageId");
 
                     b.ToTable("AnimalSpecies");
                 });
@@ -389,8 +397,8 @@ namespace API.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("UnitPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("TicketId");
 
@@ -417,8 +425,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("PurchaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double?>("TotalPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("TransactionId");
 
@@ -449,6 +457,13 @@ namespace API.Migrations
                     b.Navigation("Cage");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("API.Models.Entities.AnimalSpecies", b =>
+                {
+                    b.HasOne("API.Models.Entities.Cage", null)
+                        .WithMany("AnimalSpecies")
+                        .HasForeignKey("CageId");
                 });
 
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
@@ -583,6 +598,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
                 {
+                    b.Navigation("AnimalSpecies");
+
                     b.Navigation("Animals");
                 });
 

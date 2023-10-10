@@ -256,22 +256,18 @@ namespace API.Models.Data
                     new AnimalSpecies
                     {
                         SpeciesName = "Girrafe",
-                        CageId = "B0001"
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Elephant",
-                        CageId = "B0002"
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Peafowl",
-                        CageId = "C0001"
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Tiger",
-                        CageId = "A0002"
                     },
                 };
                 _dbContext.AnimalSpecies.AddRange(species);
