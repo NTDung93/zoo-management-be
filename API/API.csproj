@@ -33,13 +33,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Repositories\Impl\" />
-    <Folder Include="Repositories\Impl\" />
-    <Folder Include="Repositories\Impl\" />
-  </ItemGroup>
-
 </Project>
