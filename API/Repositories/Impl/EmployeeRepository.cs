@@ -153,7 +153,7 @@ namespace API.Repositories.Impl
             return await saved > 0;
         }
 
-        public async Task<bool> UpdateStaff(EmployeeDto staff)
+        public async Task<bool> UpdateStaff(EmployeeResponse staff)
         {
             var existingStaff = await _context.Employees.FindAsync(staff.Id);
             if (existingStaff == null || !existingStaff.Role.Equals(EmpParams.STAFF_ROLE))

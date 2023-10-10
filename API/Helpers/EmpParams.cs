@@ -11,8 +11,10 @@
         public const string DEFAULT_PASSWORD = "123";
 
         public const string EMPLOYEE_ID_FORMAT = @"^E\d{3}$";
-        public const string PHONE_NUMBER_FORMAT = @"^\d{10,12}$";
-        public const string CITIZEN_ID_FORMAT = @"^\d{9,13}$";
-        
+        // For Vietnamese phone number
+        public const string PHONE_NUMBER_FORMAT = @"(84|0[3|5|7|8|9])+([0-9]{8})\b";
+        // Not specific for Vietnam
+        public const string CITIZEN_ID_FORMAT = @"^(?!.*(\d)\1{8,12})\d{9,13}$";
+
     }
 }
