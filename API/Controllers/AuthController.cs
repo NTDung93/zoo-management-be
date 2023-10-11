@@ -54,6 +54,7 @@ namespace API.Controllers
                 return Ok(new AuthenticatedResponse
                 {
                     Email = adEmail,
+                    FullName = "Admin",
                     Role = adRole,
                     Token = accessToken
                 });
