@@ -10,8 +10,13 @@ namespace API.Helpers
         {
             CreateMap<Employee, EmployeeRequest>().ReverseMap();
             CreateMap<Employee, EmployeeResponse>().ReverseMap();
-
-
+            CreateMap<Animal, AnimalDto>().ReverseMap();
+            CreateMap<Area, AreaDto>().ReverseMap();
+            CreateMap<Cage, CageDto>().ReverseMap();
+            CreateMap<Food, FoodDto>().ReverseMap();
+            CreateMap<News, NewsDto>().ReverseMap();
+            CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
+            CreateMap<AnimalSpecies, AnimalSpeciesDto>().ReverseMap();
         }
     }
 }
