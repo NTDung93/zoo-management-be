@@ -1,4 +1,5 @@
 ﻿using API.Helpers;
+using API.Models.Authentication;
 using API.Models.Data;
 using API.Models.Dtos;
 using API.Models.Entities;
@@ -14,6 +15,14 @@ namespace API.Repositories.Impl
         public EmployeeRepository(ZooManagementBackupContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<Employee> Authenticate(LoginModel account)
+        {
+            return await _dbContext.Employees
+                .FirstOrDefaultAsync(e => e.Email.Trim().Equals(account.Email) &&
+                    e.Password.Trim().Equals(account.Password) &&
+                    e.EmployeeStatus == EmployeeConstraints.NOT_DELETED);
         }
 
         public async Task<bool> CreateStaff(Employee staff)

@@ -11,8 +11,6 @@
         public string Image { get; set; }
         public string Role { get; set; }
         public byte EmployeeStatus { get; set; }
-        public string RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpiryTime { get; set; }
         public ICollection<News> News { get; set; }
         public ICollection<EmployeeCertificate> EmployeeCertificates { get; set; }
         public ICollection<Animal> Animals { get; set; }
