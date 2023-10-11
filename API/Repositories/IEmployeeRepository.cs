@@ -1,4 +1,5 @@
-﻿using API.Models.Dtos;
+﻿using API.Models.Authentication;
+using API.Models.Dtos;
 using API.Models.Entities;
 
 namespace API.Repositories
@@ -19,5 +20,7 @@ namespace API.Repositories
         
         Task<bool> HasEmployee(string id);
         Task<bool> Save();
+
+        Task<Employee> Authenticate(LoginModel account); 
     }
 }

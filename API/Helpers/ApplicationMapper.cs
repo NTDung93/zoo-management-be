@@ -1,4 +1,5 @@
-﻿using API.Models.Dtos;
+﻿using API.Models.Authentication;
+using API.Models.Dtos;
 using API.Models.Entities;
 using AutoMapper;
 
@@ -10,6 +11,10 @@ namespace API.Helpers
         {
             CreateMap<Employee, EmployeeRequest>().ReverseMap();
             CreateMap<Employee, EmployeeResponse>().ReverseMap();
+            CreateMap<Employee, EmployeeModel>().ReverseMap();
+
+            CreateMap<AnimalSpecies, AnimalSpeciesRequest>().ReverseMap();
+            CreateMap<AnimalSpecies, AnimalSpeciesResponse>().ReverseMap();
             CreateMap<Employee, EmployeeDto>().ReverseMap();
             CreateMap<Animal, AnimalDto>().ReverseMap();
             CreateMap<Area, AreaDto>().ReverseMap();

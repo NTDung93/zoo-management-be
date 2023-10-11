@@ -2,6 +2,7 @@ using API;
 using API.Models.Data;
 using API.Repositories;
 using API.Repositories.Impl;
+using API.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -45,8 +46,8 @@ builder.Services.AddScoped<ICagesRepository, CagesRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
-
-//builder.Services.AddTransient<ITokenHelper, TokenHelper>();
+builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 
 var app = builder.Build();
 
