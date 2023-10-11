@@ -39,9 +39,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-//builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
-//builder.Services.AddScoped<IAreasRepository, AreasRepository>();
-//builder.Services.AddScoped<ICagesRepository, CagesRepository>();
+builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
+builder.Services.AddScoped<IAreasRepository, AreasRepository>();
+builder.Services.AddScoped<ICagesRepository, CagesRepository>();
 //builder.Services.AddScoped<INewsRepository, NewsRepository>();
 //builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
 //builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
