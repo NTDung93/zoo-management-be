@@ -45,21 +45,16 @@ namespace API.Controllers
 
             if (account.Email.Trim().Equals(adEmail) && account.Password.Trim().Equals(adPassword))
             {
-                AdminModel admin = new AdminModel
-                {
-                    Email = adEmail,
-                    Password = adPassword,
-                    Role = adRole
-                };
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, adEmail),
-                    new Claim(ClaimTypes.Role, EmployeeConstraints.ADMIN_ROLE)
+                    new Claim(ClaimTypes.Role, adRole)
                 };
                 var accessToken = _tokenHelper.GenerateAccessToken(claims);
                 return Ok(new AuthenticatedResponse
                 {
-                    Admin = admin,
+                    Email = adEmail,
+                    Role = adRole,
                     Token = accessToken
                 });
             }
@@ -68,16 +63,20 @@ namespace API.Controllers
                 var loginAccount = await _employeeRepository.Authenticate(account);
                 if (loginAccount != null)
                 {
-                    var empProfile = _mapper.Map<EmployeeModel>(loginAccount);
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Email, empProfile.Email),
-                        new Claim(ClaimTypes.Role, empProfile.Role)
+                        new Claim(ClaimTypes.Email, loginAccount.Email),
+                        new Claim(ClaimTypes.Role, loginAccount.Role)
                     };
                     var accessToken = _tokenHelper.GenerateAccessToken(claims);
                     return Ok(new AuthenticatedResponse
                     {
-                        Employee = empProfile,
+                        Email = loginAccount.Email,
+                        FullName = loginAccount.FullName,
+                        CitizenId = loginAccount.CitizenId,
+                        PhoneNumber = loginAccount.PhoneNumber,
+                        Image = loginAccount.Image,
+                        Role = loginAccount.Role,
                         Token = accessToken,
                     });
                 }
