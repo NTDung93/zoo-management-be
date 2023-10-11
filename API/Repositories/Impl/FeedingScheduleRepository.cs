@@ -52,11 +52,11 @@ namespace API.Repositories.Impl
         public Task UpdateSchedule(int id, FeedingScheduleDto scheduleDto)
         {
             var feedingSchedule = GetFeedingScheduleById(id);
-            feedingSchedule.Result.FeedTime = scheduleDto.FeedTime;
+            feedingSchedule.Result.FeedTime = (DateTime)scheduleDto.FeedTime;
             feedingSchedule.Result.FoodId = scheduleDto.FoodId;
             feedingSchedule.Result.AnimalId = scheduleDto.AnimalId;
             feedingSchedule.Result.EmployeeId = scheduleDto.EmployeeId;
-            feedingSchedule.Result.FeedStatus = scheduleDto.FeedStatus;
+            feedingSchedule.Result.FeedStatus = (byte)scheduleDto.FeedStatus;
             return _context.SaveChangesAsync();
         }
     }
