@@ -60,6 +60,11 @@ namespace API.Repositories.Impl
                 .ToListAsync();
         }
 
+        public async Task<AnimalSpecy> GetSpecyByCageId(string cageId)
+        {
+            return await _context.AnimalSpecies.FirstOrDefaultAsync(ap => ap.CageId.Trim().ToLower().Equals(cageId.Trim().ToLower()));
+        }
+
         public async Task<bool> HasSpecies(int id)
         {
             return await _context.AnimalSpecies.AnyAsync(ap => ap.Id == id);

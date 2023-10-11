@@ -13,12 +13,16 @@ namespace API.Controllers
     {
         private readonly ICagesRepository _cagesRepo;
         private readonly IAreasRepository _areasRepo;
+        private readonly IAnimalSpeciesRepository _animalSpeciesRepo;
+        private readonly IAnimalsRepository _animalsRepo;
         private readonly IMapper _mapper;
-        public CagesController(ICagesRepository cagesRepo, IAreasRepository areasRepo, IMapper mapper)
+        public CagesController(ICagesRepository cagesRepo, IAreasRepository areasRepo, IMapper mapper, IAnimalsRepository animalsRepository, IAnimalSpeciesRepository animalSpeciesRepository)
         {
             _areasRepo = areasRepo;
             _cagesRepo = cagesRepo;
             _mapper = mapper;
+            _animalsRepo = animalsRepository;
+            _animalSpeciesRepo = animalSpeciesRepository;
         }
 
         [HttpGet("load-cages", Name = "GetCages")]
@@ -32,7 +36,7 @@ namespace API.Controllers
             return Ok(cagesDto);
         }
 
-        [HttpGet("cages-by-id")]
+        [HttpGet("cages-by-areaId")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<CageDto>>> GetCagesByAreaId([FromQuery] string areaId)
         {
@@ -43,7 +47,25 @@ namespace API.Controllers
             return Ok(cagesDto);
         }
 
-        [HttpGet("search-cages")]
+        [HttpGet("get-cage-by-id")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<CageDto>> GetCageById([FromQuery] string id)
+        {
+            var cage = await _cagesRepo.GetCageByIdWithArea(id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (cage == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var cageDto = _mapper.Map<CageDto>(cage);
+                return Ok(cageDto);
+            }
+        }
+
+        [HttpGet("search-cages-by-name")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<CageDto>>> SearchCagesByName([FromQuery] string cageName)
         {
@@ -66,20 +88,31 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("delete-cage")]
+        [HttpDelete("delete")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<CageDto>> DeleteCages([FromQuery] string cageId)
+        public async Task<IActionResult> DeleteCage([FromQuery] string cageId)
         {
-            var currCage = await _cagesRepo.GetCageById(cageId);
-            if(currCage != null)
+            var cage = await _cagesRepo.GetCageById(cageId);
+            if (cage == null)
             {
-                await _cagesRepo.DeleteCage(cageId);
-                var cages = await _cagesRepo.GetListCage();
-                if (!ModelState.IsValid)
-                    BadRequest(ModelState);
-                return CreatedAtRoute("GetCages", cages);
+                return BadRequest(new ProblemDetails { Title = "Cage not found!" });
             }
-            return NotFound();
+            var hasAnimal = await _animalsRepo.GetAnimalByCageId(cageId);
+            if (hasAnimal.Any())
+            {
+                return BadRequest(new ProblemDetails { Title = "Cage has animal!" });
+            }
+            var hasSpecies = await _animalSpeciesRepo.GetSpeciesByCageId(cageId);
+            if (hasSpecies.Any())
+            {
+                return BadRequest(new ProblemDetails { Title = "Cage has species!" });
+            }
+
+            await _cagesRepo.DeleteCage(cageId);
+            var listCages = await _cagesRepo.GetListCage();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return CreatedAtRoute("GetCages", _mapper.Map<IEnumerable<CageDto>>(listCages));
         }
 
         [HttpPost("create-cage")]
@@ -100,11 +133,11 @@ namespace API.Controllers
             }
             else if (cageDto.Id.Trim().Length == 0 || cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0) 
             { 
-                return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
+                return BadRequest(new ProblemDetails { Title = "Do not allow empty!" });
             }
             else if (!tmp.ToString().Equals(cageDto.AreaId))
             {
-                return BadRequest(new ProblemDetails { Title = "CageId is not match AreaId!" });
+                return BadRequest(new ProblemDetails { Title = "CageId is not match with AreaId!" });
             }
             else if (cageDto.MaxCapacity < 0)
             {
@@ -112,7 +145,7 @@ namespace API.Controllers
             }
             else if (cagebyId != null)
             {
-                return BadRequest(new ProblemDetails { Title = "CageId is Exist!" });
+                return BadRequest(new ProblemDetails { Title = "CageId is already exist!" });
             } 
             else if (areas.SingleOrDefault(area => area.Id.Equals(cageDto.AreaId)) == null)
             {
