@@ -12,9 +12,9 @@ public class FeedingScheduleDto
 
     public string AnimalId { get; set; }
 
-    public DateTime? FeedTime { get; set; }
+    public DateTime FeedTime { get; set; }
 
-    public byte? FeedStatus { get; set; }
+    public byte FeedStatus { get; set; }
 
     public virtual AnimalDto Animal { get; set; }
 
