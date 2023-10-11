@@ -3,6 +3,7 @@ using API.Models.Data;
 using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using NuGet.DependencyResolver;
 
 namespace API.Repositories.Impl
 {
@@ -15,6 +16,13 @@ namespace API.Repositories.Impl
             _dbContext = dbContext;
         }
 
+        public async Task<bool> CreateStaff(Employee staff)
+        {
+            if (staff == null) return false;
+            await _dbContext.Employees.AddAsync(staff);
+            return await Save();
+        }
+
         public async Task<bool> CreateTrainer(Employee trainer)
         {
             if (trainer == null) return false;
@@ -22,14 +30,41 @@ namespace API.Repositories.Impl
             return await Save();
         }
 
+        public async Task<bool> DeleteStaff(string id)
+        {
+            var staff = await _dbContext.Employees.FindAsync(id);
+            if (staff == null || !staff.Role.Equals(EmployeeConstraints.STAFF_ROLE)) return false;
+            if (staff.EmployeeStatus == EmployeeConstraints.DELETED) return false;
+
+            staff.EmployeeStatus = EmployeeConstraints.DELETED;
+            _dbContext.Update(staff);
+            return await Save();
+        }
+
         public async Task<bool> DeleteTrainer(string id)
         {
             var trainer = await _dbContext.Employees.FindAsync(id);
             if (trainer == null || !trainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE)) return false;
+            if (trainer.EmployeeStatus == EmployeeConstraints.DELETED) return false;
 
             trainer.EmployeeStatus = EmployeeConstraints.DELETED;
             _dbContext.Update(trainer);
             return await Save();
+        }
+
+        public async Task<Employee> GetStaff(string id)
+        {
+            return await _dbContext.Employees
+                .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) && 
+                e.Role.Equals(EmployeeConstraints.STAFF_ROLE));
+        }
+
+        public async Task<IEnumerable<Employee>> GetStaffAccounts()
+        {
+            return await _dbContext.Employees
+                .OrderBy(e => e.EmployeeId)
+                .Where(e => e.Role.Equals(EmployeeConstraints.STAFF_ROLE))
+                .ToListAsync();
         }
 
         public async Task<Employee> GetTrainer(string id)
@@ -56,6 +91,24 @@ namespace API.Repositories.Impl
         {
             var saved = _dbContext.SaveChangesAsync();
             return await saved > 0;
+        }
+
+        public async Task<bool> UpdateStaff(EmployeeResponse staff)
+        {
+            var existingStaff = await _dbContext.Employees
+                .FindAsync(staff.EmployeeId);
+            if (existingStaff == null || !existingStaff.Role.Equals(EmployeeConstraints.STAFF_ROLE))
+                return false;
+
+            existingStaff.FullName = staff.FullName;
+            existingStaff.CitizenId = staff.CitizenId;
+            existingStaff.Email = staff.Email;
+            existingStaff.PhoneNumber = staff.PhoneNumber;
+            existingStaff.Image = staff.Image;
+            existingStaff.EmployeeStatus = staff.EmployeeStatus;
+
+            _dbContext.Update(existingStaff);
+            return await Save();
         }
 
         public async Task<bool> UpdateTrainer(EmployeeResponse trainer)

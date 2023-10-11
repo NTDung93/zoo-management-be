@@ -11,7 +11,11 @@ namespace API.Repositories
         Task<bool> UpdateTrainer(EmployeeResponse trainer);
         Task<bool> DeleteTrainer(string id);
 
-
+        Task<IEnumerable<Employee>> GetStaffAccounts();
+        Task<Employee> GetStaff(string id);
+        Task<bool> CreateStaff(Employee staff);
+        Task<bool> UpdateStaff(EmployeeResponse staff);
+        Task<bool> DeleteStaff(string id);
         
         Task<bool> HasEmployee(string id);
         Task<bool> Save();
