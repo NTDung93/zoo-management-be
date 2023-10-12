@@ -2,8 +2,12 @@
 {
     public class AuthenticatedResponse
     {
-        public AdminModel Admin { get; set; }
-        public EmployeeModel Employee { get; set; }
+        public string FullName { get; set; }
+        public string CitizenId { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Image { get; set; }
+        public string Role { get; set; }
         public string Token { get; set; }   
     }
 }
