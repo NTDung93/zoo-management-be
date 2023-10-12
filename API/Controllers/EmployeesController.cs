@@ -5,6 +5,7 @@ using API.Models.Dtos;
 using System.Text.RegularExpressions;
 using API.Helpers;
 using API.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -21,6 +22,7 @@ namespace API.Controllers
 
         [HttpGet("trainers")]
         [ProducesResponseType(200)]
+        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetTrainers()
         {
             var trainers = await _employeeRepository.GetTrainers();
@@ -31,6 +33,7 @@ namespace API.Controllers
         
         [HttpGet("trainers/resource-id")]
         [ProducesResponseType(200)]
+        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<ActionResult<EmployeeResponse>> GetTrainer(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) return NotFound("Trainer not found!");
@@ -43,6 +46,7 @@ namespace API.Controllers
 
         [HttpPut("trainer/resource-id")]
         [ProducesResponseType(204)]
+        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<IActionResult> UpdateTrainer(string id, EmployeeResponse trainer)
         {
             if (id != trainer.EmployeeId)
@@ -76,6 +80,7 @@ namespace API.Controllers
 
         [HttpPost("trainer")]
         [ProducesResponseType(201)]
+        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> CreateTrainer(EmployeeRequest trainer)
         {
             if (trainer == null) return BadRequest(new ProblemDetails
@@ -124,6 +129,7 @@ namespace API.Controllers
 
         [HttpPut("trainer/status/resource-id")]
         [ProducesResponseType(204)]
+        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<IActionResult> DeleteTrainer(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) return NotFound("Trainer not found!");
@@ -138,6 +144,7 @@ namespace API.Controllers
         // Staff controller's zone
         [HttpGet("staff-accounts")]
         [ProducesResponseType(200)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetStaffAccounts()
         {
             var staffAccounts = await _employeeRepository.GetStaffAccounts();
@@ -148,6 +155,7 @@ namespace API.Controllers
 
         [HttpGet("staff/resource-id")]
         [ProducesResponseType(200)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<EmployeeResponse>> GetStaff(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) 
@@ -161,6 +169,7 @@ namespace API.Controllers
 
         [HttpPut("staff/resource-id")]
         [ProducesResponseType(204)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<IActionResult> UpdateStaff(string id, EmployeeResponse staff)
         {
             if (id != staff.EmployeeId)
@@ -194,6 +203,7 @@ namespace API.Controllers
 
         [HttpPost("staff")]
         [ProducesResponseType(201)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> CreateStaff(EmployeeRequest staff)
         {
             if (staff == null) return BadRequest(new ProblemDetails
@@ -242,6 +252,7 @@ namespace API.Controllers
 
         [HttpPut("staff/status/resource-id")]
         [ProducesResponseType(204)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<IActionResult> DeleteStaff(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) 

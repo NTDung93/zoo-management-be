@@ -1,4 +1,5 @@
 using API;
+using API.Helpers;
 using API.Models.Data;
 using API.Repositories;
 using API.Repositories.Impl;
@@ -48,6 +49,13 @@ builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
 builder.Services.AddTransient<ITokenHelper, TokenHelper>();
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("StaffPolicy", policy => policy.RequireRole(EmployeeConstraints.STAFF_ROLE));
+//    options.AddPolicy("TrainerPolicy", policy => policy.RequireRole(EmployeeConstraints.TRAINER_ROLE));
+//    options.AddPolicy("AdminPolicy", policy => policy.RequireRole(EmployeeConstraints.ADMIN_ROLE));
+//});
 
 var app = builder.Build();
 
