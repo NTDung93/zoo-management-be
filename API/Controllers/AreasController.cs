@@ -46,11 +46,11 @@ namespace API.Controllers
             var areas = await _areasRepo.GetListArea();
             if (areaDto.AreaId.Length > 1 || char.IsDigit(areaDto.AreaId, 0))
             {
-                return BadRequest(new ProblemDetails { Title = "AreaId have length is 1 and must to be Alphabet!" });
+                return BadRequest(new ProblemDetails { Title = "AreaId must be one capital letter!" });
             }
-            else if (areas.SingleOrDefault(tmp => tmp.AreaId.Equals(areaDto.AreaId)) != null)
+            else if (areas.SingleOrDefault(tmp => tmp.AreaId.ToLower().Equals(areaDto.AreaId.ToLower())) != null)
             {
-                return BadRequest(new ProblemDetails { Title = "AreaId is Exist!" });
+                return BadRequest(new ProblemDetails { Title = "AreaId is already exist!" });
             }
             else
             {
@@ -97,7 +97,7 @@ namespace API.Controllers
             var listCage = await _cageRepo.GetListCageByAreaId(areaId);
             if (listCage.Any())
             {
-                return BadRequest(new ProblemDetails { Title = "The Area have Cages" });
+                return BadRequest(new ProblemDetails { Title = "There are cages in this area!" });
             }
             var currCage = await _areasRepo.GetAreaById(areaId);
             if (currCage != null)
