@@ -46,9 +46,9 @@ namespace API.Controllers
             var areas = await _areasRepo.GetListArea();
             if (areaDto.AreaId.Length > 1 || char.IsDigit(areaDto.AreaId, 0))
             {
-                return BadRequest(new ProblemDetails { Title = "AreaId have length is 1 and must to be Alphabet!" });
+                return BadRequest(new ProblemDetails { Title = "AreaId have length is 1 and must to be Upper Alphabet!" });
             }
-            else if (areas.SingleOrDefault(tmp => tmp.AreaId.Equals(areaDto.AreaId)) != null)
+            else if (areas.SingleOrDefault(tmp => tmp.AreaId.ToLower().Equals(areaDto.AreaId.ToLower())) != null)
             {
                 return BadRequest(new ProblemDetails { Title = "AreaId is Exist!" });
             }
