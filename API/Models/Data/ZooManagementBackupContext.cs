@@ -23,7 +23,7 @@ namespace API.Models.Data
         public DbSet<EmployeeCertificate> EmployeeCertificates { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<FeedingSchedule> FeedingSchedules { get; set; }
-        public DbSet<Food> Foods { get; set; }
+        public DbSet<FoodInventory> FoodInventories { get; set; }
         public DbSet<ImportHistory> ImportHistories { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -118,9 +118,7 @@ namespace API.Models.Data
             modelBuilder.Entity<FeedingSchedule>().Property(fs => fs.ScheduleNo)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Food>().HasKey(f => f.FoodId);
-            modelBuilder.Entity<Food>().Property(f => f.FoodId)
-                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<FoodInventory>().HasKey(f => f.FoodId);
 
             modelBuilder.Entity<AnimalSpecies>().HasKey(aspecies => aspecies.SpeciesId);
             modelBuilder.Entity<AnimalSpecies>().Property(aspecies => aspecies.SpeciesId)
@@ -150,12 +148,12 @@ namespace API.Models.Data
                 .HasForeignKey(a => a.EmployeeId);
 
             modelBuilder.Entity<ImportHistory>()
-                .HasOne(ih => ih.Food)
+                .HasOne(ih => ih.FoodInventory)
                 .WithMany(f => f.ImportHistories)
                 .HasForeignKey(ih => ih.FoodId);
 
             modelBuilder.Entity<FeedingSchedule>()
-                .HasOne(fs => fs.Food)
+                .HasOne(fs => fs.FoodInventory)
                 .WithMany(f => f.FeedingSchedules)
                 .HasForeignKey(fs => fs.FoodId);
 

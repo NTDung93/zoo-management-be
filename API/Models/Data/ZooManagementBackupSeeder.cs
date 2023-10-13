@@ -220,32 +220,32 @@ namespace API.Models.Data
                 _dbContext.SaveChanges();
             }
 
-            if (!_dbContext.Foods.Any())
+            if (!_dbContext.FoodInventories.Any())
             {
-                var foods = new List<Food>()
+                var foods = new List<FoodInventory>()
                 {
-                    new Food
-                    {
-                        FoodName = "Corn",
-                        Quantity = 50
-                    },
-                    new Food
-                    {
-                        FoodName = "Carrot",
-                        Quantity = 45
-                    },
-                    new Food
-                    {
-                        FoodName = "Pork meat",
-                        Quantity = 75
-                    },
-                    new Food
-                    {
-                        FoodName = "Grass",
-                        Quantity = 100
-                    },
+                    //new Food
+                    //{
+                    //    FoodName = "Corn",
+                    //    Quantity = 50
+                    //},
+                    //new Food
+                    //{
+                    //    FoodName = "Carrot",
+                    //    Quantity = 45
+                    //},
+                    //new Food
+                    //{
+                    //    FoodName = "Pork meat",
+                    //    Quantity = 75
+                    //},
+                    //new Food
+                    //{
+                    //    FoodName = "Grass",
+                    //    Quantity = 100
+                    //},
                 };
-                _dbContext.Foods.AddRange(foods);
+                _dbContext.FoodInventories.AddRange(foods);
                 _dbContext.SaveChanges();
             }
 

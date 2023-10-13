@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    [Migration("20231010034643_InitialDb")]
-    partial class InitialDb
+    [Migration("20231013034517_HotfixOrderDetail")]
+    partial class HotfixOrderDetail
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,15 +88,10 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpeciesId"));
 
-                    b.Property<string>("CageId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("SpeciesName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SpeciesId");
-
-                    b.HasIndex("CageId");
 
                     b.ToTable("AnimalSpecies");
                 });
@@ -180,12 +175,6 @@ namespace API.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
@@ -203,9 +192,6 @@ namespace API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("No"));
 
                     b.Property<string>("CertificateCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CertificateCode1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -216,7 +202,7 @@ namespace API.Migrations
 
                     b.HasKey("No");
 
-                    b.HasIndex("CertificateCode1");
+                    b.HasIndex("CertificateCode");
 
                     b.HasIndex("EmployeeId");
 
@@ -246,8 +232,8 @@ namespace API.Migrations
                     b.Property<DateTime>("FeedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
+                    b.Property<string>("FoodId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ScheduleNo");
 
@@ -260,13 +246,10 @@ namespace API.Migrations
                     b.ToTable("FeedingSchedules");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.Food", b =>
+            modelBuilder.Entity("API.Models.Entities.FoodInventory", b =>
                 {
-                    b.Property<int>("FoodId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FoodId"));
+                    b.Property<string>("FoodId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FoodName")
                         .HasColumnType("nvarchar(max)");
@@ -276,7 +259,7 @@ namespace API.Migrations
 
                     b.HasKey("FoodId");
 
-                    b.ToTable("Foods");
+                    b.ToTable("FoodInventories");
                 });
 
             modelBuilder.Entity("API.Models.Entities.ImportHistory", b =>
@@ -287,8 +270,8 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("No"));
 
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
+                    b.Property<string>("FoodId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ImportDate")
                         .HasColumnType("datetime2");
@@ -376,9 +359,6 @@ namespace API.Migrations
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderDetailId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
@@ -400,8 +380,8 @@ namespace API.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("UnitPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("TicketId");
 
@@ -428,8 +408,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("PurchaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("TransactionId");
 
@@ -462,15 +442,6 @@ namespace API.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.AnimalSpecies", b =>
-                {
-                    b.HasOne("API.Models.Entities.Cage", "Cage")
-                        .WithMany("AnimalSpecies")
-                        .HasForeignKey("CageId");
-
-                    b.Navigation("Cage");
-                });
-
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
                 {
                     b.HasOne("API.Models.Entities.Area", "Area")
@@ -484,7 +455,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Entities.Certificate", "Certificate")
                         .WithMany("EmployeeCertificates")
-                        .HasForeignKey("CertificateCode1");
+                        .HasForeignKey("CertificateCode");
 
                     b.HasOne("API.Models.Entities.Employee", "Employee")
                         .WithMany("EmployeeCertificates")
@@ -505,28 +476,24 @@ namespace API.Migrations
                         .WithMany("FeedingSchedules")
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("API.Models.Entities.Food", "Food")
+                    b.HasOne("API.Models.Entities.FoodInventory", "FoodInventory")
                         .WithMany("FeedingSchedules")
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FoodId");
 
                     b.Navigation("Animal");
 
                     b.Navigation("Employee");
 
-                    b.Navigation("Food");
+                    b.Navigation("FoodInventory");
                 });
 
             modelBuilder.Entity("API.Models.Entities.ImportHistory", b =>
                 {
-                    b.HasOne("API.Models.Entities.Food", "Food")
+                    b.HasOne("API.Models.Entities.FoodInventory", "FoodInventory")
                         .WithMany("ImportHistories")
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FoodId");
 
-                    b.Navigation("Food");
+                    b.Navigation("FoodInventory");
                 });
 
             modelBuilder.Entity("API.Models.Entities.News", b =>
@@ -603,8 +570,6 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
                 {
-                    b.Navigation("AnimalSpecies");
-
                     b.Navigation("Animals");
                 });
 
@@ -624,7 +589,7 @@ namespace API.Migrations
                     b.Navigation("News");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.Food", b =>
+            modelBuilder.Entity("API.Models.Entities.FoodInventory", b =>
                 {
                     b.Navigation("FeedingSchedules");
 

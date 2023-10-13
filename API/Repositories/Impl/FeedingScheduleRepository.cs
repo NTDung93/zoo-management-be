@@ -29,24 +29,24 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByAnimalName(string name)
         {
-            var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).Where(a => a.Animal.Name.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
+            var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).Where(a => a.Animal.Name.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
             return await feedingSchedule;
         }
 
         public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByFood(string name)
         {
-            var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).Where(a => a.Food.FoodName.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
+            var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).Where(a => a.FoodInventory.FoodName.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
             return await feedingSchedule;
         }
 
         public async Task<FeedingSchedule> GetFeedingScheduleById(int id)
         {
-            return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).FirstOrDefaultAsync(schedule => schedule.ScheduleNo == id);
+            return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).FirstOrDefaultAsync(schedule => schedule.ScheduleNo == id);
         }
 
         public async Task<IEnumerable<FeedingSchedule>> GetListFeedingSchedule()
         {
-            return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).OrderBy(a => a.ScheduleNo).ToListAsync();
+            return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).OrderBy(a => a.ScheduleNo).ToListAsync();
         }
 
         public Task UpdateSchedule(int id, FeedingScheduleDto scheduleDto)
