@@ -228,43 +228,43 @@ namespace API.Models.Data
                     {
                         FoodId = "FD01",
                         FoodName = "Carrot",
-                        Quantity = 100
+                        InventoryQuantity = 100
                     },
                     new FoodInventory
                     {
                         FoodId = "FD02",
                         FoodName = "Grass",
-                        Quantity = 100
+                        InventoryQuantity = 100
                     },
                     new FoodInventory
                     {
                         FoodId = "FD03",
                         FoodName = "Beef",
-                        Quantity = 100
+                        InventoryQuantity = 100
                     },
                     new FoodInventory
                     {
                         FoodId = "FD04",
                         FoodName = "Chicken",
-                        Quantity = 100
+                        InventoryQuantity = 100
                     },
                     new FoodInventory
                     {
                         FoodId = "FD05",
                         FoodName = "Sugarcane",
-                        Quantity = 100
+                        InventoryQuantity = 100
                     },
                     new FoodInventory
                     {
                         FoodId = "FD06",
                         FoodName = "Watermelon",
-                        Quantity = 100
+                        InventoryQuantity = 100
                     },
                     new FoodInventory
                     {
                         FoodId = "FD07",
                         FoodName = "Squirrel",
-                        Quantity = 100
+                        InventoryQuantity = 100
                     },
                 };
                 _dbContext.FoodInventories.AddRange(foods);
