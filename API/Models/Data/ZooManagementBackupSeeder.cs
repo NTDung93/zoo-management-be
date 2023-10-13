@@ -224,26 +224,48 @@ namespace API.Models.Data
             {
                 var foods = new List<FoodInventory>()
                 {
-                    //new Food
-                    //{
-                    //    FoodName = "Corn",
-                    //    Quantity = 50
-                    //},
-                    //new Food
-                    //{
-                    //    FoodName = "Carrot",
-                    //    Quantity = 45
-                    //},
-                    //new Food
-                    //{
-                    //    FoodName = "Pork meat",
-                    //    Quantity = 75
-                    //},
-                    //new Food
-                    //{
-                    //    FoodName = "Grass",
-                    //    Quantity = 100
-                    //},
+                    new FoodInventory
+                    {
+                        FoodId = "FD01",
+                        FoodName = "Carrot",
+                        Quantity = 100
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD02",
+                        FoodName = "Grass",
+                        Quantity = 100
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD03",
+                        FoodName = "Beef",
+                        Quantity = 100
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD04",
+                        FoodName = "Chicken",
+                        Quantity = 100
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD05",
+                        FoodName = "Sugarcane",
+                        Quantity = 100
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD06",
+                        FoodName = "Watermelon",
+                        Quantity = 100
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD07",
+                        FoodName = "Squirrel",
+                        Quantity = 100
+                    },
                 };
                 _dbContext.FoodInventories.AddRange(foods);
                 _dbContext.SaveChanges();
@@ -264,6 +286,18 @@ namespace API.Models.Data
                     new AnimalSpecies
                     {
                         SpeciesName = "Peafowl",
+                    },
+                    new AnimalSpecies
+                    {
+                        SpeciesName = "Rhino",
+                    },
+                    new AnimalSpecies
+                    {
+                        SpeciesName = "Hippo",
+                    },
+                    new AnimalSpecies
+                    {
+                        SpeciesName = "Alligator",
                     },
                     new AnimalSpecies
                     {
@@ -349,7 +383,57 @@ namespace API.Models.Data
                 _dbContext.SaveChanges();
             }
 
+            if (!_dbContext.EmployeeCertificates.Any())
+            {
+                var empCertificates = new List<EmployeeCertificate>()
+                {
+                    new EmployeeCertificate
+                    {
+                        EmployeeId = "E001",
+                        CertificateCode = "3FQLO",
+                        Description = "7 years working",
+                    },
+                    new EmployeeCertificate
+                    {
+                        EmployeeId = "E001",
+                        CertificateCode = "CER001",
+                        Description = "1 year working",
+                    },
+                    new EmployeeCertificate
+                    {
+                        EmployeeId = "E003",
+                        CertificateCode = "CER2ND49",
+                    },
+                    new EmployeeCertificate
+                    {
+                        EmployeeId = "E003",
+                        CertificateCode = "CER002",
+                    },
+                };
+                _dbContext.EmployeeCertificates.AddRange(empCertificates);
+                _dbContext.SaveChanges();
+            }
 
+            if (!_dbContext.Tickets.Any())
+            {
+                var tickets = new List<Ticket>()
+                {
+                    new Ticket
+                    {
+                        TicketId = "AMA_ENTRANCE_01",
+                        Type = "Adult",
+                        UnitPrice = 100000
+                    },
+                    new Ticket
+                    {
+                        TicketId = "AMA_ENTRANCE_02",
+                        Type = "Child",
+                        UnitPrice = 60000
+                    },
+                };
+                _dbContext.Tickets.AddRange(tickets);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }

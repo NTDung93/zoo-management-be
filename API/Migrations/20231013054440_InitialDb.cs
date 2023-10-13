@@ -101,8 +101,7 @@ namespace API.Migrations
                 name: "Tickets",
                 columns: table => new
                 {
-                    TicketId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UnitPrice = table.Column<double>(type: "float", nullable: true)
                 },
@@ -203,8 +202,7 @@ namespace API.Migrations
                 columns: table => new
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    TicketId = table.Column<int>(type: "int", nullable: false),
-                    OrderDetailId = table.Column<int>(type: "int", nullable: false),
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },

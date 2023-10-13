@@ -350,8 +350,8 @@ namespace API.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                    b.Property<string>("TicketId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("datetime2");
@@ -368,11 +368,9 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.Ticket", b =>
                 {
-                    b.Property<int>("TicketId")
+                    b.Property<string>("TicketId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");

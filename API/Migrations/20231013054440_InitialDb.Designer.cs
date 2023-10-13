@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    [Migration("20231013034237_InitialDb")]
+    [Migration("20231013054440_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -353,14 +353,11 @@ namespace API.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                    b.Property<string>("TicketId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("OrderDetailId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
@@ -374,11 +371,9 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.Ticket", b =>
                 {
-                    b.Property<int>("TicketId")
+                    b.Property<string>("TicketId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
