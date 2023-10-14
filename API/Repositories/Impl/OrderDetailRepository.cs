@@ -13,7 +13,7 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<OrderDetail>> GetOrderDetails()
         {
-            return await _context.OrderDetails.Include(y=>y.Order).Include(z=>z.Ticket).OrderBy(x=>x.OrderDetailId).ToListAsync();
+            return await _context.OrderDetails.Include(y=>y.Order).Include(z=>z.Ticket).ToListAsync();
         }
     }
 }

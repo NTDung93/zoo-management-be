@@ -4,7 +4,6 @@ namespace API.Models.Dtos
 {
     public class OrderDetailDto
     {
-        public int OrderDetailId { get; set; }
         public int? Quantity { get; set; }
         public DateTime? EntryDate { get; set; }
         public int OrderId { get; set; }
