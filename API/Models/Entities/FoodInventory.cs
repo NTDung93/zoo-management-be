@@ -6,6 +6,6 @@
         public string FoodName { get; set; }
         public int InventoryQuantity { get; set; }
         public ICollection<ImportHistory> ImportHistories { get; set; }
-        public ICollection<FeedingSchedule> FeedingSchedules { get; set; }
+        public ICollection<FeedingMenu> FeedingSchedules { get; set; }
     }
 }

@@ -66,9 +66,6 @@ namespace API.Migrations
                     b.Property<string>("Region")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ScheduleNo")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("SpeciesId")
                         .HasColumnType("int");
 
@@ -77,8 +74,6 @@ namespace API.Migrations
                     b.HasIndex("CageId");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("ScheduleNo");
 
                     b.HasIndex("SpeciesId");
 
@@ -131,14 +126,9 @@ namespace API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ScheduleNo")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("CageId");
 
                     b.HasIndex("AreaId");
-
-                    b.HasIndex("ScheduleNo");
 
                     b.ToTable("Cages");
                 });
@@ -222,13 +212,40 @@ namespace API.Migrations
                     b.ToTable("EmployeeCertificates");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.FeedingHistory", b =>
+            modelBuilder.Entity("API.Models.Entities.FeedingMenu", b =>
                 {
-                    b.Property<int>("HistoryNo")
+                    b.Property<string>("ScheduleNo")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("FeedingQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FoodId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ScheduleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ScheduleNo");
+
+                    b.HasIndex("FoodId");
+
+                    b.ToTable("FeedingMenus");
+                });
+
+            modelBuilder.Entity("API.Models.Entities.FeedingSchedule", b =>
+                {
+                    b.Property<int>("No")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HistoryNo"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("No"));
+
+                    b.Property<string>("AnimalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CageId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<byte>("FeedingStatus")
                         .HasColumnType("tinyint");
@@ -239,27 +256,13 @@ namespace API.Migrations
                     b.Property<string>("ScheduleNo")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("HistoryNo");
+                    b.HasKey("No");
+
+                    b.HasIndex("AnimalId");
+
+                    b.HasIndex("CageId");
 
                     b.HasIndex("ScheduleNo");
-
-                    b.ToTable("FeedingHistories");
-                });
-
-            modelBuilder.Entity("API.Models.Entities.FeedingSchedule", b =>
-                {
-                    b.Property<string>("ScheduleNo")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FoodId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ScheduleName")
-                        .HasColumnType("int");
-
-                    b.HasKey("ScheduleNo");
-
-                    b.HasIndex("FoodId");
 
                     b.ToTable("FeedingSchedules");
                 });
@@ -444,10 +447,6 @@ namespace API.Migrations
                         .WithMany("Animals")
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("API.Models.Entities.FeedingSchedule", "FeedingSchedule")
-                        .WithMany("Animals")
-                        .HasForeignKey("ScheduleNo");
-
                     b.HasOne("API.Models.Entities.AnimalSpecies", "AnimalSpecies")
                         .WithMany("Animals")
                         .HasForeignKey("SpeciesId")
@@ -459,8 +458,6 @@ namespace API.Migrations
                     b.Navigation("Cage");
 
                     b.Navigation("Employee");
-
-                    b.Navigation("FeedingSchedule");
                 });
 
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
@@ -469,13 +466,7 @@ namespace API.Migrations
                         .WithMany("Cages")
                         .HasForeignKey("AreaId");
 
-                    b.HasOne("API.Models.Entities.FeedingSchedule", "FeedingSchedule")
-                        .WithMany("Cages")
-                        .HasForeignKey("ScheduleNo");
-
                     b.Navigation("Area");
-
-                    b.Navigation("FeedingSchedule");
                 });
 
             modelBuilder.Entity("API.Models.Entities.EmployeeCertificate", b =>
@@ -493,22 +484,34 @@ namespace API.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.FeedingHistory", b =>
-                {
-                    b.HasOne("API.Models.Entities.FeedingSchedule", "FeedingSchedule")
-                        .WithMany("FeedingHistories")
-                        .HasForeignKey("ScheduleNo");
-
-                    b.Navigation("FeedingSchedule");
-                });
-
-            modelBuilder.Entity("API.Models.Entities.FeedingSchedule", b =>
+            modelBuilder.Entity("API.Models.Entities.FeedingMenu", b =>
                 {
                     b.HasOne("API.Models.Entities.FoodInventory", "FoodInventory")
                         .WithMany("FeedingSchedules")
                         .HasForeignKey("FoodId");
 
                     b.Navigation("FoodInventory");
+                });
+
+            modelBuilder.Entity("API.Models.Entities.FeedingSchedule", b =>
+                {
+                    b.HasOne("API.Models.Entities.Animal", "Animal")
+                        .WithMany("FeedingSchedules")
+                        .HasForeignKey("AnimalId");
+
+                    b.HasOne("API.Models.Entities.Cage", "Cage")
+                        .WithMany("FeedingSchedules")
+                        .HasForeignKey("CageId");
+
+                    b.HasOne("API.Models.Entities.FeedingMenu", "FeedingMenu")
+                        .WithMany("FeedingSchedules")
+                        .HasForeignKey("ScheduleNo");
+
+                    b.Navigation("Animal");
+
+                    b.Navigation("Cage");
+
+                    b.Navigation("FeedingMenu");
                 });
 
             modelBuilder.Entity("API.Models.Entities.ImportHistory", b =>
@@ -575,6 +578,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.Animal", b =>
                 {
+                    b.Navigation("FeedingSchedules");
+
                     b.Navigation("News");
                 });
 
@@ -593,6 +598,8 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
                 {
                     b.Navigation("Animals");
+
+                    b.Navigation("FeedingSchedules");
                 });
 
             modelBuilder.Entity("API.Models.Entities.Certificate", b =>
@@ -609,13 +616,9 @@ namespace API.Migrations
                     b.Navigation("News");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.FeedingSchedule", b =>
+            modelBuilder.Entity("API.Models.Entities.FeedingMenu", b =>
                 {
-                    b.Navigation("Animals");
-
-                    b.Navigation("Cages");
-
-                    b.Navigation("FeedingHistories");
+                    b.Navigation("FeedingSchedules");
                 });
 
             modelBuilder.Entity("API.Models.Entities.FoodInventory", b =>

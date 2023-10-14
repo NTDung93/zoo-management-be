@@ -22,8 +22,8 @@ namespace API.Models.Data
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<EmployeeCertificate> EmployeeCertificates { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<FeedingSchedule> FeedingSchedules { get; set; }    
-        public DbSet<FeedingHistory> FeedingHistories { get; set; } 
+        public DbSet<FeedingMenu> FeedingMenus { get; set; }    
+        public DbSet<FeedingSchedule> FeedingSchedules { get; set; } 
         public DbSet<FoodInventory> FoodInventories { get; set; }
         public DbSet<ImportHistory> ImportHistories { get; set; }
         public DbSet<News> News { get; set; }
@@ -106,35 +106,41 @@ namespace API.Models.Data
                 .WithMany(c => c.EmployeeCertificates)
                 .HasForeignKey(ec => ec.CertificateCode);   
 
-            modelBuilder.Entity<News>().HasKey(n => n.NewsId);
-            modelBuilder.Entity<News>().Property(n => n.NewsId)
+            modelBuilder.Entity<News>()
+                .HasKey(n => n.NewsId);
+
+            modelBuilder.Entity<News>()
+                .Property(n => n.NewsId)
+                .ValueGeneratedOnAdd();
+            
+            modelBuilder.Entity<ImportHistory>()
+                .HasKey(ih => ih.No);
+
+            modelBuilder.Entity<ImportHistory>()
+                .Property(ih => ih.No)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<ImportHistory>().HasKey(ih => ih.No);
-            modelBuilder.Entity<ImportHistory>().Property(ih => ih.No)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<FeedingSchedule>()
+            modelBuilder.Entity<FeedingMenu>()
                 .HasKey(fs => fs.ScheduleNo);
             
             modelBuilder.Entity<FoodInventory>()
                 .HasKey(f => f.FoodId);
 
-            modelBuilder.Entity<FeedingHistory>()
-                .Property(fh => fh.HistoryNo).ValueGeneratedOnAdd();
-            modelBuilder.Entity<FeedingHistory>()
-                .HasKey(fh => fh.HistoryNo);
+            modelBuilder.Entity<FeedingSchedule>()
+                .Property(fs => fs.No).ValueGeneratedOnAdd();
+            modelBuilder.Entity<FeedingSchedule>()
+                .HasKey(fs => fs.No);
 
-            modelBuilder.Entity<AnimalSpecies>().HasKey(aspecies => aspecies.SpeciesId);
-            modelBuilder.Entity<AnimalSpecies>().Property(aspecies => aspecies.SpeciesId)
+            modelBuilder.Entity<AnimalSpecies>()
+                .HasKey(aspecies => aspecies.SpeciesId);
+
+            modelBuilder.Entity<AnimalSpecies>()
+                .Property(aspecies => aspecies.SpeciesId)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Animal>()
                 .HasKey(a => a.AnimalId);
-
-            modelBuilder.Entity<Animal>()
-                .Property(a => a.ScheduleNo).IsRequired(false);
-
+            
             modelBuilder.Entity<Area>()
                 .HasKey(area => area.AreaId);
             
@@ -151,26 +157,26 @@ namespace API.Models.Data
                 .WithMany(emp => emp.News)
                 .HasForeignKey(n => n.EmployeeId);
 
-            modelBuilder.Entity<News>()
-                .HasOne(n => n.AnimalSpecies)
-                .WithMany(aspecies => aspecies.News)
-                .HasForeignKey(n => n.SpeciesId);
+            //modelBuilder.Entity<News>()
+            //    .HasOne(n => n.AnimalSpecies)
+            //    .WithMany(aspecies => aspecies.News)
+            //    .HasForeignKey(n => n.SpeciesId);
             
             modelBuilder.Entity<News>()
                 .HasOne(n => n.Animal)
                 .WithMany(a => a.News)
                 .HasForeignKey(n => n.AnimalId);
 
+            modelBuilder.Entity<News>()
+                .HasOne(n => n.AnimalSpecies)
+                .WithMany(a => a.News)
+                .HasForeignKey(n => n.SpeciesId);
+
             modelBuilder.Entity<Animal>()
                 .HasOne(a => a.Employee)
                 .WithMany(emp => emp.Animals)
                 .HasForeignKey(a => a.EmployeeId);
-
-            modelBuilder.Entity<Animal>()
-                .HasOne(a => a.FeedingSchedule)
-                .WithMany(fs => fs.Animals)
-                .HasForeignKey(a => a.ScheduleNo);
-
+            
             modelBuilder.Entity<Animal>()
                 .HasOne(a => a.Cage)
                 .WithMany(c => c.Animals)
@@ -186,20 +192,33 @@ namespace API.Models.Data
                 .WithMany(f => f.ImportHistories)
                 .HasForeignKey(ih => ih.FoodId);
 
-            modelBuilder.Entity<Cage>()
-                .HasOne(c => c.FeedingSchedule)
-                .WithMany(fs => fs.Cages)
-                .HasForeignKey(c => c.ScheduleNo);
+            modelBuilder.Entity<FeedingSchedule>()
+                .Property(fs => fs.CageId)
+                .IsRequired(false);
 
             modelBuilder.Entity<FeedingSchedule>()
+                .Property(fs => fs.AnimalId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<FeedingMenu>()
                 .HasOne(fs => fs.FoodInventory)
                 .WithMany(f => f.FeedingSchedules)
                 .HasForeignKey(fs => fs.FoodId);
 
-            modelBuilder.Entity<FeedingHistory>()
-                .HasOne(fh => fh.FeedingSchedule)
-                .WithMany(fs => fs.FeedingHistories)
-                .HasForeignKey(fh => fh.ScheduleNo);
+            modelBuilder.Entity<FeedingSchedule>()
+                .HasOne(fs => fs.FeedingMenu)
+                .WithMany(fm => fm.FeedingSchedules)
+                .HasForeignKey(fs => fs.ScheduleNo);
+
+            modelBuilder.Entity<FeedingSchedule>()
+                .HasOne(fs => fs.Animal)
+                .WithMany(fm => fm.FeedingSchedules)
+                .HasForeignKey(fs => fs.AnimalId);
+
+            modelBuilder.Entity<FeedingSchedule>()
+                .HasOne(fs => fs.Cage)
+                .WithMany(fm => fm.FeedingSchedules)
+                .HasForeignKey(fs => fs.CageId);
         }
     }
 }
