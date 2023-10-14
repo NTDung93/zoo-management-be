@@ -17,9 +17,9 @@ namespace API.Helpers
             CreateMap<Animal, AnimalDto>().ReverseMap();
             CreateMap<Area, AreaDto>().ReverseMap();
             CreateMap<Cage, CageDto>().ReverseMap();
-            CreateMap<Food, FoodDto>().ReverseMap();
+            CreateMap<FoodInventory, FoodDto>().ReverseMap();
             CreateMap<News, NewsDto>().ReverseMap();
-            CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
+            //CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
             CreateMap<AnimalSpecies, AnimalSpeciesDto>().ReverseMap();
             CreateMap<OrderDetail, OrderDetailDto>().ReverseMap();
             CreateMap<Ticket, TicketDto>().ReverseMap();

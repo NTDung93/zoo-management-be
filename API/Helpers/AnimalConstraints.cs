@@ -2,6 +2,8 @@
 {
     public static class AnimalConstraints
     {
+        public const string ANIMAL_ID_FORMAT = @"ANI\d{3}";
+        
         public const string MALE = "Male";
         public const string FEMALE = "Female";
 

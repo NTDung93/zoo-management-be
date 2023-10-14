@@ -14,7 +14,7 @@
         public ICollection<News> News { get; set; }
         public ICollection<EmployeeCertificate> EmployeeCertificates { get; set; }
         public ICollection<Animal> Animals { get; set; }
-        public ICollection<FeedingSchedule> FeedingSchedules { get; set; }
+        //public ICollection<FeedingSchedule> FeedingSchedules { get; set; }
 
     }
 }
