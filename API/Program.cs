@@ -1,4 +1,5 @@
 using API;
+using API.Helpers;
 using API.Models.Data;
 using API.Repositories;
 using API.Repositories.Impl;
@@ -47,6 +48,7 @@ builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddScoped<ICertificateRepository, CertificateRepository>();
 builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 
 var app = builder.Build();
@@ -77,6 +79,7 @@ app.UseAuthentication();
 app.UseCors(opt =>
 {
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173");
 });
 
 app.UseAuthorization();

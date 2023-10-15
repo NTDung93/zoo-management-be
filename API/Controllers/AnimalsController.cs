@@ -19,7 +19,6 @@ namespace API.Controllers
     {
         private readonly IAnimalsRepository _animalRepo;
         private readonly IMapper _mapper;
-        //private readonly BuggyController _buggy;
 
         public AnimalsController(IAnimalsRepository animalRepo, IMapper mapper)
         {
@@ -97,32 +96,16 @@ namespace API.Controllers
         [HttpPost("create-animal")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<AnimalDto>> CreateNewAnimals([FromBody] AnimalDto animalDto)
-        {
-            var animals = await _animalRepo.GetAnimals();
-            var id = animals.OrderByDescending(a => a.AnimalId).First();
+        {           
             if (animalDto.Name.Trim().Length == 0 || animalDto.Region.Trim().Length == 0 || animalDto.Behavior.Length == 0)
             {
                 return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
             }
             else
             {
-                var animal = new Animal 
-                { 
-                    AnimalId = (int.Parse(id.AnimalId) + 1).ToString(),
-                    Name = animalDto.Name,
-                    Region = animalDto.Region,
-                    Behavior = animalDto.Behavior,
-                    Gender = animalDto.Gender,
-                    BirthDate = animalDto.BirthDate,
-                    Image = animalDto.Image,
-                    HealthStatus = animalDto.HealthStatus,
-                    Rarity = animalDto.Rarity,
-                    IsDeleted = animalDto.IsDeleted,
-                    EmployeeId = animalDto.EmployeeId,
-                    CageId = animalDto.CageId,
-                };
+                var animal = _mapper.Map<Animal>(animalDto);
                 await _animalRepo.CreateNewAnimal(animal);
-                animals = await _animalRepo.GetAnimals();
+                var animals = await _animalRepo.GetAnimals();
                 var animalsDto = _mapper.Map<IEnumerable<AnimalDto>>(animals);
                 return CreatedAtRoute("GetAnimals", animalsDto);
             }
@@ -132,7 +115,6 @@ namespace API.Controllers
         [ProducesResponseType(204)]
         public async Task<IActionResult> UpdateAnimal([FromQuery] string animalId, [FromBody] AnimalDto animalDto)
         {
-            var areas = await _animalRepo.GetAnimals();
             var currAnimal = await _animalRepo.GetAnimalById(animalId);
             if (animalDto.Name.Trim().Length == 0 || animalDto.Region.Trim().Length == 0 || animalDto.Behavior.Length == 0)
             {

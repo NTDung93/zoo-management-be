@@ -12,15 +12,16 @@
         public string Image { get; set; }
         public byte? HealthStatus { get; set; }
         public string Rarity { get; set; }
+        public int MaxFeedingQuantity { get; set; }
         public byte? IsDeleted { get; set; }
         public string EmployeeId { get; set; }
         public string CageId { get; set; }
         public int SpeciesId { get; set; }
+        public string ScheduleNo { get; set; }
         public Employee Employee { get; set; }
         public AnimalSpecies AnimalSpecies { get; set; }
         public Cage Cage { get; set; }  
         public ICollection<News> News { get; set; } 
-        public ICollection<FeedingSchedule> FeedingSchedules { get; set; }
-
+        public FeedingSchedule FeedingSchedule { get; set; }
     }
 }

@@ -12,6 +12,19 @@ namespace API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AnimalSpecies",
+                columns: table => new
+                {
+                    SpeciesId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SpeciesName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnimalSpecies", x => x.SpeciesId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Areas",
                 columns: table => new
                 {
@@ -49,9 +62,7 @@ namespace API.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmployeeStatus = table.Column<byte>(type: "tinyint", nullable: false),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    EmployeeStatus = table.Column<byte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,17 +70,16 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Foods",
+                name: "FoodInventories",
                 columns: table => new
                 {
-                    FoodId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FoodId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FoodName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    InventoryQuantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Foods", x => x.FoodId);
+                    table.PrimaryKey("PK_FoodInventories", x => x.FoodId);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,33 +101,13 @@ namespace API.Migrations
                 name: "Tickets",
                 columns: table => new
                 {
-                    TicketId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    UnitPrice = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tickets", x => x.TicketId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cages",
-                columns: table => new
-                {
-                    CageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MaxCapacity = table.Column<int>(type: "int", nullable: false),
-                    AreaId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cages", x => x.CageId);
-                    table.ForeignKey(
-                        name: "FK_Cages_Areas_AreaId",
-                        column: x => x.AreaId,
-                        principalTable: "Areas",
-                        principalColumn: "AreaId");
                 });
 
             migrationBuilder.CreateTable(
@@ -127,16 +117,15 @@ namespace API.Migrations
                     No = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CertificateCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CertificateCode1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    CertificateCode = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmployeeCertificates", x => x.No);
                     table.ForeignKey(
-                        name: "FK_EmployeeCertificates_Certificates_CertificateCode1",
-                        column: x => x.CertificateCode1,
+                        name: "FK_EmployeeCertificates_Certificates_CertificateCode",
+                        column: x => x.CertificateCode,
                         principalTable: "Certificates",
                         principalColumn: "CertificateCode");
                     table.ForeignKey(
@@ -147,6 +136,24 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FeedingSchedules",
+                columns: table => new
+                {
+                    ScheduleNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ScheduleName = table.Column<int>(type: "int", nullable: false),
+                    FoodId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeedingSchedules", x => x.ScheduleNo);
+                    table.ForeignKey(
+                        name: "FK_FeedingSchedules_FoodInventories_FoodId",
+                        column: x => x.FoodId,
+                        principalTable: "FoodInventories",
+                        principalColumn: "FoodId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ImportHistories",
                 columns: table => new
                 {
@@ -154,17 +161,16 @@ namespace API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ImportQuantity = table.Column<int>(type: "int", nullable: false),
-                    FoodId = table.Column<int>(type: "int", nullable: false)
+                    FoodId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ImportHistories", x => x.No);
                     table.ForeignKey(
-                        name: "FK_ImportHistories_Foods_FoodId",
+                        name: "FK_ImportHistories_FoodInventories_FoodId",
                         column: x => x.FoodId,
-                        principalTable: "Foods",
-                        principalColumn: "FoodId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "FoodInventories",
+                        principalColumn: "FoodId");
                 });
 
             migrationBuilder.CreateTable(
@@ -174,7 +180,7 @@ namespace API.Migrations
                     TransactionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TotalPrice = table.Column<double>(type: "float", nullable: true),
                     PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PaymentStatus = table.Column<byte>(type: "tinyint", nullable: true),
                     OrderId = table.Column<int>(type: "int", nullable: false)
@@ -195,8 +201,7 @@ namespace API.Migrations
                 columns: table => new
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    TicketId = table.Column<int>(type: "int", nullable: false),
-                    OrderDetailId = table.Column<int>(type: "int", nullable: false),
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -218,22 +223,49 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AnimalSpecies",
+                name: "Cages",
                 columns: table => new
                 {
-                    SpeciesId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SpeciesName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CageId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    CageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaxCapacity = table.Column<int>(type: "int", nullable: false),
+                    CurrentQuantity = table.Column<int>(type: "int", nullable: false),
+                    AreaId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ScheduleNo = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnimalSpecies", x => x.SpeciesId);
+                    table.PrimaryKey("PK_Cages", x => x.CageId);
                     table.ForeignKey(
-                        name: "FK_AnimalSpecies_Cages_CageId",
-                        column: x => x.CageId,
-                        principalTable: "Cages",
-                        principalColumn: "CageId");
+                        name: "FK_Cages_Areas_AreaId",
+                        column: x => x.AreaId,
+                        principalTable: "Areas",
+                        principalColumn: "AreaId");
+                    table.ForeignKey(
+                        name: "FK_Cages_FeedingSchedules_ScheduleNo",
+                        column: x => x.ScheduleNo,
+                        principalTable: "FeedingSchedules",
+                        principalColumn: "ScheduleNo");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FeedingHistories",
+                columns: table => new
+                {
+                    HistoryNo = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ScheduleNo = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FeedingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FeedingStatus = table.Column<byte>(type: "tinyint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeedingHistories", x => x.HistoryNo);
+                    table.ForeignKey(
+                        name: "FK_FeedingHistories_FeedingSchedules_ScheduleNo",
+                        column: x => x.ScheduleNo,
+                        principalTable: "FeedingSchedules",
+                        principalColumn: "ScheduleNo");
                 });
 
             migrationBuilder.CreateTable(
@@ -250,10 +282,12 @@ namespace API.Migrations
                     Image = table.Column<string>(type: "text", nullable: true),
                     HealthStatus = table.Column<byte>(type: "tinyint", nullable: true),
                     Rarity = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaxFeedingQuantity = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<byte>(type: "tinyint", nullable: true),
                     EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SpeciesId = table.Column<int>(type: "int", nullable: false)
+                    SpeciesId = table.Column<int>(type: "int", nullable: false),
+                    ScheduleNo = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -274,40 +308,11 @@ namespace API.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FeedingSchedules",
-                columns: table => new
-                {
-                    ScheduleNo = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FeedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FeedQuantity = table.Column<int>(type: "int", nullable: false),
-                    FeedStatus = table.Column<byte>(type: "tinyint", nullable: false),
-                    FoodId = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    AnimalId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FeedingSchedules", x => x.ScheduleNo);
                     table.ForeignKey(
-                        name: "FK_FeedingSchedules_Animals_AnimalId",
-                        column: x => x.AnimalId,
-                        principalTable: "Animals",
-                        principalColumn: "AnimalId");
-                    table.ForeignKey(
-                        name: "FK_FeedingSchedules_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeId");
-                    table.ForeignKey(
-                        name: "FK_FeedingSchedules_Foods_FoodId",
-                        column: x => x.FoodId,
-                        principalTable: "Foods",
-                        principalColumn: "FoodId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Animals_FeedingSchedules_ScheduleNo",
+                        column: x => x.ScheduleNo,
+                        principalTable: "FeedingSchedules",
+                        principalColumn: "ScheduleNo");
                 });
 
             migrationBuilder.CreateTable(
@@ -356,14 +361,14 @@ namespace API.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Animals_ScheduleNo",
+                table: "Animals",
+                column: "ScheduleNo");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Animals_SpeciesId",
                 table: "Animals",
                 column: "SpeciesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnimalSpecies_CageId",
-                table: "AnimalSpecies",
-                column: "CageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cages_AreaId",
@@ -371,9 +376,14 @@ namespace API.Migrations
                 column: "AreaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeCertificates_CertificateCode1",
+                name: "IX_Cages_ScheduleNo",
+                table: "Cages",
+                column: "ScheduleNo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeCertificates_CertificateCode",
                 table: "EmployeeCertificates",
-                column: "CertificateCode1");
+                column: "CertificateCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeCertificates_EmployeeId",
@@ -381,14 +391,9 @@ namespace API.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeedingSchedules_AnimalId",
-                table: "FeedingSchedules",
-                column: "AnimalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FeedingSchedules_EmployeeId",
-                table: "FeedingSchedules",
-                column: "EmployeeId");
+                name: "IX_FeedingHistories_ScheduleNo",
+                table: "FeedingHistories",
+                column: "ScheduleNo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FeedingSchedules_FoodId",
@@ -434,7 +439,7 @@ namespace API.Migrations
                 name: "EmployeeCertificates");
 
             migrationBuilder.DropTable(
-                name: "FeedingSchedules");
+                name: "FeedingHistories");
 
             migrationBuilder.DropTable(
                 name: "ImportHistories");
@@ -452,9 +457,6 @@ namespace API.Migrations
                 name: "Certificates");
 
             migrationBuilder.DropTable(
-                name: "Foods");
-
-            migrationBuilder.DropTable(
                 name: "Animals");
 
             migrationBuilder.DropTable(
@@ -467,13 +469,19 @@ namespace API.Migrations
                 name: "AnimalSpecies");
 
             migrationBuilder.DropTable(
-                name: "Employees");
-
-            migrationBuilder.DropTable(
                 name: "Cages");
 
             migrationBuilder.DropTable(
+                name: "Employees");
+
+            migrationBuilder.DropTable(
                 name: "Areas");
+
+            migrationBuilder.DropTable(
+                name: "FeedingSchedules");
+
+            migrationBuilder.DropTable(
+                name: "FoodInventories");
         }
     }
 }

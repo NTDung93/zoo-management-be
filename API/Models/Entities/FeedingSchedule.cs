@@ -2,15 +2,14 @@
 {
     public class FeedingSchedule
     {
-        public int ScheduleNo { get; set; }
-        public DateTime FeedTime { get; set; }
-        public int FeedQuantity { get; set; }
-        public byte FeedStatus { get; set; }
-        public int FoodId { get; set; }
-        public string EmployeeId { get; set; }
-        public string AnimalId { get; set; }    
-        public Employee Employee { get; set; }
-        public Animal Animal { get; set; }
-        public Food Food { get; set; }
+        public string ScheduleNo { get; set; }
+        public int ScheduleName { get; set; }
+        public string FoodId { get; set; }
+        public FoodInventory FoodInventory { get; set; }
+        public ICollection<FeedingHistory> FeedingHistories { get; set; }
+        public ICollection<Animal> Animals { get; set; }
+        public ICollection<Cage> Cages { get; set; }
+
+
     }
 }

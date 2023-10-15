@@ -11,7 +11,6 @@ namespace API.Helpers
         {
             CreateMap<Employee, EmployeeRequest>().ReverseMap();
             CreateMap<Employee, EmployeeResponse>().ReverseMap();
-            CreateMap<Employee, EmployeeModel>().ReverseMap();
 
             CreateMap<AnimalSpecies, AnimalSpeciesRequest>().ReverseMap();
             CreateMap<AnimalSpecies, AnimalSpeciesResponse>().ReverseMap();
@@ -19,10 +18,12 @@ namespace API.Helpers
             CreateMap<Animal, AnimalDto>().ReverseMap();
             CreateMap<Area, AreaDto>().ReverseMap();
             CreateMap<Cage, CageDto>().ReverseMap();
-            CreateMap<Food, FoodDto>().ReverseMap();
+            CreateMap<FoodInventory, FoodDto>().ReverseMap();
             CreateMap<News, NewsDto>().ReverseMap();
-            CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
+            //CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
             CreateMap<AnimalSpecies, AnimalSpeciesDto>().ReverseMap();
+            CreateMap<Certificate, CertificateDto>().ReverseMap();
+            CreateMap<EmployeeCertificate, EmployeeCertificateDto>().ReverseMap();
         }
     }
 }

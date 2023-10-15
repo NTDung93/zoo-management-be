@@ -8,10 +8,8 @@ public class FeedingScheduleDto
     public DateTime FeedTime { get; set; }
     public int FeedQuantity { get; set; }
     public byte FeedStatus { get; set; }
-    public int FoodId { get; set; }
-
+    public string FoodId { get; set; }
     public string EmployeeId { get; set; }
-
     public string AnimalId { get; set; }
     public EmployeeResponse Employee { get; set; }
     public AnimalDto Animal { get; set; }
