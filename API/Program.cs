@@ -48,6 +48,8 @@ builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddScoped<IFoodInventoryRepository, FoodInventoryRepository>();
+
 builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 
 var app = builder.Build();

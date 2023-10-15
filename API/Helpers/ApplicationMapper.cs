@@ -22,6 +22,9 @@ namespace API.Helpers
             CreateMap<News, NewsDto>().ReverseMap();
             //CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
             CreateMap<AnimalSpecies, AnimalSpeciesDto>().ReverseMap();
+
+            CreateMap<FoodInventory, FoodInventoryRequest>().ReverseMap();
+            CreateMap<FoodInventory, FoodInventoryResponse>().ReverseMap();
         }
     }
 }
