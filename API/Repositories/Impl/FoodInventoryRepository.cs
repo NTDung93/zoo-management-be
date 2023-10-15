@@ -26,6 +26,12 @@ namespace API.Repositories.Impl
             var food = await GetFood(id);
             if (food == null) return false;
             
+            // check if food has any records in ImportHistories table
+            // if yes, cannot delete this food
+            var isExisted = await _dbContext.ImportHistories
+                .AnyAsync(ih => ih.FoodId.Equals(id));
+            if (isExisted) return false;
+
             _dbContext.FoodInventories.Remove(food);
             return await Save();
         }
@@ -57,7 +63,7 @@ namespace API.Repositories.Impl
         public async Task<IEnumerable<FoodInventory>> SearchFoodByName(string name)
         {
             return await _dbContext.FoodInventories
-                .Where(f => f.FoodName.ToLower().Contains(name.Trim().ToLower()))
+                .Where(f => f.FoodName.ToLower().Trim().Contains(name.Trim().ToLower()))
                 .ToListAsync();
         }
 
@@ -67,7 +73,6 @@ namespace API.Repositories.Impl
             if (existingFood == null) return false;
 
             existingFood.FoodName = food.FoodName;
-            // can update quantity??
             _dbContext.FoodInventories.Update(existingFood);
             return await Save();
         }

@@ -49,6 +49,7 @@ builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
 builder.Services.AddScoped<IFoodInventoryRepository, FoodInventoryRepository>();
+builder.Services.AddScoped<IImportHistoryRepository, ImportHistoryRepository>();
 
 builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 

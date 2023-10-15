@@ -3,9 +3,7 @@ using API.Models.Dtos;
 using API.Models.Entities;
 using API.Repositories;
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using System.Text.RegularExpressions;
 
 namespace API.Controllers
@@ -99,11 +97,6 @@ namespace API.Controllers
             if (string.IsNullOrEmpty(food.FoodName)) return BadRequest(new ProblemDetails
             {
                 Title = "Food's name is empty!"
-            });
-
-            if (food.InventoryQuantity <= 0) return BadRequest(new ProblemDetails
-            {
-                Title = "Quantity must be positive integer!"
             });
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

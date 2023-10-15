@@ -25,6 +25,9 @@ namespace API.Helpers
 
             CreateMap<FoodInventory, FoodInventoryRequest>().ReverseMap();
             CreateMap<FoodInventory, FoodInventoryResponse>().ReverseMap();
+
+            CreateMap<ImportHistory, ImportHistoryRequest>().ReverseMap();
+            CreateMap<ImportHistory, ImportHistoryResponse>().ReverseMap();
         }
     }
 }
