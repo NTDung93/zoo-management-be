@@ -57,6 +57,8 @@ namespace API.Models.Data
             modelBuilder.Entity<Animal>()
                 .Property(a => a.Image).HasColumnType("text");  
 
+            modelBuilder.Entity<Ticket>()
+                .Property(t => t.Image).HasColumnType("text");
 
             modelBuilder.Entity<Order>().HasKey(o => o.OrderId);
             modelBuilder.Entity<Order>().Property(o => o.OrderId)
