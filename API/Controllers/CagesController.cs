@@ -187,5 +187,39 @@ namespace API.Controllers
             }
             return NotFound();
         }
+
+        /// <summary>
+        /// Controller is used to retrieve the current capacity of a cage
+        /// For demonstration purpose
+        /// </summary>
+        /// <param name="cageId"></param>
+        /// <returns></returns>
+        [HttpGet("cage/current-capacity")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<int>> GetCurrentCapacityInACage(string cageId)
+        {
+            var currentCapacity = await _cagesRepo.GetCurrentCapacityInACage(cageId);
+            if (currentCapacity < 0) return BadRequest(new ProblemDetails
+            {
+                Title = "Invalid of capacity!"
+            });
+            return Ok(currentCapacity);
+        }
+
+        [HttpPut("cage/current-capacity")]
+        [ProducesResponseType(204)]
+        public async Task<IActionResult> UpdateCurrentCapacityInACage(string cageId)
+        {
+            if (string.IsNullOrEmpty(cageId)) return BadRequest(new ProblemDetails
+            {
+                Title = "Cage id is empty!"
+            });
+            var result = await _cagesRepo.UpdateCurrentQuantityInACage(cageId);
+            if (!result) return BadRequest(new ProblemDetails
+            {
+                Title = "An error occurs while updating capacity!"
+            });
+            return NoContent();
+        }
     }
 }
