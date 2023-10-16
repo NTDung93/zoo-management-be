@@ -95,6 +95,18 @@ namespace API.Models.Data
 
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
 
+            modelBuilder.Entity<FoodInventory>()
+                .Property(fi => fi.InventoryQuantity)
+                .HasColumnType("decimal(5,2)");
+
+            modelBuilder.Entity<ImportHistory>()
+                .Property(ih => ih.ImportQuantity)
+                .HasColumnType("decimal(5,2)");
+        
+            modelBuilder.Entity<FeedingSchedule>()
+                .Property(fs => fs.FeedingAmount)
+                .HasColumnType("decimal(5,2)");
+
             modelBuilder.Entity<EmployeeCertificate>()
                 .HasKey(ec => ec.No);
             modelBuilder.Entity<EmployeeCertificate>()
