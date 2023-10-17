@@ -233,6 +233,15 @@ namespace API.Models.Data
                 .HasOne(fs => fs.Cage)
                 .WithMany(fm => fm.FeedingSchedules)
                 .HasForeignKey(fs => fs.CageId);
+
+            modelBuilder.Entity<FeedingSchedule>()
+                .HasOne(fs => fs.Employee)
+                .WithMany(fm => fm.FeedingSchedules)
+                .HasForeignKey(fs => fs.EmployeeId);
+
+            modelBuilder.Entity<EmployeeCertificate>()
+                .Property(ec => ec.CertificateImage)
+                .HasColumnType("text");
         }
     }
 }
