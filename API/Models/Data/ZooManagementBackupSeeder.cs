@@ -52,6 +52,7 @@ namespace API.Models.Data
                         CageId = "A0001",
                         Name = "Lion",
                         MaxCapacity = 10,
+                        CurrentCapacity = 0,
                         AreaId = "A"
                     },
                     new Cage
@@ -59,6 +60,7 @@ namespace API.Models.Data
                         CageId = "A0002",
                         Name = "Tiger",
                         MaxCapacity = 10,
+                        CurrentCapacity = 0,
                         AreaId = "A"
                     },
                     new Cage
@@ -66,6 +68,7 @@ namespace API.Models.Data
                         CageId = "B0001",
                         Name = "Girrafe",
                         MaxCapacity = 10,
+                        CurrentCapacity = 0,
                         AreaId = "B"
                     },
                     new Cage
@@ -73,6 +76,7 @@ namespace API.Models.Data
                         CageId = "B0002",
                         Name = "Elephant",
                         MaxCapacity = 10,
+                        CurrentCapacity = 0,
                         AreaId = "B"
                     },
                     new Cage
@@ -80,6 +84,7 @@ namespace API.Models.Data
                         CageId = "C0001",
                         Name = "Peacook and Flamingo",
                         MaxCapacity = 10,
+                        CurrentCapacity = 0,
                         AreaId = "C"
                     },
                     new Cage
@@ -87,6 +92,7 @@ namespace API.Models.Data
                         CageId = "C0002",
                         Name = "Rooster and Parrot",
                         MaxCapacity = 10,
+                        CurrentCapacity = 0,
                         AreaId = "C"
                     },
                     new Cage
@@ -94,6 +100,7 @@ namespace API.Models.Data
                         CageId = "D0001",
                         Name = "Crocodile",
                         MaxCapacity = 10,
+                        CurrentCapacity = 0,
                         AreaId = "D"
                     },
                 };
