@@ -60,5 +60,23 @@ namespace API.Repositories.Impl
         {
             return await _context.Cages.Include(x=>x.Area).FirstOrDefaultAsync(cage => cage.CageId.ToLower().Equals(cageId.Trim().ToLower()));
         }
+
+        public async Task<int> GetCurrentCapacityInACage(string cageId)
+        {
+            var currentCapacity = _context.Animals.Where(a => a.CageId.Equals(cageId.Trim())).Count();
+            //if (currentCapacity < 0) throw new Exception("Current capacity is not valid");
+            return await Task.FromResult(currentCapacity);
+        }
+
+        public async Task<bool> UpdateCurrentQuantityInACage(string cageId)
+        {
+            var currentCapacity = await GetCurrentCapacityInACage(cageId);
+            var currCage = await GetCageById(cageId);
+
+            currCage.CurrentCapacity = currentCapacity;
+            _context.Cages.Update(currCage);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

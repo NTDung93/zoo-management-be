@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    partial class ZooManagementBackupContextModelSnapshot : ModelSnapshot
+    [Migration("20231015022258_AddImageAndDescriptionInTickets")]
+    partial class AddImageAndDescriptionInTickets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +120,7 @@ namespace API.Migrations
                     b.Property<string>("AreaId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CurrentCapacity")
+                    b.Property<int>("CurrentQuantity")
                         .HasColumnType("int");
 
                     b.Property<int>("MaxCapacity")
@@ -217,6 +220,9 @@ namespace API.Migrations
                     b.Property<string>("ScheduleNo")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("FeedingQuantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
 
@@ -243,9 +249,6 @@ namespace API.Migrations
 
                     b.Property<string>("CageId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("FeedingAmount")
-                        .HasColumnType("decimal(5,2)");
 
                     b.Property<byte>("FeedingStatus")
                         .HasColumnType("tinyint");
@@ -275,8 +278,8 @@ namespace API.Migrations
                     b.Property<string>("FoodName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("InventoryQuantity")
-                        .HasColumnType("decimal(5,2)");
+                    b.Property<int>("InventoryQuantity")
+                        .HasColumnType("int");
 
                     b.HasKey("FoodId");
 
@@ -297,8 +300,8 @@ namespace API.Migrations
                     b.Property<DateTime>("ImportDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("ImportQuantity")
-                        .HasColumnType("decimal(5,2)");
+                    b.Property<int>("ImportQuantity")
+                        .HasColumnType("int");
 
                     b.HasKey("No");
 
