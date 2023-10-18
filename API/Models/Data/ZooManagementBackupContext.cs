@@ -242,6 +242,11 @@ namespace API.Models.Data
             modelBuilder.Entity<EmployeeCertificate>()
                 .Property(ec => ec.CertificateImage)
                 .HasColumnType("text");
+
+            modelBuilder.Entity<Area>()
+                .HasOne(a => a.Employee)
+                .WithOne(e => e.Area)
+                .HasForeignKey<Area>(a => a.EmployeeId);
         }
     }
 }

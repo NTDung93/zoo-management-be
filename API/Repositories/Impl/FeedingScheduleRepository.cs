@@ -17,7 +17,6 @@ namespace API.Repositories.Impl
         public async Task<bool> CreateFeedingSchedule(FeedingSchedule feedingSchedule)
         {
             if (feedingSchedule == null) return false;  
-            // more validation about feeding quantity
             await _dbContext.FeedingSchedules.AddAsync(feedingSchedule);
             return await Save();
         }
@@ -71,6 +70,7 @@ namespace API.Repositories.Impl
 
         public async Task<bool> UpdateFeedingScheduleStatus(FeedingSchedule feedingSchedule)
         {
+            // validation about feeding amount
             var existingFeedingSchedule = await GetFeedingSchedule(feedingSchedule.No);
             if (existingFeedingSchedule == null) return false;
 
