@@ -135,7 +135,7 @@ namespace API.Models.Data
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<FeedingMenu>()
-                .HasKey(fs => fs.ScheduleNo);
+                .HasKey(fs => fs.MenuNo);
             
             modelBuilder.Entity<FoodInventory>()
                 .HasKey(f => f.FoodId);
@@ -222,7 +222,7 @@ namespace API.Models.Data
             modelBuilder.Entity<FeedingSchedule>()
                 .HasOne(fs => fs.FeedingMenu)
                 .WithMany(fm => fm.FeedingSchedules)
-                .HasForeignKey(fs => fs.ScheduleNo);
+                .HasForeignKey(fs => fs.MenuNo);
 
             modelBuilder.Entity<FeedingSchedule>()
                 .HasOne(fs => fs.Animal)

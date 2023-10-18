@@ -3,7 +3,7 @@
     public class FeedingSchedule
     {
         public int No { get; set; }
-        public string ScheduleNo { get; set; }
+        public string MenuNo { get; set; }
         public string CageId { get; set; }
         public string AnimalId { get; set; }
         public string EmployeeId { get; set; }
