@@ -107,6 +107,10 @@ namespace API.Models.Data
                 .Property(fs => fs.FeedingAmount)
                 .HasColumnType("decimal(5,2)");
 
+            modelBuilder.Entity<OrderDetail>()
+                .Property(od => od.UnitTotalPrice)
+                .HasColumnType("decimal(10,3)");
+
             modelBuilder.Entity<EmployeeCertificate>()
                 .HasKey(ec => ec.No);
             modelBuilder.Entity<EmployeeCertificate>()
