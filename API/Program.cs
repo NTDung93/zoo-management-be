@@ -45,9 +45,13 @@ builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
 builder.Services.AddScoped<IAreasRepository, AreasRepository>();
 builder.Services.AddScoped<ICagesRepository, CagesRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddScoped<IFoodInventoryRepository, FoodInventoryRepository>();
+builder.Services.AddScoped<IImportHistoryRepository, ImportHistoryRepository>();
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
-builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
-builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddScoped<IFeedingMenuRepository, FeedingMenuRepository>();
+
 builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();

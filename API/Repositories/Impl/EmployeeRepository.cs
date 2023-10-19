@@ -4,7 +4,6 @@ using API.Models.Data;
 using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using NuGet.DependencyResolver;
 
 namespace API.Repositories.Impl
 {
@@ -53,7 +52,8 @@ namespace API.Repositories.Impl
         public async Task<bool> DeleteTrainer(string id)
         {
             var trainer = await _dbContext.Employees.FindAsync(id);
-            if (trainer == null || !trainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE)) return false;
+            if (trainer == null || !trainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
+                return false;
             if (trainer.EmployeeStatus == EmployeeConstraints.DELETED) return false;
 
             trainer.EmployeeStatus = EmployeeConstraints.DELETED;

@@ -17,10 +17,21 @@ namespace API.Helpers
             CreateMap<Animal, AnimalDto>().ReverseMap();
             CreateMap<Area, AreaDto>().ReverseMap();
             CreateMap<Cage, CageDto>().ReverseMap();
-            CreateMap<FoodInventory, FoodDto>().ReverseMap();
             CreateMap<News, NewsDto>().ReverseMap();
-            //CreateMap<FeedingSchedule, FeedingScheduleDto>().ReverseMap();
             CreateMap<AnimalSpecies, AnimalSpeciesDto>().ReverseMap();
+
+            CreateMap<FoodInventory, FoodInventoryRequest>().ReverseMap();
+            CreateMap<FoodInventory, FoodInventoryResponse>().ReverseMap();
+
+            CreateMap<ImportHistory, ImportHistoryRequest>().ReverseMap();
+            CreateMap<ImportHistory, ImportHistoryResponse>().ReverseMap();
+
+            CreateMap<FeedingMenu, FeedingMenuResponse>().ReverseMap();
+            CreateMap<FeedingMenu, FeedingMenuRequest>().ReverseMap();
+
+            CreateMap<FeedingSchedule, FeedingScheduleRequest>().ReverseMap();
+            CreateMap<FeedingSchedule, FeedingScheduleResponse>().ReverseMap();
+
             CreateMap<OrderDetail, OrderDetailDto>().ReverseMap();
             CreateMap<Ticket, TicketDto>().ReverseMap();
             CreateMap<Order, OrderDto>().ReverseMap();

@@ -1,11 +1,11 @@
 ﻿namespace API.Helpers
 {
-    public class EmployeeConstraints
+    public static class EmployeeConstraints
     {
         public const string ADMIN_ROLE = "admin";
         public const string STAFF_ROLE = "staff";
         public const string TRAINER_ROLE = "trainer";
-
+        
         public const byte DELETED = 1;
         public const byte NOT_DELETED = 0;
         public const string DEFAULT_PASSWORD = "123";

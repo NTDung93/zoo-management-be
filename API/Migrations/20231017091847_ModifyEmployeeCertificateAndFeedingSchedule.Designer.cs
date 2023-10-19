@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    partial class ZooManagementBackupContextModelSnapshot : ModelSnapshot
+    [Migration("20231017091847_ModifyEmployeeCertificateAndFeedingSchedule")]
+    partial class ModifyEmployeeCertificateAndFeedingSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,14 +107,7 @@ namespace API.Migrations
                     b.Property<string>("AreaName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("AreaId");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique()
-                        .HasFilter("[EmployeeId] IS NOT NULL");
 
                     b.ToTable("Areas");
                 });
@@ -224,16 +220,16 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.FeedingMenu", b =>
                 {
-                    b.Property<string>("MenuNo")
+                    b.Property<string>("ScheduleNo")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("MenuName")
+                    b.Property<string>("ScheduleName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MenuNo");
+                    b.HasKey("ScheduleNo");
 
                     b.HasIndex("FoodId");
 
@@ -269,7 +265,7 @@ namespace API.Migrations
                     b.Property<byte>("FeedingStatus")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("MenuNo")
+                    b.Property<string>("ScheduleNo")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("StartTime")
@@ -283,7 +279,7 @@ namespace API.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("MenuNo");
+                    b.HasIndex("ScheduleNo");
 
                     b.ToTable("FeedingSchedules");
                 });
@@ -404,9 +400,6 @@ namespace API.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("UnitTotalPrice")
-                        .HasColumnType("decimal(10,3)");
-
                     b.HasKey("OrderId", "TicketId");
 
                     b.HasIndex("TicketId");
@@ -490,15 +483,6 @@ namespace API.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.Area", b =>
-                {
-                    b.HasOne("API.Models.Entities.Employee", "Employee")
-                        .WithOne("Area")
-                        .HasForeignKey("API.Models.Entities.Area", "EmployeeId");
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
                 {
                     b.HasOne("API.Models.Entities.Area", "Area")
@@ -548,7 +532,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.Entities.FeedingMenu", "FeedingMenu")
                         .WithMany("FeedingSchedules")
-                        .HasForeignKey("MenuNo");
+                        .HasForeignKey("ScheduleNo");
 
                     b.Navigation("Animal");
 
@@ -655,8 +639,6 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Entities.Employee", b =>
                 {
                     b.Navigation("Animals");
-
-                    b.Navigation("Area");
 
                     b.Navigation("EmployeeCertificates");
 

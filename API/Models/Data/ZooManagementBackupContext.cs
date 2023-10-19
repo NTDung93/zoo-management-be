@@ -95,6 +95,22 @@ namespace API.Models.Data
 
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
 
+            modelBuilder.Entity<FoodInventory>()
+                .Property(fi => fi.InventoryQuantity)
+                .HasColumnType("decimal(5,2)");
+
+            modelBuilder.Entity<ImportHistory>()
+                .Property(ih => ih.ImportQuantity)
+                .HasColumnType("decimal(5,2)");
+        
+            modelBuilder.Entity<FeedingSchedule>()
+                .Property(fs => fs.FeedingAmount)
+                .HasColumnType("decimal(5,2)");
+
+            modelBuilder.Entity<OrderDetail>()
+                .Property(od => od.UnitTotalPrice)
+                .HasColumnType("decimal(10,3)");
+
             modelBuilder.Entity<EmployeeCertificate>()
                 .HasKey(ec => ec.No);
             modelBuilder.Entity<EmployeeCertificate>()
@@ -123,7 +139,7 @@ namespace API.Models.Data
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<FeedingMenu>()
-                .HasKey(fs => fs.ScheduleNo);
+                .HasKey(fs => fs.MenuNo);
             
             modelBuilder.Entity<FoodInventory>()
                 .HasKey(f => f.FoodId);
@@ -210,7 +226,7 @@ namespace API.Models.Data
             modelBuilder.Entity<FeedingSchedule>()
                 .HasOne(fs => fs.FeedingMenu)
                 .WithMany(fm => fm.FeedingSchedules)
-                .HasForeignKey(fs => fs.ScheduleNo);
+                .HasForeignKey(fs => fs.MenuNo);
 
             modelBuilder.Entity<FeedingSchedule>()
                 .HasOne(fs => fs.Animal)
@@ -221,6 +237,20 @@ namespace API.Models.Data
                 .HasOne(fs => fs.Cage)
                 .WithMany(fm => fm.FeedingSchedules)
                 .HasForeignKey(fs => fs.CageId);
+
+            modelBuilder.Entity<FeedingSchedule>()
+                .HasOne(fs => fs.Employee)
+                .WithMany(fm => fm.FeedingSchedules)
+                .HasForeignKey(fs => fs.EmployeeId);
+
+            modelBuilder.Entity<EmployeeCertificate>()
+                .Property(ec => ec.CertificateImage)
+                .HasColumnType("text");
+
+            modelBuilder.Entity<Area>()
+                .HasOne(a => a.Employee)
+                .WithOne(e => e.Area)
+                .HasForeignKey<Area>(a => a.EmployeeId);
         }
     }
 }

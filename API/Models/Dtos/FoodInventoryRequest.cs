@@ -1,8 +1,6 @@
-﻿using API.Models.Entities;
-
-namespace API.Models.Dtos
+﻿namespace API.Models.Dtos
 {
-    public class FoodDto
+    public class FoodInventoryRequest
     {
         public string FoodId { get; set; }
         public string FoodName { get; set; }

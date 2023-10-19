@@ -22,7 +22,6 @@ namespace API.Controllers
 
         [HttpGet("trainers")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetTrainers()
         {
             var trainers = await _employeeRepository.GetTrainers();
@@ -33,7 +32,6 @@ namespace API.Controllers
         
         [HttpGet("trainers/resource-id")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<ActionResult<EmployeeResponse>> GetTrainer(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) return NotFound("Trainer not found!");
@@ -46,7 +44,6 @@ namespace API.Controllers
 
         [HttpPut("trainer/resource-id")]
         [ProducesResponseType(204)]
-        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<IActionResult> UpdateTrainer(string id, EmployeeResponse trainer)
         {
             if (id != trainer.EmployeeId)
@@ -80,7 +77,6 @@ namespace API.Controllers
 
         [HttpPost("trainer")]
         [ProducesResponseType(201)]
-        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> CreateTrainer(EmployeeRequest trainer)
         {
             if (trainer == null) return BadRequest(new ProblemDetails
@@ -129,7 +125,6 @@ namespace API.Controllers
 
         [HttpPut("trainer/status/resource-id")]
         [ProducesResponseType(204)]
-        //[Authorize(Roles = EmployeeConstraints.STAFF_ROLE)]
         public async Task<IActionResult> DeleteTrainer(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) return NotFound("Trainer not found!");

@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    partial class ZooManagementBackupContextModelSnapshot : ModelSnapshot
+    [Migration("20231016020137_ModifyFeedingSchedulesAndFeedingMenus")]
+    partial class ModifyFeedingSchedulesAndFeedingMenus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,14 +107,7 @@ namespace API.Migrations
                     b.Property<string>("AreaName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("AreaId");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique()
-                        .HasFilter("[EmployeeId] IS NOT NULL");
 
                     b.ToTable("Areas");
                 });
@@ -204,9 +200,6 @@ namespace API.Migrations
                     b.Property<string>("CertificateCode")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CertificateImage")
-                        .HasColumnType("text");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -224,16 +217,16 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.FeedingMenu", b =>
                 {
-                    b.Property<string>("MenuNo")
+                    b.Property<string>("ScheduleNo")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("MenuName")
+                    b.Property<string>("ScheduleName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MenuNo");
+                    b.HasKey("ScheduleNo");
 
                     b.HasIndex("FoodId");
 
@@ -254,26 +247,17 @@ namespace API.Migrations
                     b.Property<string>("CageId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<decimal>("FeedingAmount")
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<byte>("FeedingStatus")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("MenuNo")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime>("FeedingTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ScheduleNo")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("No");
 
@@ -281,9 +265,7 @@ namespace API.Migrations
 
                     b.HasIndex("CageId");
 
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("MenuNo");
+                    b.HasIndex("ScheduleNo");
 
                     b.ToTable("FeedingSchedules");
                 });
@@ -404,9 +386,6 @@ namespace API.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("UnitTotalPrice")
-                        .HasColumnType("decimal(10,3)");
-
                     b.HasKey("OrderId", "TicketId");
 
                     b.HasIndex("TicketId");
@@ -490,15 +469,6 @@ namespace API.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("API.Models.Entities.Area", b =>
-                {
-                    b.HasOne("API.Models.Entities.Employee", "Employee")
-                        .WithOne("Area")
-                        .HasForeignKey("API.Models.Entities.Area", "EmployeeId");
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("API.Models.Entities.Cage", b =>
                 {
                     b.HasOne("API.Models.Entities.Area", "Area")
@@ -542,19 +512,13 @@ namespace API.Migrations
                         .WithMany("FeedingSchedules")
                         .HasForeignKey("CageId");
 
-                    b.HasOne("API.Models.Entities.Employee", "Employee")
-                        .WithMany("FeedingSchedules")
-                        .HasForeignKey("EmployeeId");
-
                     b.HasOne("API.Models.Entities.FeedingMenu", "FeedingMenu")
                         .WithMany("FeedingSchedules")
-                        .HasForeignKey("MenuNo");
+                        .HasForeignKey("ScheduleNo");
 
                     b.Navigation("Animal");
 
                     b.Navigation("Cage");
-
-                    b.Navigation("Employee");
 
                     b.Navigation("FeedingMenu");
                 });
@@ -656,11 +620,7 @@ namespace API.Migrations
                 {
                     b.Navigation("Animals");
 
-                    b.Navigation("Area");
-
                     b.Navigation("EmployeeCertificates");
-
-                    b.Navigation("FeedingSchedules");
 
                     b.Navigation("News");
                 });

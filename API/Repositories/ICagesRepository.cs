@@ -1,5 +1,6 @@
 ﻿using API.Models.Dtos;
 using API.Models.Entities;
+using AutoMapper.Configuration.Conventions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Repositories
@@ -15,6 +16,8 @@ namespace API.Repositories
         Task UpdateCage(string cageId, CageDto cageDto);
         Task<bool> HasCage(string cageId);
         Task<Cage> GetCageByIdWithArea(string cageId);
+        Task<int> GetCurrentCapacityInACage(string cageId);
+        Task<bool> UpdateCurrentQuantityInACage(string cageId);
 
     }
 }
