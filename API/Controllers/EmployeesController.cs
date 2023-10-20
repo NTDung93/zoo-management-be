@@ -5,6 +5,7 @@ using API.Models.Dtos;
 using System.Text.RegularExpressions;
 using API.Helpers;
 using API.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -138,6 +139,7 @@ namespace API.Controllers
         // Staff controller's zone
         [HttpGet("staff-accounts")]
         [ProducesResponseType(200)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetStaffAccounts()
         {
             var staffAccounts = await _employeeRepository.GetStaffAccounts();
@@ -148,6 +150,7 @@ namespace API.Controllers
 
         [HttpGet("staff/resource-id")]
         [ProducesResponseType(200)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<EmployeeResponse>> GetStaff(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) 
@@ -161,6 +164,7 @@ namespace API.Controllers
 
         [HttpPut("staff/resource-id")]
         [ProducesResponseType(204)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<IActionResult> UpdateStaff(string id, EmployeeResponse staff)
         {
             if (id != staff.EmployeeId)
@@ -194,6 +198,7 @@ namespace API.Controllers
 
         [HttpPost("staff")]
         [ProducesResponseType(201)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> CreateStaff(EmployeeRequest staff)
         {
             if (staff == null) return BadRequest(new ProblemDetails
@@ -242,6 +247,7 @@ namespace API.Controllers
 
         [HttpPut("staff/status/resource-id")]
         [ProducesResponseType(204)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<IActionResult> DeleteStaff(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) 

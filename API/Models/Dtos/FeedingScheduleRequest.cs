@@ -1,6 +1,6 @@
-﻿namespace API.Models.Entities
+﻿namespace API.Models.Dtos
 {
-    public class FeedingSchedule
+    public class FeedingScheduleRequest
     {
         public int No { get; set; }
         public string MenuNo { get; set; }
@@ -12,9 +12,5 @@
         public DateTime EndTime { get; set; }
         public double FeedingAmount { get; set; }
         public byte FeedingStatus { get; set; }
-        public Animal Animal { get; set; }
-        public Cage Cage { get; set; }  
-        public FeedingMenu FeedingMenu { get; set; }
-        public Employee Employee { get; set; }
     }
 }
