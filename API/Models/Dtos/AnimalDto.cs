@@ -18,8 +18,8 @@ namespace API.Models.Dtos
         public string EmployeeId { get; set; }
         public string CageId { get; set; }
         public int SpeciesId { get; set; }
-        public EmployeeDto Employee { get; set; }
-        public AnimalSpeciesDto AnimalSpecies { get; set; }
-        public CageDto Cage { get; set; }
+        public  EmployeeDto Employee { get; set; }
+        public  AnimalSpeciesDto AnimalSpecies { get; set; }
+        public  CageDto Cage { get; set; }
     }
 }

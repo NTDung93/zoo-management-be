@@ -1,129 +1,150 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using API.Models;
+﻿using API.Helpers;
+using API.Models.Dtos;
 using API.Models.Entities;
 using API.Repositories;
-using API.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
     public class FeedingSchedulesController : BaseApiController
     {
-        private readonly IFeedingScheduleRepository _feedingRepo;
+        private readonly IFeedingScheduleRepository _feedingScheduleRepository;
         private readonly IMapper _mapper;
+        private readonly string CAGE_ID_FORMAT = @"[A-Z]\\d{4}";
 
-        public FeedingSchedulesController(IFeedingScheduleRepository feedingRepo, IMapper mapper)
+        public FeedingSchedulesController(IFeedingScheduleRepository feedingScheduleRepository, 
+            IMapper mapper)
         {
-            this._feedingRepo = feedingRepo;
-            this._mapper = mapper;
+            _feedingScheduleRepository = feedingScheduleRepository;
+            _mapper = mapper;
         }
 
-        [HttpGet("load-schedules", Name = "LoadSchedules")]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<FeedingScheduleDto>>> GetFeedingSchedules()
+        [HttpGet("feeding-schedules")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<FeedingScheduleResponse>>> GetFeedingSchedules()
         {
-            var feedingSchedule = await _feedingRepo.GetListFeedingSchedule();
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            if (!feedingSchedule.Any())
-            {
-                return NotFound();
-            }
-            var feedingScheduleDto = _mapper.Map<IEnumerable<FeedingScheduleDto>>(feedingSchedule);
-            return Ok(feedingScheduleDto);
+            var feedingSchedules = await _feedingScheduleRepository.GetFeedingSchedules();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var mappedFeedingSchedules = _mapper.Map<IEnumerable<FeedingScheduleResponse>>(feedingSchedules);
+            return Ok(mappedFeedingSchedules);
         }
 
-        [HttpGet("find-by-schedule-number")]
-        public async Task<ActionResult<FeedingScheduleDto>> GetFeedingScheduleById(int id)
+        [HttpGet("feeding-schedules/resource-id")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<FeedingScheduleResponse>> GetFeedingSchedule(int no)
         {
-            var feedingSchedule = await _feedingRepo.GetFeedingScheduleById(id);
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            if (feedingSchedule == null) return NotFound();
-            var feedingScheduleDto = _mapper.Map<FeedingScheduleDto>(feedingSchedule);
-            return Ok(feedingScheduleDto);
+            var feedingSchedule = await _feedingScheduleRepository.GetFeedingSchedule(no);
+            if (feedingSchedule == null) return NotFound("Feeding schedule is not found!");
+            var mappedFeedingSchedule = _mapper.Map<FeedingScheduleResponse>(feedingSchedule);
+            return Ok(mappedFeedingSchedule);
         }
 
-        //this endpoint is to check whether the animal is fed or not
-        [HttpGet("find-by-animal")]
-        public async Task<ActionResult<IEnumerable<FeedingScheduleDto>>>GetFeedingScheduleByAnimalName([FromQuery] string name)
+        [HttpGet("feeding-schedules/cage/resource-id")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<FeedingScheduleResponse>> GetFeedingScheduleAtACage(string cageId)
         {
-            var feedingSchedule = await _feedingRepo.GetFeedingScheduleByAnimalName(name);
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            if (!feedingSchedule.Any()) return BadRequest(new ProblemDetails { Title = "This animal is not fed yet!"});
-            var feedingScheduleDto = _mapper.Map<IEnumerable<FeedingScheduleDto>>(feedingSchedule);
-            return Ok(feedingScheduleDto);
-        }
-
-        [HttpGet("find-by-food")]
-        public async Task<ActionResult<IEnumerable<FeedingScheduleDto>>> GetFeedingScheduleByFood([FromQuery] string name)
-        {
-            var feedingSchedule = await _feedingRepo.GetFeedingScheduleByFood(name);
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            if (!feedingSchedule.Any()) return BadRequest(new ProblemDetails { Title = "This food is not found or not served yet!" });
-            var feedingScheduleDto = _mapper.Map<IEnumerable<FeedingScheduleDto>>(feedingSchedule);
-            return Ok(feedingScheduleDto);
-        }
-
-        [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteFeedingSchedule(int id)
-        {
-           var feedingSchedule = await _feedingRepo.GetFeedingScheduleById(id);
-            if (feedingSchedule == null) return NotFound();
-            await _feedingRepo.DeleteSchedule(id);
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var schedules = await _feedingRepo.GetListFeedingSchedule();
-            return CreatedAtRoute("LoadSchedules", _mapper.Map<IEnumerable<FeedingScheduleDto>>(schedules));
-        }
-
-        [HttpPost("post-schedule")]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<FeedingScheduleDto>> PostFeedingSchedule([FromBody]FeedingScheduleDto feedingScheduleDto)
-        {
-            var feedingSchedule = _mapper.Map<FeedingSchedule>(feedingScheduleDto);
-            await _feedingRepo.CreateSchedule(feedingSchedule);
-            var listSchedule = await _feedingRepo.GetListFeedingSchedule();
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            return CreatedAtRoute("LoadSchedules", _mapper.Map<IEnumerable<FeedingScheduleDto>>(listSchedule));
-        }
-
-        [HttpPut("update")]
-        public async Task<IActionResult> PutSchedule([FromQuery] int id, [FromBody] FeedingScheduleDto scheduleDto)
-        {
-            if (id != scheduleDto.ScheduleNo || scheduleDto == null)
-            {
-                return BadRequest("Invalid schedule data or mismatched IDs.");
-            }
-
-            var curSchedule = await _feedingRepo.GetFeedingScheduleById(id);
-
-            if (curSchedule == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                try
+            if (string.IsNullOrEmpty(cageId))
+                return BadRequest(new ProblemDetails
                 {
-                    await _feedingRepo.UpdateSchedule(id, scheduleDto);
-                }
-                catch (DbUpdateConcurrencyException)
+                    Title = "Cage id is required!"
+                });
+            if (!Regex.IsMatch(cageId, CAGE_ID_FORMAT))
+                return BadRequest(new ProblemDetails
                 {
-                    throw;
-                }
-            }
+                    Title = "Invalid of cage id!"
+                });
 
-            return Ok("Update schedule successfully!");
+            var feedingSchedules = await _feedingScheduleRepository.GetFeedingSchedulesByCage(cageId);
+            if (!feedingSchedules.Any()) return NotFound("Feeding schedule is not found!");
+            var mappedFeedingSchedules = _mapper.Map<IEnumerable<FeedingScheduleResponse>>(feedingSchedules);
+            return Ok(mappedFeedingSchedules);
+        }
+
+        [HttpGet("feeding-schedules/animal/resource-id")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<FeedingScheduleResponse>> GetFeedingScheduleAtAnAnimal(string animalId)
+        {
+            if (string.IsNullOrEmpty(animalId))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Animal id is required!"
+                });
+            if (!Regex.IsMatch(animalId, AnimalConstraints.ANIMAL_ID_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid of animal id!"
+                });
+
+            var feedingSchedules = await _feedingScheduleRepository.GetFeedingSchedulesByAnimal(animalId);
+            if (!feedingSchedules.Any()) return NotFound("Feeding schedule is not found!");
+            var mappedFeedingSchedules = _mapper.Map<IEnumerable<FeedingScheduleResponse>>(feedingSchedules);
+            return Ok(mappedFeedingSchedules);
+        }
+        /// <summary>
+        /// Create a feeding schedule, 
+        /// this action is triggered when a chief trainer wants to create the feeding schedule
+        /// </summary>
+        /// <param name="feedingSchedule"></param>
+        /// <returns></returns>
+        [HttpPost("feeding-schedule")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<ActionResult<FeedingScheduleResponse>> CreateFeedingSchedule([FromBody] FeedingScheduleRequest feedingSchedule)
+        {
+            if (string.IsNullOrEmpty(feedingSchedule.MenuNo))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Schedule no is required!"  
+                });
+            if (string.IsNullOrEmpty(feedingSchedule.AnimalId) && string.IsNullOrEmpty(feedingSchedule.CageId))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Cage id or Animal id is required!"
+                });
+            if (feedingSchedule.StartTime <= feedingSchedule.CreatedTime || feedingSchedule.EndTime <= feedingSchedule.CreatedTime)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Start time and end time must be greater than created time!"
+                });
+            if (feedingSchedule.FeedingAmount <= 0)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Feeding amount must be a positive number!"
+                });
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
+            var mappedFeedingSchedule = _mapper.Map<FeedingSchedule>(feedingSchedule);
+            mappedFeedingSchedule.FeedingStatus = FeedingScheduleConstraints.FEEDING_STATUS_PENDING;
+            var result = await _feedingScheduleRepository.CreateFeedingSchedule(mappedFeedingSchedule);
+            if (!result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Failed to create feeding schedule!"
+                });
+            return CreatedAtAction(nameof(GetFeedingSchedule), new {no = mappedFeedingSchedule.No}, 
+                _mapper.Map<FeedingScheduleResponse>(mappedFeedingSchedule));
+        }
+
+        [HttpPut("feeding-schedule/feeding-status/resource-id")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<IActionResult> UpdateFeedingScheduleStatus(int no, [FromBody] FeedingScheduleRequest feedingSchedule)
+        {
+            if (no != feedingSchedule.No)
+                return Conflict(new ProblemDetails
+                {
+                    Title = "The feeding schedule no is not matched!"
+                });
+
+            var mappedFeedingSchedule = _mapper.Map<FeedingSchedule>(feedingSchedule);
+            var result = await _feedingScheduleRepository.UpdateFeedingScheduleStatus(mappedFeedingSchedule);
+            if (!result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while updating feeding schedule!"
+                });
+            return NoContent();
         }
     }
 }

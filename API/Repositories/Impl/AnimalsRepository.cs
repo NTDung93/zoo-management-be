@@ -60,6 +60,7 @@ namespace API.Repositories.Impl
             currAnimal.Result.IsDeleted = animalDto.IsDeleted;
             currAnimal.Result.EmployeeId = animalDto.EmployeeId;
             currAnimal.Result.CageId = animalDto.CageId;
+            currAnimal.Result.SpeciesId = animalDto.SpeciesId;
             await _context.SaveChangesAsync();
         }
 
