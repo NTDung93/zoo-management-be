@@ -44,18 +44,18 @@ namespace API.Controllers
         [ProducesResponseType(201)]
         public async Task<ActionResult<FeedingMenuResponse>> CreateFeedingMenu([FromBody] FeedingMenuRequest feedingMenu)
         {
-            if (string.IsNullOrEmpty(feedingMenu.ScheduleNo)) 
+            if (string.IsNullOrEmpty(feedingMenu.MenuNo)) 
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Schedule no is required, " +
                     "the format is SCH[xxx], where x stands for a digit!"
                 });
-            if (!Regex.IsMatch(feedingMenu.ScheduleNo, FeedingMenuConstraints.FEEDING_MENU_FORMAT))
+            if (!Regex.IsMatch(feedingMenu.MenuNo, FeedingMenuConstraints.FEEDING_MENU_FORMAT))
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Invalid format of schedule no!"
                 });
-            if (string.IsNullOrEmpty(feedingMenu.ScheduleName))
+            if (string.IsNullOrEmpty(feedingMenu.MenuName))
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Schedule name is required!"
@@ -80,7 +80,7 @@ namespace API.Controllers
                 {
                     Title = "An error occurs while creating!"
                 });
-            return CreatedAtAction(nameof(GetFeedingMenu), new { scheduleNo = feedingMenu.ScheduleNo }, _mapper.Map<FeedingMenu>(feedingMenu));
+            return CreatedAtAction(nameof(GetFeedingMenu), new { scheduleNo = feedingMenu.MenuNo }, _mapper.Map<FeedingMenu>(feedingMenu));
         }
 
         [HttpDelete("feeding-menu/resource-id")]
@@ -103,12 +103,12 @@ namespace API.Controllers
         [ProducesResponseType(204)]
         public async Task<IActionResult> UpdateFeedingMenu(string scheduleNo, [FromBody] FeedingMenuRequest feedingMenu)
         {
-            if (!scheduleNo.Trim().ToLower().Equals(feedingMenu.ScheduleNo.ToLower().Trim()))
+            if (!scheduleNo.Trim().ToLower().Equals(feedingMenu.MenuNo.ToLower().Trim()))
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Schedule no does not match!"
                 });
-            if (string.IsNullOrEmpty(feedingMenu.ScheduleName))
+            if (string.IsNullOrEmpty(feedingMenu.MenuName))
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Schedule name is required!"

@@ -28,7 +28,7 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<News>> GetNews()
         {
-            return await _context.News.Include(x=>x.Animal.Cage.Area).Include(y=>y.Employee).Include(z=>z.AnimalSpecies).OrderBy(a => a.NewsId).ToListAsync();
+            return await _context.News.Include(x=>x.Animal.Cage.Area).Include(t=>t.Animal.AnimalSpecies).Include(y=>y.Employee).Include(z=>z.AnimalSpecies).OrderBy(a => a.NewsId).ToListAsync();
         }
 
         public async Task<News> GetNewsById(int id)

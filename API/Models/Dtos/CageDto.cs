@@ -7,6 +7,7 @@ namespace API.Models.Dtos
         public string CageId { get; set; }
         public string Name { get; set; }
         public int MaxCapacity { get; set; }
+        public int CurrentQuantity { get; set; }
         public string AreaId { get; set; }
         public AreaDto Area { get; set; }
 

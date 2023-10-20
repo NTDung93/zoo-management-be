@@ -54,6 +54,10 @@ builder.Services.AddScoped<IFeedingMenuRepository, FeedingMenuRepository>();
 builder.Services.AddScoped<ICertificateRepository, CertificateRepository>();
 
 
+builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
+builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITransactionHistoriesRepository, TransactionHistoriesRepository>();
 builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 
 var app = builder.Build();
@@ -83,6 +87,7 @@ app.UseAuthentication();
 
 app.UseCors(opt =>
 {
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173");
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173");
 });

@@ -1,4 +1,5 @@
-﻿using API.Models;
+﻿using API.Helpers;
+using API.Models;
 using API.Models.Data;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,6 @@ namespace API.Repositories.Impl
         public async Task<bool> CreateFeedingSchedule(FeedingSchedule feedingSchedule)
         {
             if (feedingSchedule == null) return false;  
-            // more validation about feeding quantity
             await _dbContext.FeedingSchedules.AddAsync(feedingSchedule);
             return await Save();
         }
@@ -28,6 +28,7 @@ namespace API.Repositories.Impl
                 .Include(fs => fs.FeedingMenu)
                 .Include(fs => fs.Animal)
                 .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
                 .FirstOrDefaultAsync(fs => fs.No == no);
         }
 
@@ -37,6 +38,7 @@ namespace API.Repositories.Impl
                 .Include(fs => fs.FeedingMenu)
                 .Include(fs => fs.Animal)
                 .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
                 .OrderByDescending(fs => fs.No)
                 .ToListAsync();
         }
@@ -47,6 +49,7 @@ namespace API.Repositories.Impl
                 .Include(fs => fs.FeedingMenu)
                 .Include(fs => fs.Animal)
                 .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
                 .Where(fs => fs.AnimalId.ToLower().Equals(animalId.ToLower().Trim()))
                 .OrderByDescending(fs => fs.No)
                 .ToListAsync();
@@ -58,6 +61,7 @@ namespace API.Repositories.Impl
                 .Include(fs => fs.FeedingMenu)
                 .Include(fs => fs.Animal)
                 .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
                 .Where(fs => fs.CageId.ToLower().Equals(cageId.ToLower().Trim()))
                 .OrderByDescending(fs => fs.No)
                 .ToListAsync();
@@ -75,6 +79,19 @@ namespace API.Repositories.Impl
             if (existingFeedingSchedule == null) return false;
 
             existingFeedingSchedule.FeedingStatus = feedingSchedule.FeedingStatus;
+            if (existingFeedingSchedule.FeedingStatus == FeedingScheduleConstraints.FEEDING_STATUS_COMPLETED)
+            {
+                var feedingFood = await _dbContext.FoodInventories
+                    .FindAsync(existingFeedingSchedule.FeedingMenu.FoodId);
+                if (feedingFood == null) return false;
+                // get the current food quantity in food inventory
+                var currentFoodQuantity = feedingFood.InventoryQuantity;
+                var feedingQuantity = existingFeedingSchedule.FeedingAmount;
+                var updatedFoodQuantity = currentFoodQuantity - feedingQuantity;
+
+                feedingFood.InventoryQuantity = updatedFoodQuantity;
+                _dbContext.FoodInventories.Update(feedingFood);
+            }
             _dbContext.FeedingSchedules.Update(existingFeedingSchedule);
             return await Save();
         }

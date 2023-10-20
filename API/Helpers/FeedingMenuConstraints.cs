@@ -2,6 +2,6 @@
 {
     public static class FeedingMenuConstraints
     {
-        public const string FEEDING_MENU_FORMAT = @"^SCH\d{3}$";
+        public const string FEEDING_MENU_FORMAT = @"^MNU\d{3}$";
     }
 }

@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    partial class ZooManagementBackupContextModelSnapshot : ModelSnapshot
+    [Migration("20231018082929_CreateRelationshipBetweenEmployeesAndAreas")]
+    partial class CreateRelationshipBetweenEmployeesAndAreas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,16 +227,16 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Entities.FeedingMenu", b =>
                 {
-                    b.Property<string>("MenuNo")
+                    b.Property<string>("ScheduleNo")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("MenuName")
+                    b.Property<string>("ScheduleName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MenuNo");
+                    b.HasKey("ScheduleNo");
 
                     b.HasIndex("FoodId");
 
@@ -269,7 +272,7 @@ namespace API.Migrations
                     b.Property<byte>("FeedingStatus")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("MenuNo")
+                    b.Property<string>("ScheduleNo")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("StartTime")
@@ -283,7 +286,7 @@ namespace API.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("MenuNo");
+                    b.HasIndex("ScheduleNo");
 
                     b.ToTable("FeedingSchedules");
                 });
@@ -403,9 +406,6 @@ namespace API.Migrations
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("UnitTotalPrice")
-                        .HasColumnType("decimal(10,3)");
 
                     b.HasKey("OrderId", "TicketId");
 
@@ -548,7 +548,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.Entities.FeedingMenu", "FeedingMenu")
                         .WithMany("FeedingSchedules")
-                        .HasForeignKey("MenuNo");
+                        .HasForeignKey("ScheduleNo");
 
                     b.Navigation("Animal");
 

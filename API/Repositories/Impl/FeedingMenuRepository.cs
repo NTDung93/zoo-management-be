@@ -26,7 +26,7 @@ namespace API.Repositories.Impl
             if (feedingMenu == null) return false;
 
             var isExisted = await _dbContext.FeedingSchedules
-                .AnyAsync(fs => fs.ScheduleNo.Equals(feedingMenu.ScheduleNo));
+                .AnyAsync(fs => fs.MenuNo.Equals(feedingMenu.MenuNo));
             if (isExisted) return false;
 
             _dbContext.FeedingMenus.Remove(feedingMenu);
@@ -37,14 +37,14 @@ namespace API.Repositories.Impl
         {
             return await _dbContext.FeedingMenus
                 .Include(fm => fm.FoodInventory)
-                .FirstOrDefaultAsync(fm => fm.ScheduleNo.ToLower().Trim().Equals(scheduleNo.Trim().ToLower()));
+                .FirstOrDefaultAsync(fm => fm.MenuNo.ToLower().Trim().Equals(scheduleNo.Trim().ToLower()));
         }
 
         public async Task<IEnumerable<FeedingMenu>> GetFeedingMenus()
         {
             return await _dbContext.FeedingMenus
                 .Include(fm => fm.FoodInventory)
-                .OrderByDescending(fm => fm.ScheduleNo)
+                .OrderByDescending(fm => fm.MenuNo)
                 .ToListAsync();
         }
 
@@ -56,10 +56,10 @@ namespace API.Repositories.Impl
 
         public async Task<bool> UpdateFeedingMenu(FeedingMenuRequest feedingMenu)
         {
-            var existingFeedingMenu = await GetFeedingMenu(feedingMenu.ScheduleNo);
+            var existingFeedingMenu = await GetFeedingMenu(feedingMenu.MenuNo);
             if (existingFeedingMenu == null) return false;
 
-            existingFeedingMenu.ScheduleName = feedingMenu.ScheduleName;
+            existingFeedingMenu.MenuName = feedingMenu.MenuName;
             existingFeedingMenu.FoodId = feedingMenu.FoodId;
             
             _dbContext.FeedingMenus.Update(existingFeedingMenu);

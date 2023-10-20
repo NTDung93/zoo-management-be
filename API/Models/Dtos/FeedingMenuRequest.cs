@@ -4,8 +4,8 @@ namespace API.Models.Dtos
 {
     public class FeedingMenuRequest
     {
-        public string ScheduleNo { get; set; }
-        public string ScheduleName { get; set; }
+        public string MenuNo { get; set; }
+        public string MenuName { get; set; }
         public string FoodId { get; set; }
     }
 }

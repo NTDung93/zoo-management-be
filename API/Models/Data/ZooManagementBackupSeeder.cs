@@ -21,26 +21,23 @@ namespace API.Models.Data
                     new Area
                     {
                         AreaId = "A",
-                        AreaName = "Carnivore"
+                        AreaName = "Carnivore",
+                        EmployeeId = "E001"
                     },
                     new Area
                     {
                         AreaId = "B",
-                        AreaName = "Herbivore"
+                        AreaName = "Herbivore",
+                        EmployeeId = "E003"
                     },
                     new Area
                     {
                         AreaId = "C",
-                        AreaName = "Bird"
-                    },
-                    new Area
-                    {
-                        AreaId = "D",
-                        AreaName = "Reptile"
-                    },
+                        AreaName = "Underwater",
+                        EmployeeId = "E006"
+                    }
                 };
                 _dbContext.Areas.AddRange(areas);
-                _dbContext.SaveChanges();
             }
 
             if (!_dbContext.Cages.Any())
@@ -66,7 +63,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "B0001",
-                        Name = "Girrafe",
+                        Name = "Giraffe",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "B"
@@ -81,8 +78,32 @@ namespace API.Models.Data
                     },
                     new Cage
                     {
-                        CageId = "C0001",
+                        CageId = "B0003",
                         Name = "Peacook and Flamingo",
+                        MaxCapacity = 10,
+                        CurrentCapacity = 0,
+                        AreaId = "B"
+                    },
+                    new Cage
+                    {
+                        CageId = "B0004",
+                        Name = "Rooster and Parrot",
+                        MaxCapacity = 10,
+                        CurrentCapacity = 0,
+                        AreaId = "B"
+                    },
+                    new Cage
+                    {
+                        CageId = "B0005",
+                        Name = "Zebra",
+                        MaxCapacity = 10,
+                        CurrentCapacity = 0,
+                        AreaId = "B"
+                    },
+                    new Cage
+                    {
+                        CageId = "C0001",
+                        Name = "Hippo",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "C"
@@ -90,22 +111,14 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "C0002",
-                        Name = "Rooster and Parrot",
+                        Name = "Alligator",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "C"
                     },
-                    new Cage
-                    {
-                        CageId = "D0001",
-                        Name = "Crocodile",
-                        MaxCapacity = 10,
-                        CurrentCapacity = 0,
-                        AreaId = "D"
-                    },
+
                 };
                 _dbContext.Cages.AddRange(cages);
-                _dbContext.SaveChanges();
             }
 
             if (!_dbContext.Certificates.Any())
@@ -149,7 +162,6 @@ namespace API.Models.Data
                     },
                 };
                 _dbContext.Certificates.AddRange(certificates);
-                _dbContext.SaveChanges();
             }
 
             if (!_dbContext.Employees.Any())
@@ -222,9 +234,52 @@ namespace API.Models.Data
                         Role = EmployeeConstraints.TRAINER_ROLE,
                         EmployeeStatus = EmployeeConstraints.NOT_DELETED
                     },
+                    new Employee
+                    {
+                        EmployeeId = "E007",
+                        FullName = "John Smith",
+                        CitizenId = "1234567890",
+                        Email = "john.smith@example.com",
+                        Password = "1",
+                        PhoneNumber = "0589169697",
+                        Role = EmployeeConstraints.TRAINER_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                    },
+                    new Employee
+                    {
+                        EmployeeId = "E008",
+                        FullName = "Jane Doe",
+                        CitizenId = "9876543210",
+                        Email = "jane.doe@example.com",
+                        Password = "1",
+                        PhoneNumber = "0986665343",
+                        Role = EmployeeConstraints.TRAINER_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                    },
+                    new Employee
+                    {
+                        EmployeeId = "E009",
+                        FullName = "John Doe",
+                        CitizenId = "2502417558",
+                        Email = "johndoeno1@gmail.com",
+                        Password = "1",
+                        PhoneNumber = "0881230814",
+                        Role = EmployeeConstraints.STAFF_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                    },
+                    new Employee
+                    {
+                        EmployeeId = "E010",
+                        FullName = "John Doe",
+                        CitizenId = "2502417558",
+                        Email = "johndoeno1@gmail.com",
+                        Password = "1",
+                        PhoneNumber = "0327057920",
+                        Role = EmployeeConstraints.STAFF_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                    },
                 };
                 _dbContext.Employees.AddRange(employees);
-                _dbContext.SaveChanges();
             }
 
             if (!_dbContext.FoodInventories.Any())
@@ -235,47 +290,58 @@ namespace API.Models.Data
                     {
                         FoodId = "FD01",
                         FoodName = "Carrot",
-                        InventoryQuantity = 100
+                        InventoryQuantity = 10
                     },
                     new FoodInventory
                     {
                         FoodId = "FD02",
                         FoodName = "Grass",
-                        InventoryQuantity = 100
+                        InventoryQuantity = 10
                     },
                     new FoodInventory
                     {
                         FoodId = "FD03",
                         FoodName = "Beef",
-                        InventoryQuantity = 100
+                        InventoryQuantity = 10
                     },
                     new FoodInventory
                     {
                         FoodId = "FD04",
                         FoodName = "Chicken",
-                        InventoryQuantity = 100
+                        InventoryQuantity = 10
                     },
                     new FoodInventory
                     {
                         FoodId = "FD05",
                         FoodName = "Sugarcane",
-                        InventoryQuantity = 100
+                        InventoryQuantity = 10
                     },
                     new FoodInventory
                     {
                         FoodId = "FD06",
                         FoodName = "Watermelon",
-                        InventoryQuantity = 100
+                        InventoryQuantity = 10
                     },
                     new FoodInventory
                     {
                         FoodId = "FD07",
                         FoodName = "Squirrel",
-                        InventoryQuantity = 100
+                        InventoryQuantity = 10
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD08",
+                        FoodName = "FruitBlend",
+                        InventoryQuantity = 10
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD09",
+                        FoodName = "Mixed beans",
+                        InventoryQuantity = 10
                     },
                 };
                 _dbContext.FoodInventories.AddRange(foods);
-                _dbContext.SaveChanges();
             }
 
             if (!_dbContext.AnimalSpecies.Any())
@@ -284,7 +350,7 @@ namespace API.Models.Data
                 {
                     new AnimalSpecies
                     {
-                        SpeciesName = "Girrafe",
+                        SpeciesName = "Giraffe",
                     },
                     new AnimalSpecies
                     {
@@ -292,11 +358,11 @@ namespace API.Models.Data
                     },
                     new AnimalSpecies
                     {
-                        SpeciesName = "Peafowl",
+                        SpeciesName = "Peacook",
                     },
                     new AnimalSpecies
                     {
-                        SpeciesName = "Rhino",
+                        SpeciesName = "Lion",
                     },
                     new AnimalSpecies
                     {
@@ -310,9 +376,20 @@ namespace API.Models.Data
                     {
                         SpeciesName = "Tiger",
                     },
+                    new AnimalSpecies
+                    {
+                        SpeciesName = "Flamingo",
+                    },
+                    new AnimalSpecies
+                    {
+                        SpeciesName = "Zebra",
+                    },
+                    new AnimalSpecies
+                    {
+                        SpeciesName = "Parrot",
+                    }
                 };
                 _dbContext.AnimalSpecies.AddRange(species);
-                _dbContext.SaveChanges();
             }
 
             if (!_dbContext.Animals.Any())
@@ -331,11 +408,12 @@ namespace API.Models.Data
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
                         IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
                         Rarity = AnimalConstraints.RARITY_CRITICALLY_ENDANGERED,
+                        MaxFeedingQuantity = 10,
                         EmployeeId = "E001",
-                        CageId = "A0001",
+                        CageId = "A0002",
                         ImportDate = DateTime.Now,
                         BirthDate = new DateTime(2021, 10, 20),
-                        SpeciesId = 4
+                        SpeciesId = 7
                     },
                     new Animal
                     {
@@ -347,6 +425,7 @@ namespace API.Models.Data
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
                         IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
                         Rarity = AnimalConstraints.RARITY_ENDANGERED,
+                        MaxFeedingQuantity = 12,
                         EmployeeId = "E003",
                         CageId = "B0002",
                         ImportDate = DateTime.Now,
@@ -356,6 +435,23 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI003",
+                        Name = "Asian Elephant",
+                        Region = "Indochina",
+                        Gender = AnimalConstraints.MALE,
+                        Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253379/images/thu-an-thuc-vat/elephant/dhjco1vn0rkiscc55uwi.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/oymlhd9odsosig7brife.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/ixro6vpmf4roplkthlzz.jpg]",
+                        HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
+                        IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
+                        Rarity = AnimalConstraints.RARITY_ENDANGERED,
+                        MaxFeedingQuantity = 15,
+                        EmployeeId = "E003",
+                        CageId = "B0002",
+                        ImportDate = DateTime.Now,
+                        BirthDate = new DateTime(2022, 8, 30),
+                        SpeciesId = 2
+                    },
+                    new Animal
+                    {
+                        AnimalId = "ANI004",
                         Name = "Indo Flamingo",
                         Region = "Indo",
                         Gender = AnimalConstraints.FEMALE,
@@ -363,31 +459,83 @@ namespace API.Models.Data
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
                         IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
                         Rarity = AnimalConstraints.RARITY_NORMAL,
-                        EmployeeId = "E005",
-                        CageId = "C0001",
+                        MaxFeedingQuantity = 8,
+                        EmployeeId = "E008",
+                        CageId = "B0003",
                         ImportDate = DateTime.Now,
                         BirthDate = new DateTime(2022, 8, 15),
-                        SpeciesId = 3
+                        SpeciesId = 8
                     },
                     new Animal
                     {
-                        AnimalId = "ANI004",
-                        Name = "Angola Girrafe",
+                        AnimalId = "ANI005",
+                        Name = "Indo Flamingo",
+                        Region = "Indo",
+                        Gender = AnimalConstraints.MALE,
+                        Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253382/images/thu-an-thuc-vat/flamingo/cykpobgngqjn8velykyc.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/vnghr1qiadnx03oioeef.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/qccsob0qoxdtoiclau6f.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/aobfuhg9wqo2rnpphb5y.jpg]",
+                        HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
+                        IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
+                        Rarity = AnimalConstraints.RARITY_NORMAL,
+                        MaxFeedingQuantity = 12,
+                        EmployeeId = "E008",
+                        CageId = "B0003",
+                        ImportDate = DateTime.Now,
+                        BirthDate = new DateTime(2021, 7, 12),
+                        SpeciesId = 8
+                    },
+                    new Animal
+                    {
+                        AnimalId = "ANI006",
+                        Name = "Angola Giraffe",
                         Region = "South African",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253393/images/thu-an-thuc-vat/giraffe/yoi6zxjqqykoryindntl.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253391/images/thu-an-thuc-vat/giraffe/mlibbgxp756qtpcecn4o.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253391/images/thu-an-thuc-vat/giraffe/ln6w1lbpzm973julylx5.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/giraffe/ah7gnlqazxd7jxlpsk57.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
                         IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
                         Rarity = AnimalConstraints.RARITY_NORMAL,
-                        EmployeeId = "E005",
+                        MaxFeedingQuantity = 10,
+                        EmployeeId = "E006",
                         CageId = "B0001",
+                        ImportDate = DateTime.Now,
+                        BirthDate = new DateTime(2020, 12, 30),
+                        SpeciesId = 1
+                    },
+                    new Animal
+                    {
+                        AnimalId = "ANI007",
+                        Name = "African Zebra",
+                        Region = "South African",
+                        Gender = AnimalConstraints.MALE,
+                        Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/zebra/xd7jzximk4clmoyrzaje.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/zebra/w2zfbqlpkxtexs2vhqed.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253389/images/thu-an-thuc-vat/zebra/wpkh0hlq40yd0aykuzpl.jpg]",
+                        HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
+                        IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
+                        Rarity = AnimalConstraints.RARITY_ENDANGERED,
+                        MaxFeedingQuantity = 10,
+                        EmployeeId = "E006",
+                        CageId = "B0005",
+                        ImportDate = DateTime.Now,
+                        BirthDate = new DateTime(2020, 12, 31),
+                        SpeciesId = 9
+                    },
+                    new Animal
+                    {
+                        AnimalId = "ANI008",
+                        Name = "African Parrot",
+                        Region = "Africa",
+                        Gender = AnimalConstraints.FEMALE,
+                        Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253387/images/thu-an-thuc-vat/parrot/myeyqf3wvj2ojyfgvmkl.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253386/images/thu-an-thuc-vat/parrot/lp7fwviqprlpbum0r8pm.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253386/images/thu-an-thuc-vat/parrot/jo1pwznbgslpfsujguqm.jpg]",
+                        HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
+                        IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
+                        Rarity = AnimalConstraints.RARITY_NORMAL,
+                        MaxFeedingQuantity = 2,
+                        EmployeeId = "E007",
+                        CageId = "B0004",
                         ImportDate = DateTime.Now,
                         BirthDate = new DateTime(2020, 12, 30),
                         SpeciesId = 1
                     },
                 };
                 _dbContext.Animals.AddRange(animals);
-                _dbContext.SaveChanges();
             }
 
             if (!_dbContext.EmployeeCertificates.Any())
@@ -398,13 +546,11 @@ namespace API.Models.Data
                     {
                         EmployeeId = "E001",
                         CertificateCode = "3FQLO",
-                        Description = "7 years working",
                     },
                     new EmployeeCertificate
                     {
                         EmployeeId = "E001",
                         CertificateCode = "CER001",
-                        Description = "1 year working",
                     },
                     new EmployeeCertificate
                     {
@@ -418,7 +564,62 @@ namespace API.Models.Data
                     },
                 };
                 _dbContext.EmployeeCertificates.AddRange(empCertificates);
-                _dbContext.SaveChanges();
+            }
+
+            if (!_dbContext.FeedingMenus.Any())
+            {
+                var menus = new List<FeedingMenu>()
+                {
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU001",
+                        MenuName = "Tiger 1st week",
+                        FoodId = "FD04",
+                    },
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU002",
+                        MenuName = "Tiger 1st week",
+                        FoodId = "FD03",
+                    },
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU003",
+                        MenuName = "Tiger 1st week",
+                        FoodId = "FD07",
+                    },
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU004",
+                        MenuName = "Elephant 1st week",
+                        FoodId = "FD05",
+                    },
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU005",
+                        MenuName = "Elephant 1st week",
+                        FoodId = "FD06",
+                    },
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU006",
+                        MenuName = "Flamingo 1st week",
+                        FoodId = "FD09",
+                    },
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU007",
+                        MenuName = "Giraffe 1st week",
+                        FoodId = "FD01",
+                    },
+                    new FeedingMenu
+                    {
+                        MenuNo = "MNU008",
+                        MenuName = "Giraffe 1st week",
+                        FoodId = "FD02",
+                    },
+                };
+                _dbContext.FeedingMenus.AddRange(menus);
             }
 
             if (!_dbContext.Tickets.Any())
@@ -439,8 +640,8 @@ namespace API.Models.Data
                     },
                 };
                 _dbContext.Tickets.AddRange(tickets);
-                _dbContext.SaveChanges();
             }
+            _dbContext.SaveChanges();
         }
     }
 }
