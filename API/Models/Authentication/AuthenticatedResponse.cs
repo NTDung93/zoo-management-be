@@ -2,6 +2,7 @@
 {
     public class AuthenticatedResponse
     {
+        public string EmployeeId { get; set; }
         public string FullName { get; set; }
         public string CitizenId { get; set; }
         public string Email { get; set; }

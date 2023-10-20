@@ -29,6 +29,32 @@ namespace API.Controllers
             return Ok(certificatesDto);
         }
 
+        [HttpGet("load-certificateById")]
+        public async Task<ActionResult<CertificateDto>> GetCertificate(string id)
+        {
+            var certificate = await _certiRepo.GetCertificateById(id);
+
+            if (certificate == null)
+            {
+                return NotFound();
+            }
+            var certificateDto = _mapper.Map<CertificateDto>(certificate);
+            return certificateDto;
+        }
+
+        [HttpGet("load-empCertificateById")]
+        public async Task<ActionResult<EmployeeCertificateDto>> GetEmpCertificate(int id)
+        {
+            var empCertificate = await _certiRepo.GetEmployeeCertificateById(id);
+
+            if (empCertificate == null)
+            {
+                return NotFound();
+            }
+            var empCertificateDto = _mapper.Map<EmployeeCertificateDto>(empCertificate);
+            return empCertificateDto;
+        }
+
         [HttpGet("load-empCertificates", Name = "GetEmpCertificates")]
         [ProducesResponseType(200)]
         //[Authorize(Roles = "Trainer")]
@@ -89,11 +115,21 @@ namespace API.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<CertificateDto>> CreateNewCertificate([FromBody] CertificateDto certificateDto)
         {
+            var certificates = await _certiRepo.GetCertificates();
+            if (certificates.SingleOrDefault(certificate => certificate.CertificateCode.Equals(certificateDto.CertificateCode)) != null)
+            {
+                return BadRequest(new ProblemDetails { Title = "CertificateCode is exist" });
+            }
+            else
+            {
                 var certificate = _mapper.Map<Certificate>(certificateDto);
                 await _certiRepo.CreateNewCertificate(certificate);
-                var certificates = await _certiRepo.GetCertificates();
-                var certificatesDto = _mapper.Map<IEnumerable<CertificateDto>>(certificates);
-                return CreatedAtRoute("GetCertificates", certificatesDto);           
+                
+            }
+            //var certificates = await _certiRepo.GetCertificates();
+            //var certificatesDto = _mapper.Map<IEnumerable<CertificateDto>>(certificates);
+            //return CreatedAtRoute("GetCertificates", certificatesDto);
+            return NoContent();
         }
 
         [HttpPost("create-empCertificate")]

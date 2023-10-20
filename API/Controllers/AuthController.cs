@@ -72,6 +72,7 @@ namespace API.Controllers
                     var accessToken = _tokenHelper.GenerateAccessToken(claims);
                     return Ok(new AuthenticatedResponse
                     {
+                        EmployeeId = loginAccount.EmployeeId,
                         Email = loginAccount.Email,
                         FullName = loginAccount.FullName,
                         CitizenId = loginAccount.CitizenId,

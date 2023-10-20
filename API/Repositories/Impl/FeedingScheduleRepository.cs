@@ -7,57 +7,76 @@ namespace API.Repositories.Impl
 {
     public class FeedingScheduleRepository : IFeedingScheduleRepository
     {
-        //private readonly ZooManagementBackupContext _context;
+        private readonly ZooManagementBackupContext _dbContext;
 
-        //public FeedingScheduleRepository(ZooManagementBackupContext context)
-        //{
-        //    this._context = context;
-        //}
+        public FeedingScheduleRepository(ZooManagementBackupContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
-        //public async Task CreateSchedule(FeedingSchedule feedingSchedule)
-        //{
-        //    _context.FeedingSchedules.Add(feedingSchedule);
-        //    await _context.SaveChangesAsync();
-        //}
+        public async Task<bool> CreateFeedingSchedule(FeedingSchedule feedingSchedule)
+        {
+            if (feedingSchedule == null) return false;  
+            // more validation about feeding quantity
+            await _dbContext.FeedingSchedules.AddAsync(feedingSchedule);
+            return await Save();
+        }
 
-        //public async Task DeleteSchedule(int id)
-        //{
-        //    var feedingSchedule = _context.FeedingSchedules.FindAsync(id);
-        //    _context.FeedingSchedules.Remove(feedingSchedule.Result);
-        //    await _context.SaveChangesAsync();
-        //}
+        public async Task<FeedingSchedule> GetFeedingSchedule(int no)
+        {
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .FirstOrDefaultAsync(fs => fs.No == no);
+        }
 
-        //public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByAnimalName(string name)
-        //{
-        //    var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).Where(a => a.Animal.Name.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
-        //    return await feedingSchedule;
-        //}
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedules()
+        {
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .OrderByDescending(fs => fs.No)
+                .ToListAsync();
+        }
 
-        //public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByFood(string name)
-        //{
-        //    var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).Where(a => a.FoodInventory.FoodName.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
-        //    return await feedingSchedule;
-        //}
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedulesByAnimal(string animalId)
+        {
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .Where(fs => fs.AnimalId.ToLower().Equals(animalId.ToLower().Trim()))
+                .OrderByDescending(fs => fs.No)
+                .ToListAsync();
+        }
 
-        //public async Task<FeedingSchedule> GetFeedingScheduleById(int id)
-        //{
-        //    return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).FirstOrDefaultAsync(schedule => schedule.ScheduleNo == id);
-        //}
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedulesByCage(string cageId)
+        {
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .Where(fs => fs.CageId.ToLower().Equals(cageId.ToLower().Trim()))
+                .OrderByDescending(fs => fs.No)
+                .ToListAsync();
+        }
 
-        //public async Task<IEnumerable<FeedingSchedule>> GetListFeedingSchedule()
-        //{
-        //    return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.FoodInventory).OrderBy(a => a.ScheduleNo).ToListAsync();
-        //}
+        public async Task<bool> Save()
+        {
+            var saved = _dbContext.SaveChangesAsync();
+            return await saved > 0;
+        }
 
-        //public Task UpdateSchedule(int id, FeedingScheduleDto scheduleDto)
-        //{
-        //    var feedingSchedule = GetFeedingScheduleById(id);
-        //    feedingSchedule.Result.FeedTime = (DateTime)scheduleDto.FeedTime;
-        //    feedingSchedule.Result.FoodId = scheduleDto.FoodId;
-        //    feedingSchedule.Result.AnimalId = scheduleDto.AnimalId;
-        //    feedingSchedule.Result.EmployeeId = scheduleDto.EmployeeId;
-        //    feedingSchedule.Result.FeedStatus = (byte)scheduleDto.FeedStatus;
-        //    return _context.SaveChangesAsync();
-        //}
+        public async Task<bool> UpdateFeedingScheduleStatus(FeedingSchedule feedingSchedule)
+        {
+            var existingFeedingSchedule = await GetFeedingSchedule(feedingSchedule.No);
+            if (existingFeedingSchedule == null) return false;
+
+            existingFeedingSchedule.FeedingStatus = feedingSchedule.FeedingStatus;
+            _dbContext.FeedingSchedules.Update(existingFeedingSchedule);
+            return await Save();
+        }
     }
 }

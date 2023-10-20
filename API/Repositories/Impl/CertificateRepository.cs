@@ -47,7 +47,7 @@ namespace API.Repositories.Impl
 
         public async Task<EmployeeCertificate> GetEmployeeCertificateById(int id)
         {
-            return await _dbContext.EmployeeCertificates.SingleAsync(certificate => certificate.No == id);
+            return await _dbContext.EmployeeCertificates.Include(x => x.Employee).Include(y => y.Certificate).SingleOrDefaultAsync(certificate => certificate.No == id);
         }
         public async Task<Certificate> GetCertificateById(string id)
         {
