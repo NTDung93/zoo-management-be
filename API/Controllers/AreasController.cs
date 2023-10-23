@@ -116,17 +116,17 @@ namespace API.Controllers
         [ProducesResponseType(204)]
         public async Task<IActionResult> UpdateAreas([FromQuery] string areaId, [FromBody] AreaDto areaDto)
         {
-            var currArea = await _areasRepo.GetAreaById(areaId);
-            if (areaDto.AreaName.Trim().Length == 0)
+            var areas = await _areasRepo.GetListArea();
+            var area = areas.SingleOrDefault(area => area.EmployeeId.Equals(areaDto.EmployeeId));
+            if (area != null)
             {
-                return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
+                return BadRequest(new ProblemDetails { Title = $"This trainer is trainning for {area.AreaName}" });
             }
-            else if (currArea != null)
+            else
             {
                 await _areasRepo.UpdateArea(areaId, areaDto);
                 return Ok("Update Area Success!");
             }
-            return NotFound();
         }
     }
 }

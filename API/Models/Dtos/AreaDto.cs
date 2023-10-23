@@ -6,5 +6,7 @@ namespace API.Models.Dtos
     {
         public string AreaId { get; set; }
         public string AreaName { get; set; }
+        public string EmployeeId { get; set; }
+        public EmployeeDto Employee { get; set; }
     }
 }
