@@ -8,6 +8,6 @@ namespace API.Models.Dtos
         public string Email { get; set; }
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
-        //public TransactionHistoryDto TransactionHistory { get; set; }
+        public ICollection<OrderDetailDto> OrderDetails { get; set; }
     }
 }

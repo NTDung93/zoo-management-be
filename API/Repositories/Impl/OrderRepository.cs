@@ -12,6 +12,19 @@ namespace API.Repositories.Impl
         {
             _context = context;
         }
+
+        public async Task<Order> CreateOrder(Order order)
+        {
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            var createdOrder = await _context.Orders
+              .OrderByDescending(o => o.OrderId)
+              .FirstOrDefaultAsync();
+
+            return createdOrder;
+        }
+
         public async Task<IEnumerable<Order>> GetOrders()
         {
             return await _context.Orders.OrderBy(x=>x.OrderId).ToListAsync();
