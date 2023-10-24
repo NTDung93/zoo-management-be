@@ -3,6 +3,7 @@ using API.Models;
 using API.Models.Data;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace API.Repositories.Impl
 {
@@ -65,6 +66,26 @@ namespace API.Repositories.Impl
                 .Where(fs => fs.CageId.ToLower().Equals(cageId.ToLower().Trim()))
                 .OrderByDescending(fs => fs.No)
                 .ToListAsync();
+        }
+
+        public async Task<double> GetMaxFeedingQuantityOnAnimal(string animalId)
+        {
+            var animal = _dbContext.Animals.Find(animalId);
+            return await Task.FromResult(animal.MaxFeedingQuantity);
+        }
+
+        public async Task<double> GetMaxFeedingQuantityOnCage(string cageId)
+        {
+            var animals = await _dbContext.Animals
+                .Where(a => a.CageId.ToLower() == cageId.ToLower())
+                .ToListAsync();
+            
+            if (!animals.Any()) return 0;
+
+            double avgFeedingQuantity = animals
+                .Select(a => (double)a.MaxFeedingQuantity)
+                .Average();
+            return avgFeedingQuantity;
         }
 
         public async Task<bool> Save()

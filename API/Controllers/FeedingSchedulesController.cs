@@ -113,6 +113,26 @@ namespace API.Controllers
                 {
                     Title = "Feeding amount must be a positive number!"
                 });
+
+            if (feedingSchedule.AnimalId != null)
+            {
+                var maxFeedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnAnimal(feedingSchedule.AnimalId);
+                if (feedingSchedule.FeedingAmount > maxFeedingQuantity)
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "Feeding amount must be less than or equal to the maximum feeding quantity of the animal!"
+                    });
+            }
+
+            if (feedingSchedule.CageId != null)
+            {
+                var maxFeedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnCage(feedingSchedule.CageId);
+                if (feedingSchedule.FeedingAmount > maxFeedingQuantity)
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "Feeding amount must be less than or equal to the maximum feeding quantity of the cage!"
+                    });
+            }
             if (!ModelState.IsValid) return BadRequest(ModelState);
             
             var mappedFeedingSchedule = _mapper.Map<FeedingSchedule>(feedingSchedule);
@@ -145,6 +165,24 @@ namespace API.Controllers
                     Title = "An error occurs while updating feeding schedule!"
                 });
             return NoContent();
+        }
+
+        [HttpGet("demo-api-01")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<ActionResult<double>> GetFeedingQuantityOfAnAnimal(string animalId)
+        {
+            var feedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnAnimal(animalId);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return Ok(feedingQuantity);
+        }
+
+        [HttpGet("demo-api-02")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<ActionResult<double>> GetFeedingQuantityOfACage(string cageId)
+        {
+            var feedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnCage(cageId);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return Ok(feedingQuantity);
         }
     }
 }
