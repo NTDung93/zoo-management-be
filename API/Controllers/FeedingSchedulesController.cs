@@ -13,7 +13,7 @@ namespace API.Controllers
     {
         private readonly IFeedingScheduleRepository _feedingScheduleRepository;
         private readonly IMapper _mapper;
-        private readonly string CAGE_ID_FORMAT = @"[A-Z]\\d{4}";
+        private readonly string CAGE_ID_FORMAT = @"[A-Z]\d{4}$";
 
         public FeedingSchedulesController(IFeedingScheduleRepository feedingScheduleRepository, 
             IMapper mapper)
@@ -51,7 +51,7 @@ namespace API.Controllers
                 {
                     Title = "Cage id is required!"
                 });
-            if (!Regex.IsMatch(cageId, CAGE_ID_FORMAT))
+            if (Regex.IsMatch(cageId, CAGE_ID_FORMAT) == false)
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Invalid of cage id!"
