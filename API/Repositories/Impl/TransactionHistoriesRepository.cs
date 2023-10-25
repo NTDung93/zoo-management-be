@@ -11,6 +11,13 @@ namespace API.Repositories.Impl
         {
             _context = context;
         }
+
+        public async Task CreateTransaction(TransactionHistory transaction)
+        {
+            _context.TransactionHistories.Add(transaction);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<TransactionHistory>> GetTransactions()
         {
             return await _context.TransactionHistories.Include(x=>x.Order).OrderBy(a => a.TransactionId).ToListAsync();
