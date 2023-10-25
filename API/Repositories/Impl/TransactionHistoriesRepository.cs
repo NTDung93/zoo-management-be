@@ -14,7 +14,7 @@ namespace API.Repositories.Impl
 
         public async Task CreateTransaction(TransactionHistory transaction)
         {
-            await _context.TransactionHistories.AddAsync(transaction);
+            _context.TransactionHistories.Add(transaction);
             await _context.SaveChangesAsync();
         }
 

@@ -27,7 +27,7 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<Order>> GetOrders()
         {
-            return await _context.Orders.OrderBy(x=>x.OrderId).ToListAsync();
+            return await _context.Orders.OrderByDescending(x=>x.OrderId).ToListAsync();
         }
     }
 }
