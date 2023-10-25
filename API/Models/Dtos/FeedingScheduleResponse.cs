@@ -1,4 +1,5 @@
 ﻿using API.Models.Entities;
+using Newtonsoft.Json;
 
 namespace API.Models.Dtos
 {
@@ -10,7 +11,11 @@ namespace API.Models.Dtos
         public string AnimalId { get; set; }
         public string EmployeeId { get; set; }
         public DateTime CreatedTime { get; set; }
+
+        [JsonProperty(PropertyName = "StartTime")]
         public DateTime StartTime { get; set; }
+        
+        [JsonProperty(PropertyName = "EndTime")]
         public DateTime EndTime { get; set; }
         public double FeedingAmount { get; set; }
         public byte FeedingStatus { get; set; }
@@ -18,5 +23,10 @@ namespace API.Models.Dtos
         public CageDto Cage { get; set; }
         public FeedingMenuResponse FeedingMenu { get; set; }
         public EmployeeResponse Employee { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
     }
 }
