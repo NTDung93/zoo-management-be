@@ -61,6 +61,36 @@ namespace API.Repositories.Impl
             return await Save();
         }
 
+        public async Task<IEnumerable<Employee>> GetEmployeeOfAnArea(string areaId)
+        {
+            var result = await _dbContext.Employees
+                .Join(
+                    _dbContext.Animals,
+                    e => e.EmployeeId,
+                    a => a.EmployeeId,
+                    (e, a) => new { e, a }
+                )
+                .Join(
+                    _dbContext.Cages,
+                    ea => ea.a.CageId,
+                    c => c.CageId,
+                    (ea, c) => new { ea.a, ea.e, c }
+                )
+                .Join(
+                    _dbContext.Areas,
+                    eac => eac.c.AreaId,
+                    ar => ar.AreaId,
+                    (eac, ar) => new { eac.e, ar }
+                )
+                .Where(x => x.ar.AreaId.ToLower() == areaId.ToLower())
+                .Select(x => x.e)
+                //.Distinct()
+                .ToListAsync();
+            var distinctResult = result.GroupBy(e => e.EmployeeId)
+                .Select(g => g.First());
+            return distinctResult;
+        }
+
         public async Task<Employee> GetStaff(string id)
         {
             return await _dbContext.Employees

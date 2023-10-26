@@ -118,7 +118,7 @@ namespace API.Models.Data
             modelBuilder.Entity<EmployeeCertificate>()
                 .HasOne(ec => ec.Employee)
                 .WithMany(e => e.EmployeeCertificates)
-                .HasForeignKey(ec => ec.EmployeeId);    
+                .HasForeignKey(ec => ec.EmployeeId);
             modelBuilder.Entity<EmployeeCertificate>()
                 .HasOne(ec => ec.Certificate)
                 .WithMany(c => c.EmployeeCertificates)
