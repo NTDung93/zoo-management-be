@@ -16,7 +16,7 @@ namespace API.Models.Dtos
         public DateTime EndTime { get; set; }
         public double FeedingAmount { get; set; }
         public byte FeedingStatus { get; set; }
-
+        public string Note { get; set; }
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);

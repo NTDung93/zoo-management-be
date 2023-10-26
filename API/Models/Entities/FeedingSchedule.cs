@@ -15,6 +15,7 @@ namespace API.Models.Entities
         public DateTime EndTime { get; set; }
         public double FeedingAmount { get; set; }
         public byte FeedingStatus { get; set; }
+        public string Note { get; set; }
         public Animal Animal { get; set; }
         public Cage Cage { get; set; }  
         public FeedingMenu FeedingMenu { get; set; }

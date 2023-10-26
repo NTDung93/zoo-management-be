@@ -255,6 +255,10 @@ namespace API.Models.Data
             modelBuilder.Entity<Animal>()
                 .Property(a => a.MaxFeedingQuantity)
                 .HasColumnType("decimal(5,2)");
+
+            modelBuilder.Entity<FeedingSchedule>()
+                .Property(fs => fs.Note)
+                .HasColumnType("nvarchar(250)");
         }
     }
 }

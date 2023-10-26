@@ -19,6 +19,7 @@ namespace API.Models.Dtos
         public DateTime EndTime { get; set; }
         public double FeedingAmount { get; set; }
         public byte FeedingStatus { get; set; }
+        public string Note { get; set; }
         public AnimalDto Animal { get; set; }
         public CageDto Cage { get; set; }
         public FeedingMenuResponse FeedingMenu { get; set; }
