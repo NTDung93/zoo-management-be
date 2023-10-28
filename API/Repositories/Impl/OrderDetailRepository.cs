@@ -26,7 +26,7 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<OrderDetail>> GetOrderDetails()
         {
-            return await _context.OrderDetails.Include(y=>y.Order).Include(z=>z.Ticket).ToListAsync();
+            return await _context.OrderDetails.Include(z=>z.Ticket).ToListAsync();
         }
     }
 }

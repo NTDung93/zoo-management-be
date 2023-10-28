@@ -20,7 +20,7 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<TransactionHistory>> GetTransactions()
         {
-            return await _context.TransactionHistories.Include(x=>x.Order).OrderBy(a => a.TransactionId).ToListAsync();
+            return await _context.TransactionHistories.Include(x=>x.Order.OrderDetails).OrderBy(a => a.TransactionId).ToListAsync();
         }
     }
 }
