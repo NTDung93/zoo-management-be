@@ -6,5 +6,7 @@ namespace API.Repositories
     {
         Task<Order> CreateOrder(Order order);
         Task<IEnumerable<Order>> GetOrders();
+        Task<IEnumerable<Order>> GetOrdersWithOrderDetails();
+
     }
 }

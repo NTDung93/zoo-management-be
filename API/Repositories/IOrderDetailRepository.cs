@@ -7,5 +7,6 @@ namespace API.Repositories
         Task CreateOrderDetails(List<OrderDetail> orderDetails);
         Task CreateSingleOrderDetail(OrderDetail orderDetail);
         Task<IEnumerable<OrderDetail>> GetOrderDetails();
+        Task<IEnumerable<OrderDetail>> GetOrderDetailsByOrderId(int orderId);
     }
 }

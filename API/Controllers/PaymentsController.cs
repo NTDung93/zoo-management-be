@@ -8,6 +8,9 @@ using Stripe;
 using Stripe.Checkout;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using System.Net;
+using System.Net.Mail;
 
 namespace API.Controllers
 {
@@ -124,7 +127,6 @@ namespace API.Controllers
                     var data = stripeEvent.Data.Object;
                     var eventType = stripeEvent.Type;
 
-                    // Handle the event
                     if (stripeEvent.Type == Events.PaymentIntentSucceeded)
                     {
                     }
@@ -141,6 +143,9 @@ namespace API.Controllers
                         var orders = await _orderRepo.GetOrders();
                         var lastestOrder = orders.FirstOrDefault();
 
+                        //Console.WriteLine("<<<<<<<<<Order :");
+                        var listOrderDetails = await _orderDetailRepo.GetOrderDetailsByOrderId(lastestOrder.OrderId);
+
                         //create new transaction history
                         var transaction = new TransactionHistory
                         {
@@ -153,12 +158,336 @@ namespace API.Controllers
                         Console.WriteLine("Transaction total:");
                         Console.WriteLine(transaction.TotalPrice);
                         await _transactionHistoriesRepo.CreateTransaction(transaction);
+
+                        var htmlCode = "<!DOCTYPE html>" +
+                            "<html lang=\"en, id\">" +
+                            "  <head>" +
+                            "    <meta charset=\"UTF-8\" />" +
+                            "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />" +
+                            "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />" +
+                            "" +
+                            "    <link" +
+                            "      href=\"https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap\"" +
+                            "      rel=\"stylesheet\"" +
+                            "    />" +
+                            "" +
+                            "<style>" +
+                            "@import \"https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap\";" +
+                            "* {" +
+                            "  margin: 0 auto;" +
+                            "  padding: 0 auto;" +
+                            "  user-select: none;" +
+                            "}" +
+                            "" +
+                            "body {" +
+                            "  padding: 20px;" +
+                            "  font-family: \"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Open Sans\", \"Helvetica Neue\", sans-serif;" +
+                            "  -webkit-font-smoothing: antialiased;" +
+                            "  background-color: #dcdcdc;" +
+                            "}" +
+                            "" +
+                            ".wrapper-invoice {" +
+                            "  display: flex;" +
+                            "  justify-content: center;" +
+                            "}" +
+                            ".wrapper-invoice .invoice {" +
+                            "  height: auto;" +
+                            "  background: #fff;" +
+                            "  padding: 5vh;" +
+                            "  margin-top: 5vh;" +
+                            "  max-width: 110vh;" +
+                            "  width: 100%;" +
+                            "  box-sizing: border-box;" +
+                            "  border: 1px solid #dcdcdc;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-information {" +
+                            "  float: right;" +
+                            "  text-align: right;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-information b {" +
+                            "  color: \"#0F172A\";" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-information p {" +
+                            "  font-size: 2vh;" +
+                            "  color: gray;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-logo-brand h2 {" +
+                            "  text-transform: uppercase;" +
+                            "  font-family: \"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Open Sans\", \"Helvetica Neue\", sans-serif;" +
+                            "  font-size: 2.9vh;" +
+                            "  color: \"#0F172A\";" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-logo-brand img {" +
+                            "  max-width: 100px;" +
+                            "  width: 100%;" +
+                            "  object-fit: fill;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head {" +
+                            "  display: flex;" +
+                            "  margin-top: 8vh;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head .head {" +
+                            "  width: 100%;" +
+                            "  box-sizing: border-box;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head .client-info {" +
+                            "  text-align: left;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head .client-info h2 {" +
+                            "  font-weight: 500;" +
+                            "  letter-spacing: 0.3px;" +
+                            "  font-size: 2vh;" +
+                            "  color: \"#0F172A\";" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head .client-info p {" +
+                            "  font-size: 2vh;" +
+                            "  color: gray;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head .client-data {" +
+                            "  text-align: right;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head .client-data h2 {" +
+                            "  font-weight: 500;" +
+                            "  letter-spacing: 0.3px;" +
+                            "  font-size: 2vh;" +
+                            "  color: \"#0F172A\";" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-head .client-data p {" +
+                            "  font-size: 2vh;" +
+                            "  color: gray;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body {" +
+                            "  margin-top: 8vh;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .table {" +
+                            "  border-collapse: collapse;" +
+                            "  width: 100%;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .table thead tr th {" +
+                            "  font-size: 2vh;" +
+                            "  border: 1px solid #dcdcdc;" +
+                            "  text-align: left;" +
+                            "  padding: 1vh;" +
+                            "  background-color: #eeeeee;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .table tbody tr td {" +
+                            "  font-size: 2vh;" +
+                            "  border: 1px solid #dcdcdc;" +
+                            "  text-align: left;" +
+                            "  padding: 1vh;" +
+                            "  background-color: #fff;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .table tbody tr td:nth-child(2) {" +
+                            "  text-align: right;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .flex-table {" +
+                            "  display: flex;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .flex-table .flex-column {" +
+                            "  width: 100%;" +
+                            "  box-sizing: border-box;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .flex-table .flex-column .table-subtotal {" +
+                            "  border-collapse: collapse;" +
+                            "  box-sizing: border-box;" +
+                            "  width: 100%;" +
+                            "  margin-top: 2vh;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .flex-table .flex-column .table-subtotal tbody tr td {" +
+                            "  font-size: 2vh;" +
+                            "  border-bottom: 1px solid #dcdcdc;" +
+                            "  text-align: left;" +
+                            "  padding: 1vh;" +
+                            "  background-color: #fff;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .flex-table .flex-column .table-subtotal tbody tr td:nth-child(2) {" +
+                            "  text-align: right;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .invoice-total-amount {" +
+                            "  margin-top: 1rem;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-body .invoice-total-amount p {" +
+                            "  font-weight: bold;" +
+                            "  color: \"#0F172A\";" +
+                            "  text-align: right;" +
+                            "  font-size: 2vh;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-footer {" +
+                            "  margin-top: 4vh;" +
+                            "}" +
+                            ".wrapper-invoice .invoice .invoice-footer p {" +
+                            "  font-size: 1.7vh;" +
+                            "  color: gray;" +
+                            "}" +
+                            "" +
+                            ".copyright {" +
+                            "  margin-top: 2rem;" +
+                            "  text-align: center;" +
+                            "}" +
+                            ".copyright p {" +
+                            "  color: gray;" +
+                            "  font-size: 1.8vh;" +
+                            "}" +
+                            "" +
+                            "@media print {" +
+                            "  .table thead tr th {" +
+                            "    -webkit-print-color-adjust: exact;" +
+                            "    background-color: #eeeeee !important;" +
+                            "  }" +
+                            "" +
+                            "  .copyright {" +
+                            "    display: none;" +
+                            "  }" +
+                            "}" +
+                            ".rtl {" +
+                            "  direction: rtl;" +
+                            "  font-family: \"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Open Sans\", \"Helvetica Neue\", sans-serif;" +
+                            "}" +
+                            ".rtl .invoice-information {" +
+                            "  float: left !important;" +
+                            "  text-align: left !important;" +
+                            "}" +
+                            ".rtl .invoice-head .client-info {" +
+                            "  text-align: right !important;" +
+                            "}" +
+                            ".rtl .invoice-head .client-data {" +
+                            "  text-align: left !important;" +
+                            "}" +
+                            ".rtl .invoice-body .table thead tr th {" +
+                            "  text-align: right !important;" +
+                            "}" +
+                            ".rtl .invoice-body .table tbody tr td {" +
+                            "  text-align: right !important;" +
+                            "}" +
+                            ".rtl .invoice-body .table tbody tr td:nth-child(2) {" +
+                            "  text-align: left !important;" +
+                            "}" +
+                            ".rtl .invoice-body .flex-table .flex-column .table-subtotal tbody tr td {" +
+                            "  text-align: right !important;" +
+                            "}" +
+                            ".rtl .invoice-body .flex-table .flex-column .table-subtotal tbody tr td:nth-child(2) {" +
+                            "  text-align: left !important;" +
+                            "}" +
+                            ".rtl .invoice-body .invoice-total-amount p {" +
+                            "  text-align: left !important;" +
+                            "}" +
+                            "" +
+                            "/*# sourceMappingURL=invoice.css.map */" +
+                            "</style>" +
+                            "  </head>" +
+                            "  <body>" +
+                            "    <section class=\"wrapper-invoice\">" +
+                            "      <!-- switch mode rtl by adding class rtl on invoice class -->" +
+                            "      <div class=\"invoice\">" +
+                            "        <div class=\"invoice-information\">" +
+                            "          <p><b>Created Date: </b>" + DateTime.Now.ToString("MMMM dd, yyyy") + "</p>" +
+                            "        </div>" +
+                            "        <!-- logo brand invoice -->" +
+                            "        <div class=\"invoice-logo-brand\">" +
+                            "          <!-- <h2>Tampsh.</h2> -->" +
+                            "          <img src=\"https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696070552/logo/dsfsinb1tzz9q1drdqoe.png\" alt=\"\" />" +
+                            "        </div>" +
+                            "        <!-- invoice head -->" +
+                            "        <div class=\"invoice-head\">" +
+                            "          <div class=\"head client-info\">" +
+                            "            <p>Name: " +
+                            "            <p>Phone: " +
+                            "            <p>Email: </p>" +
+                            "            <p>Purchase: </p>" +
+                            "          </div>" +
+                            "          <div class=\"head client-data\">" +
+                            "            <p>" + lastestOrder.FullName + "</p>" +
+                            "            <p>" + lastestOrder.PhoneNumber + "</p>" +
+                            "            <p>" + lastestOrder.Email + "</p>" +
+                            "          <p>" + DateTime.Now.ToString("MMMM dd, yyyy") + "</p>" +
+                            "          </div>" +
+                            "        </div>" +
+                            "        <!-- invoice body-->" +
+                            "        <div class=\"invoice-body\">" +
+                            "          <table class=\"table\">" +
+                            "            <thead>" +
+                            "              <tr>" +
+                        "                <th></th>" +
+                        "                <th style=\"text-align: center;\">Type</th>" +
+                        "                <th style=\"text-align: center;\">Quantity</th>" +
+                        "                <th style=\"text-align: center;\">Entry date</th>" +
+                        "                <th style=\"text-align: center;\">Unit price</th>" +
+                        "              </tr>" +
+                            "            </thead>" +
+                            "            <tbody>";
+                        //"              <tr>" +
+                        //"                <td>Template Invoice</td>" +
+                        //"                <td>Rp.75.000</td>" +
+                        //"              </tr>" +
+                        //"              <tr>" +
+                        //"                <td>tax</td>" +
+                        //"                <td>Rp.5.000</td>" +
+                        //"              </tr>" +
+
+                        foreach (var orderDetail in listOrderDetails)
+                        {
+                            htmlCode += "              <tr>" +
+                                           "                <td style=\"text-align: center;\"><img src=\"" + orderDetail.Ticket.Image + "\" width=\"100\" height=\"100\"></td>" +
+                                           "                <td style=\"text-align: center;\">" + orderDetail.Ticket.Type + "</td>" +
+                                           "                <td style=\"text-align: center;\">" + orderDetail.Quantity + "</td>" +
+                                           "                <td style=\"text-align: center;\">" + orderDetail.EntryDate.ToString().Substring(0, 10) + "</td>" +
+                                           "                <td style=\"text-align: center;\">" + orderDetail.Ticket.UnitPrice + " vnd</td>" +
+                                           "              </tr>";
+                        }
+
+                        htmlCode += " </tbody>" +
+                            "          </table>" +
+                            "          <!-- invoice total  -->" +
+                            "          <div class=\"invoice-total-amount\">" +
+                            "            <p>Total: " + session.AmountTotal + " vnd</p>" +
+                            "          </div>" +
+                            "        </div>" +
+                            "        <!-- invoice footer -->" +
+                            "        <div class=\"invoice-footer\">" +
+                            "          <p>Thank you, we are so happy to see you at AmaZoo!</p>" +
+                            "        </div>" +
+                            "      </div>" +
+                            "    </section>" +
+                            "  </body>" +
+                            "</html>";
+
+                        string smtpServer = "smtp.office365.com";
+                        int smtpPort = 587; // Gmail SMTP port
+                        string smtpUsername = "lily.plantshop@outlook.com";
+                        string smtpPassword = "Password@1234";
+
+                        SmtpClient smtpClient = new SmtpClient(smtpServer);
+                        smtpClient.Port = smtpPort;
+                        smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+                        smtpClient.EnableSsl = true; // Use SSL for secure connection
+
+                        MailMessage mailMessage = new MailMessage
+                        {
+                            From = new MailAddress(smtpUsername),
+                            Subject = "Thanks for buying our zoo tickets!",
+                            IsBodyHtml = true,
+                            Body = htmlCode
+
+                        };
+                        //mailMessage.To.Add(lastestOrder.Email);
+
+                        mailMessage.To.Add(lastestOrder.Email);
+
+                        try
+                        {
+                            smtpClient.Send(mailMessage);
+                            Console.WriteLine("Email sent successfully!");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Email could not be sent. Error: " + ex.Message);
+                        }
                     }
                     else
                     {
                         Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
                     }
-                    
+
                 }
                 catch (StripeException e)
                 {
