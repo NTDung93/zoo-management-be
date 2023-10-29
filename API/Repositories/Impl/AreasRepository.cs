@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Models.Data;
 using API.Models.Dtos;
 using API.Models.Entities;
 using AutoMapper;
@@ -8,14 +9,14 @@ namespace API.Repositories.Impl
 {
     public class AreasRepository : IAreasRepository
     {
-        private readonly ZooManagementContext _context;
-        public AreasRepository(ZooManagementContext context)
+        private readonly ZooManagementBackupContext _context;
+        public AreasRepository(ZooManagementBackupContext context)
         {
             _context = context;
         }
         public async Task<IEnumerable<Area>> GetListArea()
         {
-            return await _context.Areas.OrderBy(a => a.Id).ToListAsync();
+            return await _context.Areas.OrderBy(a => a.AreaId).ToListAsync();
         }
         public async Task CreateNewArea(Area area)
         {
@@ -24,11 +25,11 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Area>> SearchAreaByName(string areaName)
         {
-            return await _context.Areas.Where(area => area.Name.ToLower().Contains(areaName.Trim().ToLower())).ToListAsync();
+            return await _context.Areas.Where(area => area.AreaName.ToLower().Contains(areaName.Trim().ToLower())).ToListAsync();
         }
         public async Task<Area> GetAreaById(string areaId)
         {
-            return await _context.Areas.SingleOrDefaultAsync(area => area.Id.ToLower().Equals(areaId.Trim().ToLower()));
+            return await _context.Areas.SingleOrDefaultAsync(area => area.AreaId.ToLower().Equals(areaId.Trim().ToLower()));
         }
         public async Task DeleteArea(string areaId)
         {
@@ -39,7 +40,7 @@ namespace API.Repositories.Impl
         public async Task UpdateArea(string areaId, AreaDto areaDto)
         {
             var currArea = GetAreaById(areaId);
-            currArea.Result.Name = areaDto.Name;
+            currArea.Result.AreaName = areaDto.AreaName;
             await _context.SaveChangesAsync();
         }
     }

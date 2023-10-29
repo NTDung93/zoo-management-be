@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
 
 namespace API.Helpers
 {
@@ -11,7 +10,7 @@ namespace API.Helpers
 
             var checkEmail = new EmailAddressAttribute();
             result = checkEmail.IsValid(email);
-            
+
             return result;
         }
     }

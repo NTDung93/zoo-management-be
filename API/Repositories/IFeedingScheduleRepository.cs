@@ -4,12 +4,15 @@ namespace API.Repositories
 {
     public interface IFeedingScheduleRepository
     {
-        Task<IEnumerable<FeedingSchedule>> GetListFeedingSchedule();
-        Task<FeedingSchedule> GetFeedingScheduleById(int id);
-        Task DeleteSchedule(int id);
-        Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByAnimalName(string name);
-        Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByFood(string name);
-        Task CreateSchedule(FeedingSchedule feedingSchedule);
-        Task UpdateSchedule(int id, FeedingScheduleDto scheduleDto);
+        // add an interface to retrieve the next schedule
+        Task<IEnumerable<FeedingSchedule>> GetFeedingSchedules();
+        Task<FeedingSchedule> GetFeedingSchedule(int no);
+        Task<IEnumerable<FeedingSchedule>> GetFeedingSchedulesByCage(string cageId);
+        Task<IEnumerable<FeedingSchedule>> GetFeedingSchedulesByAnimal(string animalId);
+        Task<bool> CreateFeedingSchedule(FeedingSchedule feedingSchedule);
+        Task<bool> UpdateFeedingScheduleStatus(FeedingSchedule feedingSchedule);
+        Task<double> GetMaxFeedingQuantityOnAnimal(string animalId);
+        Task<double> GetMaxFeedingQuantityOnCage(string cageId);
+        Task<bool> Save();
     }
 }

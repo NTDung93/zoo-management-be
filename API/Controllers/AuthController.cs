@@ -1,10 +1,9 @@
 ﻿using API.Helpers;
-using API.Helpers.Token;
-using API.Models.Authen;
+using API.Models.Authentication;
 using API.Repositories;
+using API.Token;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,19 +11,18 @@ namespace API.Controllers
 {
     public class AuthController : BaseApiController
     {
-        private readonly IEmployeeRepository _employeeRepo;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
         private readonly ITokenHelper _tokenHelper;
-        private readonly IConfiguration _config;
 
-        public AuthController(IEmployeeRepository employeeRepo, IMapper mapper, 
-            ITokenHelper tokenHelper, 
-            IConfiguration config)
+        public AuthController(IEmployeeRepository employeeRepository, IMapper mapper, 
+            IConfiguration configuration, ITokenHelper tokenHelper)
         {
-            _employeeRepo = employeeRepo;
+            _employeeRepository = employeeRepository;
             _mapper = mapper;
+            _configuration = configuration;
             _tokenHelper = tokenHelper;
-            _config = config;
         }
 
         [HttpPost("login")]
@@ -32,61 +30,60 @@ namespace API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel account)
         {
             // get the admin account
-            var adEmail = _config["AdminAccount:Email"];
-            var adPassword = _config["AdminAccount:Password"];
-            var adRole = EmpParams.ADMIN_ROLE;
-            
+            var adEmail = _configuration["AdminAccount:Email"];
+            var adPassword = _configuration["AdminAccount:Password"];
+            var adRole = EmployeeConstraints.ADMIN_ROLE;
+
             if (account == null)
-                return BadRequest("Invalid client request");
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid client request!"
+                });
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             if (account.Email.Trim().Equals(adEmail) && account.Password.Trim().Equals(adPassword))
             {
-                AdminAuthen admin = new AdminAuthen
-                {
-                    Email = adEmail,
-                    Password = adPassword,
-                    Role = adRole
-                };
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, adEmail),
-                    new Claim(ClaimTypes.Role, EmpParams.ADMIN_ROLE)
+                    new Claim(ClaimTypes.Role, adRole)
                 };
-                var accessToken = _tokenHelper.GenerateAccessToken_V2(claims); 
+                var accessToken = _tokenHelper.GenerateAccessToken(claims);
                 return Ok(new AuthenticatedResponse
                 {
-                    Admin = admin,
+                    Email = adEmail,
+                    FullName = "Admin",
+                    Role = adRole,
                     Token = accessToken
                 });
             }
             else
             {
-                var loginAccount = await _employeeRepo.Authenticate(account);
+                var loginAccount = await _employeeRepository.Authenticate(account);
                 if (loginAccount != null)
                 {
-                    var empProfile = _mapper.Map<EmpProfileModel>(loginAccount);
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Email, empProfile.Email),
-                        new Claim(ClaimTypes.Role, empProfile.Role)
+                        new Claim(ClaimTypes.Email, loginAccount.Email),
+                        new Claim(ClaimTypes.Role, loginAccount.Role)
                     };
                     var accessToken = _tokenHelper.GenerateAccessToken(claims);
-                    var refreshToken = _tokenHelper.GenerateRefreshToken();
-
-                    if (!await _employeeRepo.AddRefreshToken(empProfile, refreshToken))
-                        return UnprocessableEntity("Cannot add refresh token!");
-
                     return Ok(new AuthenticatedResponse
                     {
-                        Employee = empProfile,
+                        EmployeeId = loginAccount.EmployeeId,
+                        Email = loginAccount.Email,
+                        FullName = loginAccount.FullName,
+                        CitizenId = loginAccount.CitizenId,
+                        PhoneNumber = loginAccount.PhoneNumber,
+                        Image = loginAccount.Image,
+                        Role = loginAccount.Role,
                         Token = accessToken,
-                        RefreshToken = refreshToken
                     });
                 }
             }
-            return NotFound("Account not found");
+            return NotFound("Account not found!");
         }
     }
 }

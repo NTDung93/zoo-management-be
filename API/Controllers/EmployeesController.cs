@@ -1,279 +1,262 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using API.Models.Entities;
 using API.Repositories;
 using AutoMapper;
 using API.Models.Dtos;
-using API.Helpers;
 using System.Text.RegularExpressions;
+using API.Helpers;
+using API.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-
     public class EmployeesController : BaseApiController
     {
-        private readonly IEmployeeRepository _employeeRepo;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
-        private readonly IAnimalsRepository _animalsRepo;
-        
-        public EmployeesController(IEmployeeRepository employeeRepo, 
-            IMapper mapper, 
-            IAnimalsRepository animalsRepo)
+
+        public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper)
         {
-            _employeeRepo = employeeRepo;
+            _employeeRepository = employeeRepository;
             _mapper = mapper;
-            _animalsRepo = animalsRepo;
-        }
-        
-        [HttpGet("trainers", Name = "GetTrainers")]
-        [ProducesResponseType(200)]
-        [Authorize(Roles = "Staff")]
-        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetTrainers()
-        {
-            if (!ModelState.IsValid) 
-                return BadRequest(ModelState);
-            var trainers = await _employeeRepo.GetTrainers();
-            var trainersDto = _mapper.Map<IEnumerable<EmployeeDto>>(trainers);
-            return Ok(trainersDto);
         }
 
+        [HttpGet("trainers")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetTrainers()
+        {
+            var trainers = await _employeeRepository.GetTrainers();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var mappedTrainers = _mapper.Map<IEnumerable<EmployeeResponse>>(trainers);
+            return Ok(mappedTrainers);
+        }
+        
         [HttpGet("trainers/resource-id")]
         [ProducesResponseType(200)]
-        [Authorize(Roles = "Staff")]
-        public async Task<ActionResult<EmployeeDto>> GetTrainer([FromQuery] string id)
+        public async Task<ActionResult<EmployeeResponse>> GetTrainer(string id)
         {
-            if (!await _employeeRepo.HasTrainer(id))
-                return NotFound("Trainer not found!");
+            if (!await _employeeRepository.HasEmployee(id)) return NotFound("Trainer not found!");
+            var trainer = await _employeeRepository.GetTrainer(id);
+
+            if (trainer == null) return NotFound("Trainer not found!");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var trainer = await _employeeRepo.GetTrainer(id);
-            var trainerDto = _mapper.Map<EmployeeDto>(trainer);
-            return Ok(trainerDto);
+            return Ok(_mapper.Map<EmployeeResponse>(trainer));
         }
 
-        [HttpDelete("trainer/resource-id")]
+        [HttpPut("trainer/resource-id")]
         [ProducesResponseType(204)]
-        //[Authorize(Roles = "Staff")]
-        public async Task<IActionResult> DeleteTrainer(string id)
+        public async Task<IActionResult> UpdateTrainer(string id, EmployeeResponse trainer)
         {
-            if (!await _employeeRepo.HasTrainer(id))
-                return NotFound("Trainer not found!");
+            if (id != trainer.EmployeeId)
+                return Conflict(new ProblemDetails
+                {
+                    Title = "Trainer id does not match!"
+                });
 
-            if (!ModelState.IsValid) 
-                return BadRequest(ModelState);
+            if (trainer == null)
+                return BadRequest(new ProblemDetails { Title = "Trainer is null!" });
             
-            if (!await _employeeRepo.DeleteTrainer(id))
-                return UnprocessableEntity("An error occurs while deleting!");
+            if (!Regex.IsMatch(trainer.PhoneNumber, EmployeeConstraints.PHONE_NUMBER_FORMAT))
+                return BadRequest(new ProblemDetails { Title = "Invalid phone number!" });
+
+            if (!Regex.IsMatch(trainer.CitizenId, EmployeeConstraints.CITIZEN_ID_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid citizen id format!"
+                });
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _employeeRepository.UpdateTrainer(trainer))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while updating!"
+                });
             return NoContent();
         }
 
         [HttpPost("trainer")]
         [ProducesResponseType(201)]
-        //[Authorize(Roles = "Staff")]
-        public async Task<ActionResult<Employee>> CreateTrainer([FromBody] EmployeeDto trainerDto)
+        public async Task<ActionResult<IEnumerable<EmployeeResponse>>> CreateTrainer(EmployeeRequest trainer)
         {
-            // default password: 123
+            if (trainer == null) return BadRequest(new ProblemDetails
+            {
+                Title = "Trainer is empty!"
+            });
 
-            if (trainerDto == null) 
-                return BadRequest("Trainer is null!");
-            
-            // check id format
-            if (!Regex.IsMatch(trainerDto.Id, EmpParams.EMPLOYEE_ID_FORMAT))
-                return ValidationProblem("The format of id is E[xxx], where x stands for a digit!");
-            
-            // check email format
-            if (!EmailValidation.IsValid(trainerDto.Email))
-                return ValidationProblem("Invalid email format!");
-            
-            // check citizen id format
-            if (!Regex.IsMatch(trainerDto.CitizenId, EmpParams.CITIZEN_ID_FORMAT))
-                return ValidationProblem("Invalid citizen id format, it must contain [9,13] digits!");
+            if (!Regex.IsMatch(trainer.EmployeeId, EmployeeConstraints.EMPLOYEE_ID_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid id format!"
+                });
 
-            // check duplicate
-            if (await _employeeRepo.HasEmployee(trainerDto.Id))
-                return ValidationProblem("Duplicate of employee Id!");
-            
-            // check phone number
-            if (!Regex.IsMatch(trainerDto.PhoneNumber, EmpParams.PHONE_NUMBER_FORMAT))
-                return ValidationProblem("Invalid phone number, it must contains [10,12] digits!");
+            if (!Regex.IsMatch(trainer.CitizenId, EmployeeConstraints.CITIZEN_ID_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid citizen id format!"
+                });
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            
-            var trainer = _mapper.Map<Employee>(trainerDto);    
-            // assign 
-            trainer.Password = EmpParams.DEFAULT_PASSWORD;
-            trainer.IsDeleted = EmpParams.NOT_DELETED;
-            trainer.Role = EmpParams.TRAINER_ROLE;
+            if (!Regex.IsMatch(trainer.PhoneNumber, EmployeeConstraints.PHONE_NUMBER_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid phone number!"
+                });
 
-            if (!await _employeeRepo.CreateTrainer(trainer))
-                return UnprocessableEntity("An error occurs while creating!");
-            
-            var trainers = await _employeeRepo.GetTrainers();
-            return CreatedAtRoute("GetTrainers", _mapper.Map<IEnumerable<EmployeeDto>>(trainers));
+            if (await _employeeRepository.HasEmployee(trainer.EmployeeId))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of employee id!"
+                });
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var mappedTrainer = _mapper.Map<Employee>(trainer);
+            mappedTrainer.Password = EmployeeConstraints.DEFAULT_PASSWORD;
+            mappedTrainer.Role = EmployeeConstraints.TRAINER_ROLE;
+            mappedTrainer.EmployeeStatus = EmployeeConstraints.NOT_DELETED;
+
+            if (!await _employeeRepository.CreateTrainer(mappedTrainer))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while creating!"
+                });
+            var trainers = await _employeeRepository.GetTrainers();
+            return CreatedAtAction("GetTrainers", _mapper.Map<IEnumerable<EmployeeResponse>>(trainers));
         }
 
-        [HttpPut("trainer/resource-id")]
+        [HttpPut("trainer/status/resource-id")]
         [ProducesResponseType(204)]
-        //[Authorize(Roles = "Staff")]
-        public async Task<IActionResult> UpdateTrainer(string id, [FromBody] EmployeeDto trainerDto)
+        public async Task<IActionResult> DeleteTrainer(string id)
         {
-            if (id != trainerDto.Id)
-                return Conflict("Trainer id does not matched!");
-
-            if (trainerDto == null)
-                return BadRequest("Trainer is null!");
-
-            if (!EmailValidation.IsValid(trainerDto.Email))
-                return ValidationProblem("Invalid email format!");
-
-            if (!Regex.IsMatch(trainerDto.PhoneNumber, EmpParams.PHONE_NUMBER_FORMAT))
-                return ValidationProblem("Invalid phone number, it must contains [10,12] digits!");
-
-            if (!Regex.IsMatch(trainerDto.CitizenId, EmpParams.CITIZEN_ID_FORMAT))
-                return ValidationProblem("Invalid citizen id format, it must contain [9,13] digits!");
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (!await _employeeRepo.UpdateTrainer(trainerDto))
-                return UnprocessableEntity("An error occurs while updating!");
+            if (!await _employeeRepository.HasEmployee(id)) return NotFound("Trainer not found!");
+            if (!await _employeeRepository.DeleteTrainer(id))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while deleting trainer!"
+                });
             return NoContent();
         }
-        
-        
-        [HttpPut("assign-trainer-with-animal")]
+
+        // Staff controller's zone
+        [HttpGet("staff-accounts")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = "Staff")]
-        public async Task<IActionResult> AssignTrainerWithAnimal(string trainerId, string animalId)
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
+        public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetStaffAccounts()
         {
-            if (!await _employeeRepo.HasTrainer(trainerId))
-                return NotFound("Trainer not found!");
-
-            if (!await _animalsRepo.HasAnimal(animalId))
-                return NotFound("Animal not found!");
-            
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var animal = await _animalsRepo.GetAnimalById(animalId);
-            
-            if (!await _employeeRepo.AssignTrainerWithAnimal(trainerId, animal))
-                return UnprocessableEntity("An error occurs while assigning!");
-
-            return Ok("Assign successfully!");
-        }
-
-
-        [HttpGet("staff-accounts", Name = "Staff")]
-        [ProducesResponseType(200)]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetStaffAccounts()
-        {
+            var staffAccounts = await _employeeRepository.GetStaffAccounts();
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var staffAccounts = await _employeeRepo.GetStaffAccounts();
-            var staffAccountsDto = _mapper.Map<IEnumerable<EmployeeDto>>(staffAccounts);
-            return Ok(staffAccountsDto);
+            var mappedStaff = _mapper.Map<IEnumerable<EmployeeResponse>>(staffAccounts);
+            return Ok(mappedStaff);
         }
 
         [HttpGet("staff/resource-id")]
         [ProducesResponseType(200)]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetStaffAccount(string id)
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
+        public async Task<ActionResult<EmployeeResponse>> GetStaff(string id)
         {
-            if (!await _employeeRepo.HasStaff(id))
+            if (!await _employeeRepository.HasEmployee(id)) 
                 return NotFound("Staff not found!");
-            var staff = await _employeeRepo.GetStaff(id);
-            var staffDto = _mapper.Map<EmployeeDto>(staff);
-            if (!ModelState.IsValid) 
-                return BadRequest(ModelState);
-            return Ok(staffDto);
-        }
+            var staff = await _employeeRepository.GetStaff(id);
 
-        [HttpPost("staff")]
-        [ProducesResponseType(201)]
-        //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Employee>> CreateStaff([FromBody] EmployeeDto staffDto)
-        {
-            // default password: 123
-
-            if (staffDto == null)
-                return BadRequest("Staff is null!");
-
-            // check id format
-            if (!Regex.IsMatch(staffDto.Id, EmpParams.EMPLOYEE_ID_FORMAT))
-                return ValidationProblem("The format of id is Exxx, x stands for a digit!");
-
-            // check email format
-            if (!EmailValidation.IsValid(staffDto.Email))
-                return ValidationProblem("Invalid email format!");
-
-            // check duplicate
-            if (await _employeeRepo.HasEmployee(staffDto.Id))
-                return BadRequest("Duplicate of employee ID!");
-
-            if (!Regex.IsMatch(staffDto.PhoneNumber, EmpParams.PHONE_NUMBER_FORMAT))
-                return ValidationProblem("Invalid phone number!");
-
-            if (!Regex.IsMatch(staffDto.CitizenId, EmpParams.CITIZEN_ID_FORMAT))
-                return ValidationProblem("Invalid citizen id format!");
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var staff = _mapper.Map<Employee>(staffDto);
-            
-            staff.Password = EmpParams.DEFAULT_PASSWORD;
-            staff.IsDeleted = EmpParams.NOT_DELETED;
-            staff.Role = EmpParams.STAFF_ROLE;
-
-            if (!await _employeeRepo.CreateStaff(staff))
-                return UnprocessableEntity("An error occurs while creating!");
-
-            var staffAccounts = await _employeeRepo.GetStaffAccounts();
-            return CreatedAtRoute("Staff", _mapper.Map<IEnumerable<EmployeeDto>>(staffAccounts));
-        }
-
-        [HttpDelete("staff/resource-id")]
-        [ProducesResponseType(204)]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteStaff([FromQuery] string id)
-        {
-            if (!await _employeeRepo.HasStaff(id))
-                return NotFound("Staff not found!");
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (!await _employeeRepo.DeleteStaff(id))
-                return UnprocessableEntity("An error occurs while deleting!");
-            return NoContent();
+            if (staff == null) return NotFound("Staff not found!");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return Ok(_mapper.Map<EmployeeResponse>(staff));
         }
 
         [HttpPut("staff/resource-id")]
         [ProducesResponseType(204)]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateStaff(string id, [FromBody] EmployeeDto staffDto)
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
+        public async Task<IActionResult> UpdateStaff(string id, EmployeeResponse staff)
         {
-            if (id != staffDto.Id)
-                return Conflict("Staff id is not matched!");
+            if (id != staff.EmployeeId)
+                return Conflict(new ProblemDetails
+                {
+                    Title = "Staff id does not match!"
+                });
 
-            if (staffDto == null)
-                return BadRequest("Staff is null!");
+            if (staff == null)
+                return BadRequest(new ProblemDetails { Title = "Staff is null!" });
 
-            if (!EmailValidation.IsValid(staffDto.Email))
-                return ValidationProblem("Invalid email format!");
+            if (!Regex.IsMatch(staff.PhoneNumber, EmployeeConstraints.PHONE_NUMBER_FORMAT))
+                return BadRequest(new ProblemDetails { Title = "Invalid phone number!" });
 
-            if (!Regex.IsMatch(staffDto.PhoneNumber, EmpParams.PHONE_NUMBER_FORMAT))
-                return ValidationProblem("Invalid phone number!");
-
-            if (!Regex.IsMatch(staffDto.CitizenId, EmpParams.CITIZEN_ID_FORMAT))
-                return ValidationProblem("Invalid citizen id format!");
+            if (!Regex.IsMatch(staff.CitizenId, EmployeeConstraints.CITIZEN_ID_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid citizen id format!"
+                });
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _employeeRepo.UpdateStaff(staffDto))
-                return UnprocessableEntity("An error occurs while updating!");
+            if (!await _employeeRepository.UpdateStaff(staff))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while updating!"
+                });
+            return NoContent();
+        }
+
+        [HttpPost("staff")]
+        [ProducesResponseType(201)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
+        public async Task<ActionResult<IEnumerable<EmployeeResponse>>> CreateStaff(EmployeeRequest staff)
+        {
+            if (staff == null) return BadRequest(new ProblemDetails
+            {
+                Title = "Staff is empty!"
+            });
+
+            if (!Regex.IsMatch(staff.EmployeeId, EmployeeConstraints.EMPLOYEE_ID_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid id format!"
+                });
+
+            if (!Regex.IsMatch(staff.CitizenId, EmployeeConstraints.CITIZEN_ID_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid citizen id format!"
+                });
+
+            if (!Regex.IsMatch(staff.PhoneNumber, EmployeeConstraints.PHONE_NUMBER_FORMAT))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid phone number!"
+                });
+
+            if (await _employeeRepository.HasEmployee(staff.EmployeeId))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of employee id!"
+                });
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var mappedStaff = _mapper.Map<Employee>(staff);
+            mappedStaff.Password = EmployeeConstraints.DEFAULT_PASSWORD;
+            mappedStaff.Role = EmployeeConstraints.STAFF_ROLE;
+            mappedStaff.EmployeeStatus = EmployeeConstraints.NOT_DELETED;
+
+            if (!await _employeeRepository.CreateStaff(mappedStaff))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while creating!"
+                });
+            var staffAccounts = await _employeeRepository.GetStaffAccounts();
+            return CreatedAtAction("GetStaffAccounts", _mapper.Map<IEnumerable<EmployeeResponse>>(staffAccounts));
+        }
+
+        [HttpPut("staff/status/resource-id")]
+        [ProducesResponseType(204)]
+        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
+        public async Task<IActionResult> DeleteStaff(string id)
+        {
+            if (!await _employeeRepository.HasEmployee(id)) 
+                return NotFound("Staff not found!");
+            if (!await _employeeRepository.DeleteStaff(id))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while deleting staff!"
+                });
             return NoContent();
         }
     }

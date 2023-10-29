@@ -102,11 +102,6 @@ namespace API.Controllers
             {
                 return BadRequest(new ProblemDetails { Title = "Cage has animal!" });
             }
-            var hasSpecies = await _animalSpeciesRepo.GetSpeciesByCageId(cageId);
-            if (hasSpecies.Any())
-            {
-                return BadRequest(new ProblemDetails { Title = "Cage has species!" });
-            }
 
             await _cagesRepo.DeleteCage(cageId);
             var listCages = await _cagesRepo.GetListCage();
@@ -120,18 +115,18 @@ namespace API.Controllers
         public async Task<ActionResult<CageDto>> CreateNewCages([FromBody] CageDto cageDto)
         {
             string pattern = "[A-Z]\\d{4}";
-            var cagebyId = await _cagesRepo.GetCageById(cageDto.Id);
+            var cagebyId = await _cagesRepo.GetCageById(cageDto.CageId);
             var areas = await _areasRepo.GetListArea();
-            char tmp = cageDto.Id.Substring(0, 1)[0];
-            if (!Regex.IsMatch(cageDto.Id, pattern))
+            char tmp = cageDto.CageId.Substring(0, 1)[0];
+            if (!Regex.IsMatch(cageDto.CageId, pattern))
             {
                 return BadRequest(new ProblemDetails { Title = "CageId have a format [A-Z]{xxxx}!" });
             } 
-            else if (areas.SingleOrDefault(area => area.Id.Equals(tmp.ToString())) == null)
+            else if (areas.SingleOrDefault(area => area.AreaId.Equals(tmp.ToString())) == null)
             {
-                return BadRequest(new ProblemDetails { Title = $"{tmp} in {cageDto.Id} is not exist in ListAreaId" });
+                return BadRequest(new ProblemDetails { Title = $"{tmp} in {cageDto.CageId} is not exist in ListAreaId" });
             }
-            else if (cageDto.Id.Trim().Length == 0 || cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0) 
+            else if (cageDto.CageId.Trim().Length == 0 || cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0) 
             { 
                 return BadRequest(new ProblemDetails { Title = "Do not allow empty!" });
             }
@@ -147,7 +142,7 @@ namespace API.Controllers
             {
                 return BadRequest(new ProblemDetails { Title = "CageId is already exist!" });
             } 
-            else if (areas.SingleOrDefault(area => area.Id.Equals(cageDto.AreaId)) == null)
+            else if (areas.SingleOrDefault(area => area.AreaId.Equals(cageDto.AreaId)) == null)
             {
                 return BadRequest(new ProblemDetails { Title = "AreaId is not Exist!" });
             }
@@ -167,7 +162,7 @@ namespace API.Controllers
         {
             var areas = await _areasRepo.GetListArea();
             var currCage = await _cagesRepo.GetCageById(cageId);
-            char tmp = cageDto.Id.Substring(0, 1)[0];
+            char tmp = cageDto.CageId.Substring(0, 1)[0];
 
             if (cageDto.Name.Trim().Length == 0 || cageDto.AreaId.Length == 0)
             {
@@ -181,7 +176,7 @@ namespace API.Controllers
             {
                 return BadRequest(new ProblemDetails { Title = "CageId is not match AreaId!" });
             }
-            else if (areas.SingleOrDefault(area => area.Id.Equals(cageDto.AreaId)) == null)
+            else if (areas.SingleOrDefault(area => area.AreaId.Equals(cageDto.AreaId)) == null)
             {
                 return BadRequest(new ProblemDetails { Title = "AreaId is not Exist!" });
             }
@@ -191,6 +186,40 @@ namespace API.Controllers
                 return Ok("Update Cage Success!");
             }
             return NotFound();
+        }
+
+        /// <summary>
+        /// Controller is used to retrieve the current capacity of a cage
+        /// For demonstration purpose
+        /// </summary>
+        /// <param name="cageId"></param>
+        /// <returns></returns>
+        [HttpGet("cage/current-capacity")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<int>> GetCurrentCapacityInACage(string cageId)
+        {
+            var currentCapacity = await _cagesRepo.GetCurrentCapacityInACage(cageId);
+            if (currentCapacity < 0) return BadRequest(new ProblemDetails
+            {
+                Title = "Invalid of capacity!"
+            });
+            return Ok(currentCapacity);
+        }
+
+        [HttpPut("cage/current-capacity")]
+        [ProducesResponseType(204)]
+        public async Task<IActionResult> UpdateCurrentCapacityInACage(string cageId)
+        {
+            if (string.IsNullOrEmpty(cageId)) return BadRequest(new ProblemDetails
+            {
+                Title = "Cage id is empty!"
+            });
+            var result = await _cagesRepo.UpdateCurrentQuantityInACage(cageId);
+            if (!result) return BadRequest(new ProblemDetails
+            {
+                Title = "An error occurs while updating capacity!"
+            });
+            return NoContent();
         }
     }
 }

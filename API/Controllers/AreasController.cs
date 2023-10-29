@@ -9,10 +9,12 @@ namespace API.Controllers
     public class AreasController : BaseApiController
     {
         private readonly IAreasRepository _areasRepo;
+        private readonly ICagesRepository _cageRepo;
         private readonly IMapper _mapper;
-        public AreasController(IAreasRepository areaRepo, IMapper mapper)
+        public AreasController(IAreasRepository areaRepo, ICagesRepository cageRepo, IMapper mapper)
         {
             _areasRepo = areaRepo;
+            _cageRepo = cageRepo;
             _mapper = mapper;
         }
         [HttpGet("load-areas", Name = "GetAreas")]
@@ -26,34 +28,43 @@ namespace API.Controllers
             return Ok(areasDto);
         }
 
+        [HttpGet("areas-by-id")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<AreaDto>> GetAreasById([FromQuery] string areaId)
+        {
+            var areas = await _areasRepo.GetAreaById(areaId);
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var areasDto = _mapper.Map<AreaDto>(areas);
+            return Ok(areasDto);
+        }
+
         [HttpPost("create-area")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<AreaDto>> CreateNewAreas([FromBody]AreaDto areaDto)
+        public async Task<ActionResult<AreaDto>> CreateNewAreas([FromBody] AreaDto areaDto)
         {
             var areas = await _areasRepo.GetListArea();
-            if (areaDto.Id.Length > 1 || char.IsDigit(areaDto.Id, 0))
+            if (areaDto.AreaId.Length > 1 || char.IsDigit(areaDto.AreaId, 0))
             {
-                return BadRequest(new ProblemDetails { Title = "AreaId have length is 1 and must to be Alphabet!" });
-            }else if (areas.SingleOrDefault(tmp => tmp.Id.Equals(areaDto.Id)) != null)
+                return BadRequest(new ProblemDetails { Title = "AreaId have length is 1 and must to be Upper Alphabet!" });
+            }
+            else if (areas.SingleOrDefault(tmp => tmp.AreaId.ToLower().Equals(areaDto.AreaId.ToLower())) != null)
             {
-                return BadRequest(new ProblemDetails { Title = "AreaId is Exist!" });
-            }else if(areaDto.Name.Trim().Length == 0)
-            {
-                return BadRequest(new ProblemDetails { Title = "Do Not Allow Empty!" });
+                return BadRequest(new ProblemDetails { Title = "AreaId is already exist!" });
             }
             else
-            {               
-                var area = new Area 
-                { 
-                    Id = areaDto.Id.ToUpper(),
-                    Name = areaDto.Name,
-                
+            {
+                var area = new Area
+                {
+                    AreaId = areaDto.AreaId.ToUpper(),
+                    AreaName = areaDto.AreaName,
+
                 };
                 await _areasRepo.CreateNewArea(area);
                 areas = await _areasRepo.GetListArea();
                 var areasDto = _mapper.Map<IEnumerable<AreaDto>>(areas);
                 return CreatedAtRoute("GetAreas", areasDto);
-            }  
+            }
         }
 
         [HttpGet("search-area")]
@@ -75,14 +86,19 @@ namespace API.Controllers
                 {
                     var areasDto = _mapper.Map<IEnumerable<AreaDto>>(areas);
                     return Ok(areasDto);
-                }               
-            }          
+                }
+            }
         }
 
         [HttpDelete("delete-area")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<AreaDto>> DeleteAreas([FromQuery] string areaId)
         {
+            var listCage = await _cageRepo.GetListCageByAreaId(areaId);
+            if (listCage.Any())
+            {
+                return BadRequest(new ProblemDetails { Title = "There are cages in this area!" });
+            }
             var currCage = await _areasRepo.GetAreaById(areaId);
             if (currCage != null)
             {
@@ -93,7 +109,7 @@ namespace API.Controllers
                 return CreatedAtRoute("GetAreas", areas);
             }
             return NotFound();
-            
+
         }
 
         [HttpPut("update-area")]
@@ -101,7 +117,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateAreas([FromQuery] string areaId, [FromBody] AreaDto areaDto)
         {
             var currArea = await _areasRepo.GetAreaById(areaId);
-            if (areaDto.Name.Trim().Length == 0)
+            if (areaDto.AreaName.Trim().Length == 0)
             {
                 return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
             }
@@ -110,7 +126,7 @@ namespace API.Controllers
                 await _areasRepo.UpdateArea(areaId, areaDto);
                 return Ok("Update Area Success!");
             }
-            return NotFound();         
+            return NotFound();
         }
     }
 }

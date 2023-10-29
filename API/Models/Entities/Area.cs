@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API.Models.Entities;
-
-public partial class Area
+﻿namespace API.Models.Entities
 {
-    public string Id { get; set; }
-
-    public string Name { get; set; }
-
-    public virtual ICollection<Cage> Cages { get; set; } = new List<Cage>();
+    public class Area
+    {
+        public string AreaId { get; set; }
+        public string AreaName { get; set; }
+        public string EmployeeId { get; set; }
+        public ICollection<Cage> Cages { get; set; }
+        public Employee Employee { get; set; }
+    }
 }

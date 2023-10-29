@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Models.Data;
 using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -8,30 +9,30 @@ namespace API.Repositories.Impl
 {
     public class AnimalsRepository : IAnimalsRepository
     {
-        private readonly ZooManagementContext _context;
+        private readonly ZooManagementBackupContext _context;
 
-        public AnimalsRepository(ZooManagementContext context)
+        public AnimalsRepository(ZooManagementBackupContext context)
         {
             _context = context;
         }
 
         public async Task<Animal> GetAnimalById(string id)
         {
-            return await _context.Animals.Include(x => x.Cage).Include(y => y.Emp).SingleAsync(animal => animal.Id.Equals(id.Trim()));
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).SingleAsync(animal => animal.AnimalId.Equals(id.Trim()));
         }
 
         public async Task<IEnumerable<Animal>> GetAnimals()
         {
-            return await _context.Animals.Include(x => x.Cage).Include(y => y.Emp).OrderBy(a => a.Id).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z=>z.AnimalSpecies).OrderBy(a => a.AnimalId).ToListAsync();
         }
 
         public async Task<bool> HasAnimal(string id)
         {
-            return await _context.Animals.AnyAsync(a => a.Id.Trim().Equals(id));
+            return await _context.Animals.AnyAsync(a => a.AnimalId.Trim().Equals(id));
         }
         public async Task<IEnumerable<Animal>> SearchAnimalsByName(string animalName)
         {
-            return await _context.Animals.Include(x => x.Cage).Include(y => y.Emp).Where(animal => animal.Name.ToLower().Contains(animalName.Trim().ToLower())).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Where(animal => animal.Name.ToLower().Contains(animalName.Trim().ToLower())).ToListAsync();
         }
         public async Task DeleteAnimal(string animalId)
         {
@@ -57,8 +58,9 @@ namespace API.Repositories.Impl
             currAnimal.Result.HealthStatus = animalDto.HealthStatus;
             currAnimal.Result.Rarity = animalDto.Rarity;
             currAnimal.Result.IsDeleted = animalDto.IsDeleted;
-            currAnimal.Result.EmpId = animalDto.EmpId;
+            currAnimal.Result.EmployeeId = animalDto.EmployeeId;
             currAnimal.Result.CageId = animalDto.CageId;
+            currAnimal.Result.SpeciesId = animalDto.SpeciesId;
             await _context.SaveChangesAsync();
         }
 

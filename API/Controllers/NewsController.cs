@@ -18,13 +18,11 @@ namespace API.Controllers
     {
         private readonly INewsRepository _newsRepo;
         private readonly IMapper _mapper;
-        private readonly BuggyController _buggy;
 
-        public NewsController(INewsRepository newsRepo, IMapper mapper, BuggyController buggy)
+        public NewsController(INewsRepository newsRepo, IMapper mapper)
         {
             _newsRepo = newsRepo;
             _mapper = mapper;
-            _buggy = buggy;
         }
 
         [HttpPost("post-news")]
@@ -89,7 +87,7 @@ namespace API.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> PutNews([FromQuery] int id, [FromBody] NewsDto newsDto)
         {
-            if (id != newsDto.Id || newsDto == null)
+            if (id != newsDto.NewsId || newsDto == null)
             {
                 return BadRequest("Invalid news data or mismatched IDs.");
             }

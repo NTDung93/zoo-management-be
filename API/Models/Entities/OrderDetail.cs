@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API.Models.Entities;
-
-public partial class OrderDetail
+﻿namespace API.Models.Entities
 {
-    public int OrderId { get; set; }
-
-    public int TicketId { get; set; }
-
-    public int? Quantity { get; set; }
-
-    public DateTime? EntryDate { get; set; }
-
-    public virtual Order Order { get; set; }
-
-    public virtual Ticket Ticket { get; set; }
+    public class OrderDetail
+    {
+        public int? Quantity { get; set; }
+        public DateTime? EntryDate { get; set; }
+        public double UnitTotalPrice { get; set; }
+        public int OrderId { get; set; }
+        public string TicketId { get; set; }
+        public Order Order { get; set; }
+        public Ticket Ticket { get; set; }
+    }
 }

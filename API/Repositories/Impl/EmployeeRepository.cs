@@ -1,198 +1,141 @@
 ﻿using API.Helpers;
-using API.Models;
-using API.Models.Authen;
+using API.Models.Authentication;
+using API.Models.Data;
 using API.Models.Dtos;
 using API.Models.Entities;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories.Impl
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly ZooManagementContext _context;
-        private readonly IMapper _mapper;
-        
-        public EmployeeRepository(ZooManagementContext context)
-        {
-            _context = context;
-        }
+        private readonly ZooManagementBackupContext _dbContext;
 
-        public async Task<bool> AddNewRefreshToken(Employee account, string refreshToken)
+        public EmployeeRepository(ZooManagementBackupContext dbContext)
         {
-            var existingAccount = await _context.Employees.FindAsync(account.Id);
-            if (existingAccount == null)
-                return false;
-            
-            existingAccount.RefreshToken = refreshToken;
-
-            return await Save();
-        }
-
-        public async Task<bool> AddRefreshToken(EmpProfileModel loginAccount, string refreshToken)
-        {
-            var account = await _context.Employees.FirstOrDefaultAsync(a => a.Email.Equals(loginAccount.Email));
-            if (account == null)
-                return false;
-            
-            account.RefreshToken = refreshToken;
-            account.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-            return await Save();
-        }
-
-        public async Task<bool> AssignTrainerWithAnimal(string trainerId, Animal animal)
-        {
-            // assign a new trainer that manages the animal
-            animal.EmpId = trainerId;
-            return await Save();    
+            _dbContext = dbContext;
         }
 
         public async Task<Employee> Authenticate(LoginModel account)
         {
-            return await _context.Employees
+            return await _dbContext.Employees
                 .FirstOrDefaultAsync(e => e.Email.Trim().Equals(account.Email) &&
                     e.Password.Trim().Equals(account.Password) &&
-                    e.IsDeleted == EmpParams.NOT_DELETED);
+                    e.EmployeeStatus == EmployeeConstraints.NOT_DELETED);
         }
 
         public async Task<bool> CreateStaff(Employee staff)
         {
-            _context.Employees.Add(staff);
+            if (staff == null) return false;
+            await _dbContext.Employees.AddAsync(staff);
             return await Save();
         }
 
         public async Task<bool> CreateTrainer(Employee trainer)
         {
-            if (trainer.Role.Trim().Equals(EmpParams.TRAINER_ROLE))
-            {
-                _context.Employees.Add(trainer);
-            }
+            if (trainer == null) return false;
+            await _dbContext.Employees.AddAsync(trainer);
             return await Save();
         }
 
-        public async Task<bool> DeleteStaff(string staffId)
+        public async Task<bool> DeleteStaff(string id)
         {
-            var staff = _context.Employees.Find(staffId);
-            if (staff != null)
-            {
-                if (staff.IsDeleted == EmpParams.NOT_DELETED)
-                {
-                    staff.IsDeleted = EmpParams.DELETED;
-                    _context.Employees.Update(staff);
-                }
-            }
+            var staff = await _dbContext.Employees.FindAsync(id);
+            if (staff == null || !staff.Role.Equals(EmployeeConstraints.STAFF_ROLE)) return false;
+            if (staff.EmployeeStatus == EmployeeConstraints.DELETED) return false;
+
+            staff.EmployeeStatus = EmployeeConstraints.DELETED;
+            _dbContext.Update(staff);
             return await Save();
         }
 
-        public async Task<bool> DeleteTrainer(string trainerId)
+        public async Task<bool> DeleteTrainer(string id)
         {
-            var trainer = _context.Employees.Find(trainerId);
-            if (trainer != null)
-            {
-                if (trainer.IsDeleted == EmpParams.NOT_DELETED)
-                {
-                    trainer.IsDeleted = EmpParams.DELETED;
-                    _context.Employees.Update(trainer);
-                }
-            }
-            return await Save();
-        }
+            var trainer = await _dbContext.Employees.FindAsync(id);
+            if (trainer == null || !trainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
+                return false;
+            if (trainer.EmployeeStatus == EmployeeConstraints.DELETED) return false;
 
-        public async Task<Employee> GetAccountByEmail(string email)
-        {
-            return await _context.Employees.FirstOrDefaultAsync(e => e.Email.Equals(email));
+            trainer.EmployeeStatus = EmployeeConstraints.DELETED;
+            _dbContext.Update(trainer);
+            return await Save();
         }
 
         public async Task<Employee> GetStaff(string id)
         {
-            return await _context.Employees.FindAsync(id);
+            return await _dbContext.Employees
+                .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) && 
+                e.Role.Equals(EmployeeConstraints.STAFF_ROLE));
         }
 
         public async Task<IEnumerable<Employee>> GetStaffAccounts()
         {
-            return await _context.Employees.Where(e => e.Role.Trim().Equals(EmpParams.STAFF_ROLE))
-                .OrderBy(e => e.Id)
+            return await _dbContext.Employees
+                .OrderBy(e => e.EmployeeId)
+                .Where(e => e.Role.Equals(EmployeeConstraints.STAFF_ROLE))
                 .ToListAsync();
         }
 
         public async Task<Employee> GetTrainer(string id)
         {
-            return await _context.Employees
-                .FirstOrDefaultAsync(e => e.Id.Trim().ToLower().Equals(id.ToLower().Trim()) && e.Role.Equals(EmpParams.TRAINER_ROLE));
+            return await _dbContext.Employees
+                .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) && e.Role.Equals(EmployeeConstraints.TRAINER_ROLE));
         }
 
         public async Task<IEnumerable<Employee>> GetTrainers()
         {
-            return await _context.Employees.Where(e => e.Role.Trim().Equals(EmpParams.TRAINER_ROLE))
-                .OrderBy(e => e.Id)
+            return await _dbContext.Employees
+                .OrderBy(e => e.EmployeeId)
+                .Where(e => e.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
                 .ToListAsync();
         }
 
         public async Task<bool> HasEmployee(string id)
         {
-            return await _context.Employees.AnyAsync(e => e.Id.Trim().ToLower().Equals(id.ToLower().Trim()));
-        }
-
-        public async Task<bool> HasStaff(string id)
-        {
-            return await _context.Employees
-                .AnyAsync(e => e.Id.Trim().ToLower().Equals(id.ToLower().Trim()) && e.Role.Equals(EmpParams.STAFF_ROLE));
-        }
-
-        public async Task<bool> HasTrainer(string id)
-        {
-            return await _context.Employees
-                .AnyAsync(e => e.Id.Trim().ToLower().Equals(id.ToLower().Trim()) && e.Role.Equals(EmpParams.TRAINER_ROLE));
-        }
-
-        public async Task<bool> RevokeRefreshToken(Employee account)
-        {
-            account.RefreshToken = null;
-            return await Save();
+            return await _dbContext.Employees
+                .AnyAsync(e => e.EmployeeId.Equals(id.Trim()));
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChangesAsync();
+            var saved = _dbContext.SaveChangesAsync();
             return await saved > 0;
         }
 
-        public async Task<bool> UpdateStaff(EmployeeDto staff)
+        public async Task<bool> UpdateStaff(EmployeeResponse staff)
         {
-            var existingStaff = await _context.Employees.FindAsync(staff.Id);
-            if (existingStaff == null || !existingStaff.Role.Equals(EmpParams.STAFF_ROLE))
+            var existingStaff = await _dbContext.Employees
+                .FindAsync(staff.EmployeeId);
+            if (existingStaff == null || !existingStaff.Role.Equals(EmployeeConstraints.STAFF_ROLE))
                 return false;
-            
-            existingStaff.FullName = staff.FullName;
-            existingStaff.Email = staff.Email;
-            existingStaff.CitizenId = staff.CitizenId;
-            existingStaff.Image = staff.Image;
-            existingStaff.PhoneNumber = staff.PhoneNumber;
-            existingStaff.Role = EmpParams.STAFF_ROLE;
-            existingStaff.IsDeleted = staff.IsDeleted;
 
+            existingStaff.FullName = staff.FullName;
+            existingStaff.CitizenId = staff.CitizenId;
+            existingStaff.Email = staff.Email;
+            existingStaff.PhoneNumber = staff.PhoneNumber;
+            existingStaff.Image = staff.Image;
+            existingStaff.EmployeeStatus = staff.EmployeeStatus;
+
+            _dbContext.Update(existingStaff);
             return await Save();
         }
 
-        public async Task<bool> UpdateTrainer(EmployeeDto trainer)
+        public async Task<bool> UpdateTrainer(EmployeeResponse trainer)
         {
-            var existingTrainer = await _context.Employees.FindAsync(trainer.Id);
-            if (existingTrainer == null || !existingTrainer.Role.Equals(EmpParams.TRAINER_ROLE))
+            var existingTrainer = await _dbContext.Employees
+                .FindAsync(trainer.EmployeeId);
+            if (existingTrainer == null || !existingTrainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE)) 
                 return false;
-            
-            //_mapper.Map(trainer, existingTrainer);
 
             existingTrainer.FullName = trainer.FullName;
-            existingTrainer.Email = trainer.Email;
             existingTrainer.CitizenId = trainer.CitizenId;
-            existingTrainer.Image = trainer.Image;
+            existingTrainer.Email = trainer.Email;
             existingTrainer.PhoneNumber = trainer.PhoneNumber;
-            existingTrainer.Role = EmpParams.TRAINER_ROLE;
-            existingTrainer.IsDeleted = trainer.IsDeleted;
+            existingTrainer.Image = trainer.Image;
+            existingTrainer.EmployeeStatus = trainer.EmployeeStatus;
 
+            _dbContext.Update(existingTrainer);
             return await Save();
         }
-
-        
     }
 }

@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Models.Data;
 using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -7,85 +8,73 @@ namespace API.Repositories.Impl
 {
     public class AnimalSpeciesRepository : IAnimalSpeciesRepository
     {
-        private readonly ZooManagementContext _context;
+        private readonly ZooManagementBackupContext _dbContext;
 
-        public AnimalSpeciesRepository(ZooManagementContext context)
+        public AnimalSpeciesRepository(ZooManagementBackupContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
-        public async Task<bool> CreateAnimalSpecies(AnimalSpecy species)
+        public async Task<bool> CreateAnimalSpecies(AnimalSpecies species)
         {
-            _context.AnimalSpecies.Add(species);
+            if (species == null) return false;
+            await _dbContext.AddAsync(species);
             return await Save();
         }
 
         public async Task<bool> DeleteAnimalSpecies(int id)
         {
-            var animalSpecies = _context.AnimalSpecies.Find(id);
-            if (animalSpecies != null)
-                _context.AnimalSpecies.Remove(animalSpecies);
+            var species = await GetAnimalSpecies(id);
+            if (species == null) return false;
+            // check whether there is any animal of this species
+            var animals = _dbContext.Animals.Where(a => a.SpeciesId == species.SpeciesId).ToList();
+            if (animals.Any())
+            {
+                return false;
+            }
+            _dbContext.AnimalSpecies.Remove(species);
             return await Save();
         }
 
-        public async Task<IEnumerable<AnimalSpecy>> GetSpecies()
+        public async Task<IEnumerable<AnimalSpecies>> GetAnimalSpecies()
         {
-            return await _context.AnimalSpecies.Include(ap => ap.Cage)
-                .Include(ap => ap.News)
-                .OrderBy(ap => ap.Name)
+            return await _dbContext.AnimalSpecies
+                .OrderBy(a => a.SpeciesId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByCageId(string cageId)
+        public async Task<AnimalSpecies> GetAnimalSpecies(int id)
         {
-            return await _context.AnimalSpecies
-                .Include(ap => ap.News)
-                .Include(ap => ap.Cage)
-                .Where(ap => ap.CageId.Trim().ToLower().Equals(cageId.Trim().ToLower()))
+            return await _dbContext.AnimalSpecies
+                .FindAsync(id);
+        }
+
+        public async Task<AnimalSpecies> GetAnimalSpecies(string name)
+        {
+            return await _dbContext.AnimalSpecies
+                .FirstOrDefaultAsync(a => a.SpeciesName.Equals(name.Trim()));
+        }
+
+        public async Task<IEnumerable<AnimalSpecies>> GetAnimalSpeciesByName(string name)
+        {
+            return await _dbContext.AnimalSpecies
+                .Where(a => a.SpeciesName.ToLower().Contains(name.Trim().ToLower()))
                 .ToListAsync();
-        }
-
-        public async Task<AnimalSpecy> GetSpeciesById(int id)
-        {
-            return await _context.AnimalSpecies.Include(x => x.Cage).FirstOrDefaultAsync(ap => ap.Id == id);
-        }
-
-        public async Task<IEnumerable<AnimalSpecy>> GetSpeciesByName(string name)
-        {
-            return await _context.AnimalSpecies
-                .Include(ap => ap.Cage)
-                .Include(ap => ap.News)
-                .OrderBy(ap => ap.Name)
-                .Where(ap => ap.Name.Trim().ToLower().Contains(name.Trim().ToLower()))
-                .ToListAsync();
-        }
-
-        public async Task<AnimalSpecy> GetSpecyByCageId(string cageId)
-        {
-            return await _context.AnimalSpecies.FirstOrDefaultAsync(ap => ap.CageId.Trim().ToLower().Equals(cageId.Trim().ToLower()));
-        }
-
-        public async Task<bool> HasSpecies(int id)
-        {
-            return await _context.AnimalSpecies.AnyAsync(ap => ap.Id == id);
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChangesAsync();
+            var saved = _dbContext.SaveChangesAsync();
             return await saved > 0;
         }
 
-        public async Task<bool> UpdateSpecies(AnimalSpeciesDto species)
+        public async Task<bool> UpdateAnimalSpecies(AnimalSpeciesResponse species)
         {
-            var existingSpecies = await _context.AnimalSpecies.FindAsync(species.Id);
+            var existingSpecies = await GetAnimalSpecies(species.SpeciesId);
+            if (existingSpecies == null) return false;
 
-            if (existingSpecies == null)
-                return false;
-            
-            existingSpecies.Name = species.Name;
-            existingSpecies.CageId = species.CageId;
-
+            existingSpecies.SpeciesName = species.SpeciesName;
+            _dbContext.Update(existingSpecies);
             return await Save();
         }
     }

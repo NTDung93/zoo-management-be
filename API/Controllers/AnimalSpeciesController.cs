@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using API.Models.Data;
 using API.Models.Entities;
 using API.Repositories;
 using AutoMapper;
@@ -6,104 +8,98 @@ using API.Models.Dtos;
 
 namespace API.Controllers
 {
-
     public class AnimalSpeciesController : BaseApiController
     {
         private readonly IAnimalSpeciesRepository _speciesRepository;
         private readonly IMapper _mapper;
-        private readonly ICagesRepository _cagesRepo;
 
-        public AnimalSpeciesController(IAnimalSpeciesRepository speciesRepository, 
-            IMapper mapper, 
-            ICagesRepository cagesRepo)
+        public AnimalSpeciesController(IAnimalSpeciesRepository speciesRepository, IMapper mapper)
         {
             _speciesRepository = speciesRepository;
             _mapper = mapper;
-            _cagesRepo = cagesRepo;
         }
-        
-        [HttpGet("species", Name = "GetSpecies")]
+
+        [HttpGet("species")]
         [ProducesResponseType(200)]
         //[Authorize(Roles = "Trainer")]
-        public async Task<ActionResult<IEnumerable<AnimalSpeciesDto>>> GetSpecies()
+        public async Task<ActionResult<IEnumerable<AnimalSpeciesResponse>>> GetSpecies()
         {
-            var species = await _speciesRepository.GetSpecies();
-            if (!ModelState.IsValid) 
-                return BadRequest(ModelState);
-            var speciesDto = _mapper.Map<IEnumerable<AnimalSpeciesDto>>(species);
-            return Ok(speciesDto);
+            var species = await _speciesRepository.GetAnimalSpecies();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var mappedSpecies = _mapper.Map<IEnumerable<AnimalSpeciesResponse>>(species);
+            return Ok(mappedSpecies);
         }
-        
-        [HttpGet("species/species-name")]
+
+        [HttpGet("species/resource-id")]
         [ProducesResponseType(200)]
         //[Authorize(Roles = "Trainer")]
-        public async Task<ActionResult<IEnumerable<AnimalSpeciesDto>>> SearchSpeciesByName([FromQuery] string name)
+        public async Task<ActionResult<AnimalSpeciesResponse>> GetASpecies(int id)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                return BadRequest("Field is empty!");
-
-            var species = await _speciesRepository.GetSpeciesByName(name);
-            if (!species.Any())
-                return NotFound("Species not found!");
-
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            var speciesDto = _mapper.Map<IEnumerable<AnimalSpeciesDto>>(species);
-            return Ok(speciesDto);
-        }
-
-        [HttpGet("species/cages/cageId")]
-        [ProducesResponseType(200)]
-        //[Authorize(Roles = "Trainer")]
-        public async Task<ActionResult<IEnumerable<AnimalSpeciesDto>>> SearchSpeciesByCageId([FromQuery] string cageId)
-        {
-            if (string.IsNullOrWhiteSpace(cageId))
-                return BadRequest("Cage Id must not be empty!");
-            var species = await _speciesRepository.GetSpeciesByCageId(cageId);
-           
-            if (!species.Any())
-                return NotFound("Species not found!");
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            var speciesDto = _mapper.Map<IEnumerable<AnimalSpeciesDto>>(species);
-            return Ok(speciesDto);
-        }
-        
-        [HttpPut("species/resource-id")]
-        public async Task<IActionResult> UpdateSpecies([FromBody] AnimalSpeciesDto species)
-        {
-            if (species == null) 
-                return BadRequest("Species must not be empty!");
-
-            if (!await _cagesRepo.HasCage(species.CageId))
-                return NotFound("Cage not found!");
+            var species = await _speciesRepository.GetAnimalSpecies(id);
+            if (species == null) return NotFound("Species not found!");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             
+            var mappedSpecies = _mapper.Map<AnimalSpeciesResponse>(species);
+            return Ok(mappedSpecies);
+        }
+
+        [HttpPut("species/resource-id")]
+        [ProducesResponseType(204)]
+        //[Authorize(Roles = "Trainer")]
+        public async Task<IActionResult> UpdateSpecies([FromBody] AnimalSpeciesResponse species)
+        {
+            if (species == null)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Species is empty!"
+                });
+
+            if (string.IsNullOrEmpty(species.SpeciesName))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Species name is required!"
+                });
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _speciesRepository.UpdateSpecies(species))
-                return UnprocessableEntity("An error occurs while updating!");
-
+            if (!await _speciesRepository.UpdateAnimalSpecies(species))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while updating species!"
+                });
             return NoContent();
         }
 
         [HttpPost("species")]
         [ProducesResponseType(201)]
         //[Authorize(Roles = "Trainer")]
-        public async Task<ActionResult<AnimalSpecy>> CreateSpecies(AnimalSpeciesDto speciesDto)
+        public async Task<ActionResult<IEnumerable<AnimalSpeciesResponse>>> CreateSpecies(AnimalSpeciesRequest species)
         {
-            if (speciesDto == null)
-                return ValidationProblem("Species is nullable!");
+            if (species == null)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Species is empty!" 
+                });
+
+            if (string.IsNullOrEmpty(species.SpeciesName))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Species name is required!"
+                });
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var species = _mapper.Map<AnimalSpecy>(speciesDto);
-            if (!await _speciesRepository.CreateAnimalSpecies(species))
-                return UnprocessableEntity("An error occurs while creating!");
+            
+            var mappedSpecies = _mapper.Map<AnimalSpecies>(species);
+            if (!await _speciesRepository.CreateAnimalSpecies(mappedSpecies))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while creating!"
+                });
 
-            var listSpecies = await _speciesRepository.GetSpecies();
-            return CreatedAtRoute("GetSpecies", _mapper.Map<IEnumerable<AnimalSpeciesDto>>(listSpecies));
+            var listSpecies = await _speciesRepository.GetAnimalSpecies();
+            return CreatedAtAction("GetSpecies", _mapper.Map<IEnumerable<AnimalSpeciesResponse>>(listSpecies));
         }
 
         [HttpDelete("species/resource-id")]
@@ -111,14 +107,12 @@ namespace API.Controllers
         //[Authorize(Roles = "Trainer")]
         public async Task<IActionResult> DeleteSpecies([FromQuery] int id)
         {
-            if (!await _speciesRepository.HasSpecies(id))
-                return NotFound("Species not found!");
-            if (!ModelState.IsValid)
-                return BadRequest();
             if (!await _speciesRepository.DeleteAnimalSpecies(id))
-                return UnprocessableEntity("An error occurs while deleting!");
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while deleting species!"
+                });
             return NoContent();
         }
-
     }
 }

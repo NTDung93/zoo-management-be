@@ -1,62 +1,120 @@
-﻿using API.Models;
+﻿using API.Helpers;
+using API.Models;
+using API.Models.Data;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace API.Repositories.Impl
 {
     public class FeedingScheduleRepository : IFeedingScheduleRepository
     {
-        private readonly ZooManagementContext _context;
+        private readonly ZooManagementBackupContext _dbContext;
 
-        public FeedingScheduleRepository(ZooManagementContext context)
+        public FeedingScheduleRepository(ZooManagementBackupContext dbContext)
         {
-            this._context = context;
+            _dbContext = dbContext;
         }
 
-        public async Task CreateSchedule(FeedingSchedule feedingSchedule)
+        public async Task<bool> CreateFeedingSchedule(FeedingSchedule feedingSchedule)
         {
-            _context.FeedingSchedules.Add(feedingSchedule);
-            await _context.SaveChangesAsync();
+            if (feedingSchedule == null) return false;  
+            await _dbContext.FeedingSchedules.AddAsync(feedingSchedule);
+            return await Save();
         }
 
-        public async Task DeleteSchedule(int id)
+        public async Task<FeedingSchedule> GetFeedingSchedule(int no)
         {
-            var feedingSchedule = _context.FeedingSchedules.FindAsync(id);
-            _context.FeedingSchedules.Remove(feedingSchedule.Result);
-            await _context.SaveChangesAsync();
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
+                .FirstOrDefaultAsync(fs => fs.No == no);
         }
 
-        public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByAnimalName(string name)
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedules()
         {
-            var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).Where(a => a.Animal.Name.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
-            return await feedingSchedule;
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
+                .OrderByDescending(fs => fs.No)
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleByFood(string name)
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedulesByAnimal(string animalId)
         {
-            var feedingSchedule = _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).Where(a => a.Food.Name.ToLower().Contains(name.Trim().ToLower())).ToListAsync();
-            return await feedingSchedule;
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
+                .Where(fs => fs.AnimalId.ToLower().Equals(animalId.ToLower().Trim()))
+                .OrderByDescending(fs => fs.No)
+                .ToListAsync();
         }
 
-        public async Task<FeedingSchedule> GetFeedingScheduleById(int id)
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedulesByCage(string cageId)
         {
-            return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).FirstOrDefaultAsync(schedule => schedule.ScheduleNo == id);
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
+                .Where(fs => fs.CageId.ToLower().Equals(cageId.ToLower().Trim()))
+                .OrderByDescending(fs => fs.No)
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<FeedingSchedule>> GetListFeedingSchedule()
+        public async Task<double> GetMaxFeedingQuantityOnAnimal(string animalId)
         {
-            return await _context.FeedingSchedules.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.Food).OrderBy(a => a.ScheduleNo).ToListAsync();
+            var animal = _dbContext.Animals.Find(animalId);
+            return await Task.FromResult(animal.MaxFeedingQuantity);
         }
 
-        public Task UpdateSchedule(int id, FeedingScheduleDto scheduleDto)
+        public async Task<double> GetMaxFeedingQuantityOnCage(string cageId)
         {
-            var feedingSchedule = GetFeedingScheduleById(id);
-            feedingSchedule.Result.FeedTime = scheduleDto.FeedTime;
-            feedingSchedule.Result.FoodId = scheduleDto.FoodId;
-            feedingSchedule.Result.AnimalId = scheduleDto.AnimalId;
-            feedingSchedule.Result.EmployeeId = scheduleDto.EmployeeId;
-            feedingSchedule.Result.FeedStatus = scheduleDto.FeedStatus;
-            return _context.SaveChangesAsync();
+            var animals = await _dbContext.Animals
+                .Where(a => a.CageId.ToLower() == cageId.ToLower())
+                .ToListAsync();
+            
+            if (!animals.Any()) return 0;
+
+            double avgFeedingQuantity = animals
+                .Select(a => (double)a.MaxFeedingQuantity)
+                .Average();
+            return avgFeedingQuantity;
+        }
+
+        public async Task<bool> Save()
+        {
+            var saved = _dbContext.SaveChangesAsync();
+            return await saved > 0;
+        }
+
+        public async Task<bool> UpdateFeedingScheduleStatus(FeedingSchedule feedingSchedule)
+        {
+            var existingFeedingSchedule = await GetFeedingSchedule(feedingSchedule.No);
+            if (existingFeedingSchedule == null) return false;
+
+            existingFeedingSchedule.FeedingStatus = feedingSchedule.FeedingStatus;
+            if (existingFeedingSchedule.FeedingStatus == FeedingScheduleConstraints.FEEDING_STATUS_COMPLETED)
+            {
+                var feedingFood = await _dbContext.FoodInventories
+                    .FindAsync(existingFeedingSchedule.FeedingMenu.FoodId);
+                if (feedingFood == null) return false;
+                // get the current food quantity in food inventory
+                var currentFoodQuantity = feedingFood.InventoryQuantity;
+                var feedingQuantity = existingFeedingSchedule.FeedingAmount;
+                var updatedFoodQuantity = currentFoodQuantity - feedingQuantity;
+
+                feedingFood.InventoryQuantity = updatedFoodQuantity;
+                _dbContext.FoodInventories.Update(feedingFood);
+            }
+            _dbContext.FeedingSchedules.Update(existingFeedingSchedule);
+            return await Save();
         }
     }
 }

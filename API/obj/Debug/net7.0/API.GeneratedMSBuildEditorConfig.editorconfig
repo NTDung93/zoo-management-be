@@ -9,9 +9,11 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = API
 build_property.RootNamespace = API
-build_property.ProjectDir = D:\FPT\Half_05\SWP391\zoo-management\zoo-management-be\API\
+
+build_property.ProjectDir = D:\FPT_SE\v\SWP_Backend\zoo-management-be\API\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\FPT\Half_05\SWP391\zoo-management\zoo-management-be\API
+build_property.MSBuildProjectDirectory = D:\FPT_SE\v\SWP_Backend\zoo-management-be\API
+
 build_property._RazorSourceGeneratorDebug = 

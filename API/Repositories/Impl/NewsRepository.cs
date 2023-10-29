@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Models.Data;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,8 +7,8 @@ namespace API.Repositories.Impl
 {
     public class NewsRepository : INewsRepository
     {
-        private readonly ZooManagementContext _context;
-        public NewsRepository(ZooManagementContext context)
+        private readonly ZooManagementBackupContext _context;
+        public NewsRepository(ZooManagementBackupContext context)
         {
             _context = context;
         }
@@ -27,17 +28,18 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<News>> GetNews()
         {
-            return await _context.News.Include(x=>x.Animal).Include(y=>y.Emp).Include(z=>z.Species).OrderBy(a => a.Id).ToListAsync();
+            //return await _context.News.Include(x=>x.Animal.Cage.Area).Include(t=>t.Animal.AnimalSpecies).Include(y=>y.Employee).Include(z=>z.AnimalSpecies).OrderBy(a => a.NewsId).ToListAsync();
+            return await _context.News.Include(y => y.Employee).Include(z => z.AnimalSpecies).OrderBy(a => a.NewsId).ToListAsync();
         }
 
         public async Task<News> GetNewsById(int id)
         {
-            return await _context.News.Include(x => x.Animal).Include(y => y.Emp).Include(z => z.Species).FirstOrDefaultAsync(a => a.Id == id);
+            return await _context.News.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.AnimalSpecies).FirstOrDefaultAsync(a => a.NewsId == id);
         }
 
         public async Task<IEnumerable<News>> SearchNewsByTitle(string title)
         {
-            return await _context.News.Include(x => x.Animal).Include(y => y.Emp).Include(z => z.Species).Where(a => a.Title.ToLower().Contains(title.Trim().ToLower())).ToListAsync();
+            return await _context.News.Include(x => x.Animal).Include(y => y.Employee).Include(z => z.AnimalSpecies).Where(a => a.Title.ToLower().Contains(title.Trim().ToLower())).ToListAsync();
         }
 
         public async Task UpdateNews(int id, NewsDto newsDto)
@@ -49,7 +51,7 @@ namespace API.Repositories.Impl
             currentNews.Result.WritingDate = newsDto.WritingDate;
             currentNews.Result.SpeciesId = newsDto.SpeciesId;
             currentNews.Result.AnimalId = newsDto.AnimalId;
-            currentNews.Result.EmpId = newsDto.EmpId;
+            currentNews.Result.EmployeeId = newsDto.EmployeeId;
             await _context.SaveChangesAsync();
         }
     }

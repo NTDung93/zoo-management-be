@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API.Models.Entities;
-
-public partial class Certificate
+﻿namespace API.Models.Entities
 {
-    public string Code { get; set; }
-
-    public string Name { get; set; }
-
-    public string Level { get; set; }
-
-    public string TrainingInstitution { get; set; }
-
-    public virtual ICollection<EmployeeCertificate> EmployeeCertificates { get; set; } = new List<EmployeeCertificate>();
+    public class Certificate
+    {
+        public string CertificateCode { get; set; }
+        public string CertificateName { get; set; }
+        public string Level { get; set; }
+        public string TrainingInstitution { get; set; }
+        public ICollection<EmployeeCertificate> EmployeeCertificates { get; set; }
+        
+    }
 }

@@ -1,9 +1,9 @@
-using API.Controllers;
+using API;
 using API.Helpers;
-using API.Helpers.Token;
-using API.Models;
+using API.Models.Data;
 using API.Repositories;
 using API.Repositories.Impl;
+using API.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,17 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ZooManagementContext>(options =>
+
+builder.Services.AddDbContext<ZooManagementBackupContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddCors();
-
+builder.Services.AddTransient<ZooManagementBackupSeeder>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<BuggyController>();
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -41,19 +40,42 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAnimalsRepository, AnimalsRepository>();
 builder.Services.AddScoped<IAreasRepository, AreasRepository>();
 builder.Services.AddScoped<ICagesRepository, CagesRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
-builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+builder.Services.AddScoped<IFoodInventoryRepository, FoodInventoryRepository>();
+builder.Services.AddScoped<IImportHistoryRepository, ImportHistoryRepository>();
+builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
+builder.Services.AddScoped<IFeedingMenuRepository, FeedingMenuRepository>();
+builder.Services.AddScoped<ICertificateRepository, CertificateRepository>();
 
+
+builder.Services.AddScoped<ITicketsRepository, TicketsRepository>();
+builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITransactionHistoriesRepository, TransactionHistoriesRepository>();
 builder.Services.AddTransient<ITokenHelper, TokenHelper>();
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+    SeedData(app);
+
+void SeedData(IHost app)
+{
+    var scopedFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<ZooManagementBackupSeeder>();
+        service.Seed();
+    };
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -61,10 +83,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthentication(); // added before UseAuthorization()
+app.UseAuthentication();
 
 app.UseCors(opt =>
 {
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173");
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
 });
 
