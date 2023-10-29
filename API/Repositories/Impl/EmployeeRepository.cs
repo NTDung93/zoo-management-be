@@ -19,9 +19,11 @@ namespace API.Repositories.Impl
         public async Task<Employee> Authenticate(LoginModel account)
         {
             return await _dbContext.Employees
-                .FirstOrDefaultAsync(e => e.Email.Trim().Equals(account.Email) &&
+                .Where(e => e.Email.Trim().Equals(account.Email) &&
                     e.Password.Trim().Equals(account.Password) &&
-                    e.EmployeeStatus == EmployeeConstraints.NOT_DELETED);
+                    e.EmployeeStatus == EmployeeConstraints.NOT_DELETED)
+                .Include(e => e.Area)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> CreateStaff(Employee staff)

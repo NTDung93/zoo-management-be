@@ -1,4 +1,7 @@
-﻿namespace API.Models.Authentication
+﻿using API.Models.Dtos;
+using System.Diagnostics.CodeAnalysis;
+
+namespace API.Models.Authentication
 {
     public class AuthenticatedResponse
     {
@@ -9,6 +12,7 @@
         public string PhoneNumber { get; set; }
         public string Image { get; set; }
         public string Role { get; set; }
-        public string Token { get; set; }   
+        public string Token { get; set; }
+        public AreaDto Area { get; set; }
     }
 }

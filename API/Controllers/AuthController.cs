@@ -1,5 +1,6 @@
 ﻿using API.Helpers;
 using API.Models.Authentication;
+using API.Models.Dtos;
 using API.Repositories;
 using API.Token;
 using AutoMapper;
@@ -79,6 +80,7 @@ namespace API.Controllers
                         PhoneNumber = loginAccount.PhoneNumber,
                         Image = loginAccount.Image,
                         Role = loginAccount.Role,
+                        Area = _mapper.Map<AreaDto>(loginAccount.Area),
                         Token = accessToken,
                     });
                 }
