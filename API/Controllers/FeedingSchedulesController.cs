@@ -192,6 +192,8 @@ namespace API.Controllers
                 {
                     Title = "The feeding schedule no is not matched!"
                 });
+            // validate StartTime and EndTime > current time
+            // Create Schedule ko cung thoi diem cung 1 cage
 
             var mappedFeedingSchedule = _mapper.Map<FeedingSchedule>(feedingSchedule);
             var result = await _feedingScheduleRepository.UpdateFeedingSchedule(mappedFeedingSchedule);

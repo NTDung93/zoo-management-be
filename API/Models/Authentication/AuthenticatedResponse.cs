@@ -13,6 +13,6 @@ namespace API.Models.Authentication
         public string Image { get; set; }
         public string Role { get; set; }
         public string Token { get; set; }
-        public AreaDto Area { get; set; }
+        public string AreaId { get; set; }
     }
 }

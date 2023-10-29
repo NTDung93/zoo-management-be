@@ -18,7 +18,20 @@ namespace API.Repositories.Impl
 
         public async Task<bool> CreateFeedingSchedule(FeedingSchedule feedingSchedule)
         {
-            if (feedingSchedule == null) return false;  
+            if (feedingSchedule == null) 
+                return false;  
+
+            var existingSchedules = await _dbContext.FeedingSchedules
+                .Where(fs => fs.CageId == feedingSchedule.CageId)
+                .ToListAsync();
+
+            foreach(var schedule in existingSchedules)
+            {
+                if (feedingSchedule.StartTime == schedule.StartTime && feedingSchedule.EndTime == schedule.EndTime)
+                {
+                    return false;
+                }
+            }
             await _dbContext.FeedingSchedules.AddAsync(feedingSchedule);
             return await Save();
         }

@@ -71,18 +71,35 @@ namespace API.Controllers
                         new Claim(ClaimTypes.Role, loginAccount.Role)
                     };
                     var accessToken = _tokenHelper.GenerateAccessToken(claims);
-                    return Ok(new AuthenticatedResponse
+                    if (loginAccount.Area == null)
                     {
-                        EmployeeId = loginAccount.EmployeeId,
-                        Email = loginAccount.Email,
-                        FullName = loginAccount.FullName,
-                        CitizenId = loginAccount.CitizenId,
-                        PhoneNumber = loginAccount.PhoneNumber,
-                        Image = loginAccount.Image,
-                        Role = loginAccount.Role,
-                        Area = _mapper.Map<AreaDto>(loginAccount.Area),
-                        Token = accessToken,
-                    });
+                        return Ok(new AuthenticatedResponse
+                        {
+                            EmployeeId = loginAccount.EmployeeId,
+                            Email = loginAccount.Email,
+                            FullName = loginAccount.FullName,
+                            CitizenId = loginAccount.CitizenId,
+                            PhoneNumber = loginAccount.PhoneNumber,
+                            Image = loginAccount.Image,
+                            Role = loginAccount.Role,
+                            Token = accessToken,
+                        });
+                    }
+                    else
+                    {
+                        return Ok(new AuthenticatedResponse
+                        {
+                            EmployeeId = loginAccount.EmployeeId,
+                            Email = loginAccount.Email,
+                            FullName = loginAccount.FullName,
+                            CitizenId = loginAccount.CitizenId,
+                            PhoneNumber = loginAccount.PhoneNumber,
+                            Image = loginAccount.Image,
+                            Role = loginAccount.Role,
+                            AreaId = _mapper.Map<AreaDto>(loginAccount.Area).AreaId,
+                            Token = accessToken,
+                        });
+                    }
                 }
             }
             return NotFound("Account not found!");
