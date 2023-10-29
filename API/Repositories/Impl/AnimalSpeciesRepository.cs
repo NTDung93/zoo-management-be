@@ -62,6 +62,11 @@ namespace API.Repositories.Impl
                 .ToListAsync();
         }
 
+        public Task<AnimalSpecies> GetSpecyByCageId(string cageId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> Save()
         {
             var saved = _dbContext.SaveChangesAsync();
