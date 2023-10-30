@@ -71,7 +71,7 @@ namespace API.Controllers
                         new Claim(ClaimTypes.Role, loginAccount.Role)
                     };
                     var accessToken = _tokenHelper.GenerateAccessToken(claims);
-                    if (loginAccount.Area == null)
+                    if (loginAccount.Role == EmployeeConstraints.TRAINER_ROLE && loginAccount.Area != null)
                     {
                         return Ok(new AuthenticatedResponse
                         {
@@ -82,6 +82,7 @@ namespace API.Controllers
                             PhoneNumber = loginAccount.PhoneNumber,
                             Image = loginAccount.Image,
                             Role = loginAccount.Role,
+                            AreaId = _mapper.Map<AreaDto>(loginAccount.Area).AreaId,
                             Token = accessToken,
                         });
                     }
@@ -96,7 +97,6 @@ namespace API.Controllers
                             PhoneNumber = loginAccount.PhoneNumber,
                             Image = loginAccount.Image,
                             Role = loginAccount.Role,
-                            AreaId = _mapper.Map<AreaDto>(loginAccount.Area).AreaId,
                             Token = accessToken,
                         });
                     }
