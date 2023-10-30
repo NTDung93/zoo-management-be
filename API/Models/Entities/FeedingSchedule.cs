@@ -8,11 +8,11 @@ namespace API.Models.Entities
         public string CageId { get; set; }
         public string AnimalId { get; set; }
         public string EmployeeId { get; set; }
-        public DateTime CreatedTime { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
         [JsonProperty(PropertyName = "StartTime")]
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
         [JsonProperty(PropertyName = "EndTime")]
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
         public double FeedingAmount { get; set; }
         public byte FeedingStatus { get; set; }
         public string Note { get; set; }
