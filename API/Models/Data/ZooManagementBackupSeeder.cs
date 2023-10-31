@@ -22,19 +22,22 @@ namespace API.Models.Data
                     {
                         AreaId = "A",
                         AreaName = "Carnivore",
-                        EmployeeId = "E001"
+                        EmployeeId = "E001",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Area
                     {
                         AreaId = "B",
                         AreaName = "Herbivore",
-                        EmployeeId = "E003"
+                        EmployeeId = "E003",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Area
                     {
                         AreaId = "C",
                         AreaName = "Underwater",
-                        EmployeeId = "E006"
+                        EmployeeId = "E006",
+                        CreatedDate = DateTimeOffset.Now
                     }
                 };
                 _dbContext.Areas.AddRange(areas);
@@ -50,7 +53,8 @@ namespace API.Models.Data
                         Name = "Lion",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "A"
+                        AreaId = "A",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -58,7 +62,8 @@ namespace API.Models.Data
                         Name = "Tiger",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "A"
+                        AreaId = "A",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -66,7 +71,8 @@ namespace API.Models.Data
                         Name = "Giraffe",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "B"
+                        AreaId = "B",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -74,7 +80,8 @@ namespace API.Models.Data
                         Name = "Elephant",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "B"
+                        AreaId = "B",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -82,7 +89,8 @@ namespace API.Models.Data
                         Name = "Peacook and Flamingo",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "B"
+                        AreaId = "B",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -90,7 +98,8 @@ namespace API.Models.Data
                         Name = "Rooster and Parrot",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "B"
+                        AreaId = "B",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -98,7 +107,8 @@ namespace API.Models.Data
                         Name = "Zebra",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "B"
+                        AreaId = "B",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -106,7 +116,8 @@ namespace API.Models.Data
                         Name = "Hippo",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "C"
+                        AreaId = "C",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Cage
                     {
@@ -114,7 +125,8 @@ namespace API.Models.Data
                         Name = "Alligator",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
-                        AreaId = "C"
+                        AreaId = "C",
+                        CreatedDate = DateTimeOffset.Now
                     },
 
                 };
@@ -130,35 +142,40 @@ namespace API.Models.Data
                         CertificateCode = "3FQLO",
                         CertificateName = "Reptile Specialist",
                         Level = "Expert",
-                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development"
+                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Certificate
                     {
                         CertificateCode = "CER001",
                         CertificateName = "Animal Care Specialist",
                         Level = "Intermeidate",
-                        TrainingInstitution = "Nong Lam University"
+                        TrainingInstitution = "Nong Lam University",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Certificate
                     {
                         CertificateCode = "CER002",
                         CertificateName = "Zoologist Certification",
                         Level = "Beginner",
-                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development"
+                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Certificate
                     {
                         CertificateCode = "CER2ND49",
                         CertificateName = "Tiger Training Specilization",
                         Level = "Intermediate",
-                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development"
+                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Certificate
                     {
                         CertificateCode = "CEREZ769",
                         CertificateName = "Elephant Training Certificate",
                         Level = "Expert",
-                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development"
+                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
+                        CreatedDate = DateTimeOffset.Now
                     },
                 };
                 _dbContext.Certificates.AddRange(certificates);
@@ -177,7 +194,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0981342455",
                         Role = EmployeeConstraints.TRAINER_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -188,7 +206,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0981342455",
                         Role = EmployeeConstraints.STAFF_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -199,7 +218,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0897876321",
                         Role = EmployeeConstraints.TRAINER_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -210,7 +230,8 @@ namespace API.Models.Data
                         Password = "2",
                         PhoneNumber = "0923463674",
                         Role = EmployeeConstraints.STAFF_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -221,7 +242,8 @@ namespace API.Models.Data
                         Password = "2",
                         PhoneNumber = "0823458761",
                         Role = EmployeeConstraints.STAFF_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -232,7 +254,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0876312334",
                         Role = EmployeeConstraints.TRAINER_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -243,7 +266,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0589169697",
                         Role = EmployeeConstraints.TRAINER_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -254,7 +278,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0986665343",
                         Role = EmployeeConstraints.TRAINER_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED, 
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -265,7 +290,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0881230814",
                         Role = EmployeeConstraints.STAFF_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new Employee
                     {
@@ -276,7 +302,8 @@ namespace API.Models.Data
                         Password = "1",
                         PhoneNumber = "0327057920",
                         Role = EmployeeConstraints.STAFF_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
                     },
                 };
                 _dbContext.Employees.AddRange(employees);
@@ -290,55 +317,64 @@ namespace API.Models.Data
                     {
                         FoodId = "FD01",
                         FoodName = "Carrot",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD02",
                         FoodName = "Grass",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD03",
                         FoodName = "Beef",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD04",
                         FoodName = "Chicken",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD05",
                         FoodName = "Sugarcane",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD06",
                         FoodName = "Watermelon",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD07",
                         FoodName = "Squirrel",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD08",
                         FoodName = "FruitBlend",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FoodInventory
                     {
                         FoodId = "FD09",
                         FoodName = "Mixed beans",
-                        InventoryQuantity = 10
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
                     },
                 };
                 _dbContext.FoodInventories.AddRange(foods);
@@ -351,42 +387,52 @@ namespace API.Models.Data
                     new AnimalSpecies
                     {
                         SpeciesName = "Giraffe",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Elephant",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Peacook",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Lion",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Hippo",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Alligator",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Tiger",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Flamingo",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Zebra",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new AnimalSpecies
                     {
                         SpeciesName = "Parrot",
+                        CreatedDate = DateTimeOffset.Now
                     }
                 };
                 _dbContext.AnimalSpecies.AddRange(species);
@@ -575,48 +621,56 @@ namespace API.Models.Data
                         MenuNo = "MNU001",
                         MenuName = "Tiger 1st week",
                         FoodId = "FD04",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
                     {
                         MenuNo = "MNU002",
                         MenuName = "Tiger 1st week",
                         FoodId = "FD03",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
                     {
                         MenuNo = "MNU003",
                         MenuName = "Tiger 1st week",
                         FoodId = "FD07",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
                     {
                         MenuNo = "MNU004",
                         MenuName = "Elephant 1st week",
                         FoodId = "FD05",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
                     {
                         MenuNo = "MNU005",
                         MenuName = "Elephant 1st week",
                         FoodId = "FD06",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
                     {
                         MenuNo = "MNU006",
                         MenuName = "Flamingo 1st week",
                         FoodId = "FD09",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
                     {
                         MenuNo = "MNU007",
                         MenuName = "Giraffe 1st week",
                         FoodId = "FD01",
+                        CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
                     {
                         MenuNo = "MNU008",
                         MenuName = "Giraffe 1st week",
                         FoodId = "FD02",
+                        CreatedDate = DateTimeOffset.Now
                     },
                 };
                 _dbContext.FeedingMenus.AddRange(menus);

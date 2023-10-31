@@ -10,6 +10,7 @@
         public string PhoneNumber { get; set; }
         public string Image { get; set; }
         public string Role { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
         public byte EmployeeStatus { get; set; }
         public ICollection<News> News { get; set; }
         public ICollection<EmployeeCertificate> EmployeeCertificates { get; set; }

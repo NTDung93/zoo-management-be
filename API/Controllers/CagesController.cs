@@ -30,6 +30,10 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<CageDto>>> GetCages()
         {
             var cages = await _cagesRepo.GetListCage();
+            foreach(var cage in cages)
+            {
+                cage.CurrentCapacity = await _cagesRepo.GetCurrentCapacityInACage(cage.CageId);
+            }
             if (!ModelState.IsValid)
                 return BadRequest();
             var cagesDto = _mapper.Map<IEnumerable<CageDto>>(cages);

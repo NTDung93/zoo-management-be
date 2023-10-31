@@ -4,7 +4,6 @@ namespace API.Repositories
 {
     public interface IFeedingScheduleRepository
     {
-        // add an interface to retrieve the next schedule
         Task<IEnumerable<FeedingSchedule>> GetFeedingSchedules();
         Task<FeedingSchedule> GetFeedingSchedule(int no);
         Task<IEnumerable<FeedingSchedule>> GetFeedingSchedulesByCage(string cageId);
@@ -13,6 +12,8 @@ namespace API.Repositories
         Task<bool> UpdateFeedingScheduleStatus(FeedingSchedule feedingSchedule);
         Task<double> GetMaxFeedingQuantityOnAnimal(string animalId);
         Task<double> GetMaxFeedingQuantityOnCage(string cageId);
+        Task<bool> DeleteFeedingSchedule(int no);
+        Task<bool> UpdateFeedingSchedule(FeedingSchedule feedingSchedule);
         Task<bool> Save();
     }
 }

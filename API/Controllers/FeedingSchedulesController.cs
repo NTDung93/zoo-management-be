@@ -167,22 +167,59 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpGet("demo-api-01")]
+        [HttpDelete("feeding-schedule/resource-id")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public async Task<ActionResult<double>> GetFeedingQuantityOfAnAnimal(string animalId)
+        public async Task<IActionResult> DeleteFeedingSchedule(int no)
         {
-            var feedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnAnimal(animalId);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            return Ok(feedingQuantity);
+            if (no <= 0) return BadRequest(new ProblemDetails
+            {
+                Title = "Feeding schedule no is required!"
+            });
+            var result = await _feedingScheduleRepository.DeleteFeedingSchedule(no);
+            if (!result) return BadRequest(new ProblemDetails
+            {
+                Title = "An error occurs while deleting feeding schedule!"
+            });
+            return NoContent();
         }
 
-        [HttpGet("demo-api-02")]
+        [HttpPut("feeding-schedule/resource-id")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public async Task<ActionResult<double>> GetFeedingQuantityOfACage(string cageId)
+        public async Task<IActionResult> UpdateFeedingSchedule(int no, [FromBody] FeedingScheduleRequest feedingSchedule)
         {
-            var feedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnCage(cageId);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            return Ok(feedingQuantity);
+            if (no != feedingSchedule.No)
+                return Conflict(new ProblemDetails
+                {
+                    Title = "The feeding schedule no is not matched!"
+                });
+            // validate StartTime and EndTime > current time
+            // Create Schedule ko cung thoi diem cung 1 cage
+
+            var mappedFeedingSchedule = _mapper.Map<FeedingSchedule>(feedingSchedule);
+            var result = await _feedingScheduleRepository.UpdateFeedingSchedule(mappedFeedingSchedule);
+            if (!result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "An error occurs while updating feeding schedule!"
+                });
+            return NoContent();
         }
+        //[HttpGet("demo-api-01")]
+        //[ProducesResponseType((int)HttpStatusCode.NoContent)]
+        //public async Task<ActionResult<double>> GetFeedingQuantityOfAnAnimal(string animalId)
+        //{
+        //    var feedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnAnimal(animalId);
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    return Ok(feedingQuantity);
+        //}
+
+        //[HttpGet("demo-api-02")]
+        //[ProducesResponseType((int)HttpStatusCode.NoContent)]
+        //public async Task<ActionResult<double>> GetFeedingQuantityOfACage(string cageId)
+        //{
+        //    var feedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnCage(cageId);
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    return Ok(feedingQuantity);
+        //}
     }
 }

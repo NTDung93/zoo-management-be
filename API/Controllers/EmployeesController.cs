@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using API.Helpers;
 using API.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using NuGet.DependencyResolver;
 
 namespace API.Controllers
 {
@@ -64,6 +65,13 @@ namespace API.Controllers
                     Title = "Invalid citizen id format!"
                 });
 
+            var result = await _employeeRepository.CheckDuplicateOfEmail(trainer.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
+                });
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -102,6 +110,13 @@ namespace API.Controllers
                     Title = "Invalid phone number!"
                 });
 
+            var result = await _employeeRepository.CheckDuplicateOfEmail(trainer.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
+                });
+
             if (await _employeeRepository.HasEmployee(trainer.EmployeeId))
                 return BadRequest(new ProblemDetails
                 {
@@ -134,6 +149,26 @@ namespace API.Controllers
                     Title = "An error occurs while deleting trainer!"
                 });
             return NoContent();
+        }
+
+        [HttpGet("trainers/area/resource-id")]
+        [ProducesResponseType(200)] 
+        public async Task<ActionResult<EmployeeResponse>> GetEmployeeOfAnArea(string areaId)
+        {
+            if (string.IsNullOrEmpty(areaId))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Area id is empty!"
+                });
+            var employees = await _employeeRepository.GetEmployeeOfAnArea(areaId);
+            if (!employees.Any())
+                return NotFound("Employee is not found!");
+            var mappedEmployees = employees.Select(e => new EmployeeResponse
+            {
+                EmployeeId = e.EmployeeId,
+                FullName = e.FullName,
+            });
+            return Ok(mappedEmployees);
         }
 
         // Staff controller's zone
@@ -185,6 +220,13 @@ namespace API.Controllers
                     Title = "Invalid citizen id format!"
                 });
 
+            var result = await _employeeRepository.CheckDuplicateOfEmail(staff.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
+                });
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -222,6 +264,13 @@ namespace API.Controllers
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Invalid phone number!"
+                });
+
+            var result = await _employeeRepository.CheckDuplicateOfEmail(staff.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
                 });
 
             if (await _employeeRepository.HasEmployee(staff.EmployeeId))

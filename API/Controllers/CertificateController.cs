@@ -29,6 +29,17 @@ namespace API.Controllers
             return Ok(certificatesDto);
         }
 
+        //[HttpGet("load-university")]
+        //[ProducesResponseType(200)]
+        ////[Authorize(Roles = "Trainer")]
+        //public async Task<ActionResult<IEnumerable<University>>> GetUniversity()
+        //{
+        //    var certificates = await _certiRepo.ReadJsonFile("world_universities_and_domains.json");
+        //    if (!ModelState.IsValid)
+        //        return BadRequest();
+        //    return Ok(certificates);
+        //}
+
         [HttpGet("load-certificateById")]
         public async Task<ActionResult<CertificateDto>> GetCertificate(string id)
         {
