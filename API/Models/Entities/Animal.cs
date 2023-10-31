@@ -13,6 +13,7 @@
         public byte? HealthStatus { get; set; }
         public string Rarity { get; set; }
         public double MaxFeedingQuantity { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
         public byte? IsDeleted { get; set; }
         public string EmployeeId { get; set; }
         public string CageId { get; set; }
