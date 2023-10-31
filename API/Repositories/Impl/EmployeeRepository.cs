@@ -153,10 +153,11 @@ namespace API.Repositories.Impl
 
             existingStaff.FullName = staff.FullName;
             existingStaff.CitizenId = staff.CitizenId;
-            existingStaff.Email = staff.Email;
+            //existingStaff.Email = staff.Email;
             existingStaff.PhoneNumber = staff.PhoneNumber;
             existingStaff.Image = staff.Image;
             existingStaff.EmployeeStatus = staff.EmployeeStatus;
+            existingStaff.CreatedDate = DateTimeOffset.Now;
 
             _dbContext.Update(existingStaff);
             return await Save();
@@ -172,10 +173,11 @@ namespace API.Repositories.Impl
 
             existingTrainer.FullName = trainer.FullName;
             existingTrainer.CitizenId = trainer.CitizenId;
-            existingTrainer.Email = trainer.Email;
+            //existingTrainer.Email = trainer.Email;
             existingTrainer.PhoneNumber = trainer.PhoneNumber;
             existingTrainer.Image = trainer.Image;
             existingTrainer.EmployeeStatus = trainer.EmployeeStatus;
+            existingTrainer.CreatedDate = DateTimeOffset.Now;
 
             _dbContext.Update(existingTrainer);
             return await Save();
