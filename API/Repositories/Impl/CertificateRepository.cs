@@ -21,7 +21,9 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<Certificate>> GetCertificates()
         {
-            return await _dbContext.Certificates.ToListAsync();
+            return await _dbContext.Certificates
+                .OrderByDescending(c => c.CreatedDate)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<EmployeeCertificate>> GetEmployeeCertificatesByEmpId(string empId)

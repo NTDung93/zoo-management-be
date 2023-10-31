@@ -128,6 +128,7 @@ namespace API.Controllers
             mappedTrainer.Password = EmployeeConstraints.DEFAULT_PASSWORD;
             mappedTrainer.Role = EmployeeConstraints.TRAINER_ROLE;
             mappedTrainer.EmployeeStatus = EmployeeConstraints.NOT_DELETED;
+            mappedTrainer.CreatedDate = DateTimeOffset.Now;
 
             if (!await _employeeRepository.CreateTrainer(mappedTrainer))
                 return BadRequest(new ProblemDetails
@@ -284,6 +285,7 @@ namespace API.Controllers
             mappedStaff.Password = EmployeeConstraints.DEFAULT_PASSWORD;
             mappedStaff.Role = EmployeeConstraints.STAFF_ROLE;
             mappedStaff.EmployeeStatus = EmployeeConstraints.NOT_DELETED;
+            mappedStaff.CreatedDate = DateTimeOffset.Now;
 
             if (!await _employeeRepository.CreateStaff(mappedStaff))
                 return BadRequest(new ProblemDetails

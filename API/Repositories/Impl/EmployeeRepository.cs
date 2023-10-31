@@ -112,6 +112,7 @@ namespace API.Repositories.Impl
             return await _dbContext.Employees
                 .OrderBy(e => e.EmployeeId)
                 .Where(e => e.Role.Equals(EmployeeConstraints.STAFF_ROLE))
+                .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
         }
 
@@ -126,6 +127,7 @@ namespace API.Repositories.Impl
             return await _dbContext.Employees
                 .OrderBy(e => e.EmployeeId)
                 .Where(e => e.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
+                .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
         }
 
