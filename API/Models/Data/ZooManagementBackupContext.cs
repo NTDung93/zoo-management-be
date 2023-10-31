@@ -251,6 +251,10 @@ namespace API.Models.Data
                 .HasOne(a => a.Employee)
                 .WithOne(e => e.Area)
                 .HasForeignKey<Area>(a => a.EmployeeId);
+
+            modelBuilder.Entity<Animal>()
+                .Property(a => a.MaxFeedingQuantity)
+                .HasColumnType("decimal(5,2)");
         }
     }
 }

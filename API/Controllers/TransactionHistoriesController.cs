@@ -1,4 +1,5 @@
 ﻿using API.Models.Dtos;
+using API.Models.Entities;
 using API.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,18 @@ namespace API.Controllers
             }
             var transactionsDto = _mapper.Map<IEnumerable<TransactionHistoryDto>>(transactions);
             return Ok(transactionsDto);
+        }
+
+        [HttpPost("create")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<TransactionHistoryDto>> CreateTransaction([FromBody] TransactionHistoryDto transaction)
+        {
+            var tr = _mapper.Map<TransactionHistory>(transaction);
+            await _transRepo.CreateTransaction(tr);
+            var listTrans = await _transRepo.GetTransactions();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return CreatedAtRoute("GetTransactions", _mapper.Map<IEnumerable<TransactionHistoryDto>>(listTrans));
         }
     }
 }

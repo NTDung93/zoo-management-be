@@ -2,6 +2,7 @@
 using API.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 
 namespace API.Controllers
 {
