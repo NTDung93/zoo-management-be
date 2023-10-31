@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    partial class ZooManagementBackupContextModelSnapshot : ModelSnapshot
+    [Migration("20231030132849_ChangedTimeDataTypeInFeedingSchedule")]
+    partial class ChangedTimeDataTypeInFeedingSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,9 +91,6 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpeciesId"));
 
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<string>("SpeciesName")
                         .HasColumnType("nvarchar(max)");
 
@@ -106,9 +106,6 @@ namespace API.Migrations
 
                     b.Property<string>("AreaName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
@@ -129,9 +126,6 @@ namespace API.Migrations
 
                     b.Property<string>("AreaId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("CurrentCapacity")
                         .HasColumnType("int");
@@ -157,9 +151,6 @@ namespace API.Migrations
                     b.Property<string>("CertificateName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<string>("Level")
                         .HasColumnType("nvarchar(max)");
 
@@ -178,9 +169,6 @@ namespace API.Migrations
 
                     b.Property<string>("CitizenId")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -241,9 +229,6 @@ namespace API.Migrations
                 {
                     b.Property<string>("MenuNo")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
@@ -313,9 +298,6 @@ namespace API.Migrations
                 {
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FoodName")
                         .HasColumnType("nvarchar(max)");

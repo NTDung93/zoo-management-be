@@ -19,9 +19,18 @@ namespace API.Repositories.Impl
         public async Task<Employee> Authenticate(LoginModel account)
         {
             return await _dbContext.Employees
-                .FirstOrDefaultAsync(e => e.Email.Trim().Equals(account.Email) &&
+                .Where(e => e.Email.Trim().Equals(account.Email) &&
                     e.Password.Trim().Equals(account.Password) &&
-                    e.EmployeeStatus == EmployeeConstraints.NOT_DELETED);
+                    e.EmployeeStatus == EmployeeConstraints.NOT_DELETED)
+                .Include(e => e.Area)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> CheckDuplicateOfEmail(string email)
+        {
+            var result = await _dbContext.Employees
+                .AnyAsync(e => e.Email.ToLower() == email.ToLower());
+            return result;
         }
 
         public async Task<bool> CreateStaff(Employee staff)
@@ -59,6 +68,36 @@ namespace API.Repositories.Impl
             trainer.EmployeeStatus = EmployeeConstraints.DELETED;
             _dbContext.Update(trainer);
             return await Save();
+        }
+
+        public async Task<IEnumerable<Employee>> GetEmployeeOfAnArea(string areaId)
+        {
+            var result = await _dbContext.Employees
+                .Join(
+                    _dbContext.Animals,
+                    e => e.EmployeeId,
+                    a => a.EmployeeId,
+                    (e, a) => new { e, a }
+                )
+                .Join(
+                    _dbContext.Cages,
+                    ea => ea.a.CageId,
+                    c => c.CageId,
+                    (ea, c) => new { ea.a, ea.e, c }
+                )
+                .Join(
+                    _dbContext.Areas,
+                    eac => eac.c.AreaId,
+                    ar => ar.AreaId,
+                    (eac, ar) => new { eac.e, ar }
+                )
+                .Where(x => x.ar.AreaId.ToLower() == areaId.ToLower())
+                .Select(x => x.e)
+                //.Distinct()
+                .ToListAsync();
+            var distinctResult = result.GroupBy(e => e.EmployeeId)
+                .Select(g => g.First());
+            return distinctResult;
         }
 
         public async Task<Employee> GetStaff(string id)

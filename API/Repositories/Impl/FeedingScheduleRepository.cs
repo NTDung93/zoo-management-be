@@ -18,8 +18,30 @@ namespace API.Repositories.Impl
 
         public async Task<bool> CreateFeedingSchedule(FeedingSchedule feedingSchedule)
         {
-            if (feedingSchedule == null) return false;  
+            if (feedingSchedule == null) 
+                return false;  
+
+            var existingSchedules = await _dbContext.FeedingSchedules
+                .Where(fs => fs.CageId == feedingSchedule.CageId)
+                .ToListAsync();
+
+            foreach(var schedule in existingSchedules)
+            {
+                if (feedingSchedule.StartTime == schedule.StartTime && feedingSchedule.EndTime == schedule.EndTime)
+                {
+                    return false;
+                }
+            }
             await _dbContext.FeedingSchedules.AddAsync(feedingSchedule);
+            return await Save();
+        }
+
+        public async Task<bool> DeleteFeedingSchedule(int no)
+        {
+            var existingFeedingSchedule = await GetFeedingSchedule(no);
+            if (existingFeedingSchedule == null) return false;
+
+            _dbContext.FeedingSchedules.Remove(existingFeedingSchedule);
             return await Save();
         }
 
@@ -94,12 +116,32 @@ namespace API.Repositories.Impl
             return await saved > 0;
         }
 
+        public async Task<bool> UpdateFeedingSchedule(FeedingSchedule feedingSchedule)
+        {
+            var existingFeedingSchedule = await GetFeedingSchedule(feedingSchedule.No);
+            if (existingFeedingSchedule == null) return false;
+
+            existingFeedingSchedule.MenuNo = feedingSchedule.MenuNo;
+            existingFeedingSchedule.CageId = feedingSchedule.CageId;
+            existingFeedingSchedule.AnimalId = feedingSchedule.AnimalId;
+            existingFeedingSchedule.EmployeeId = feedingSchedule.EmployeeId;
+            existingFeedingSchedule.StartTime = feedingSchedule.StartTime;
+            existingFeedingSchedule.EndTime = feedingSchedule.EndTime;
+            existingFeedingSchedule.FeedingAmount = feedingSchedule.FeedingAmount;
+            existingFeedingSchedule.Note = feedingSchedule.Note;
+
+            _dbContext.FeedingSchedules.Update(existingFeedingSchedule);
+            return await Save();
+        }
+
         public async Task<bool> UpdateFeedingScheduleStatus(FeedingSchedule feedingSchedule)
         {
             var existingFeedingSchedule = await GetFeedingSchedule(feedingSchedule.No);
             if (existingFeedingSchedule == null) return false;
 
             existingFeedingSchedule.FeedingStatus = feedingSchedule.FeedingStatus;
+            existingFeedingSchedule.Note = feedingSchedule.Note;
+
             if (existingFeedingSchedule.FeedingStatus == FeedingScheduleConstraints.FEEDING_STATUS_COMPLETED)
             {
                 var feedingFood = await _dbContext.FoodInventories

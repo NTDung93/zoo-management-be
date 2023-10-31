@@ -4,6 +4,7 @@ using API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ZooManagementBackupContext))]
-    partial class ZooManagementBackupContextModelSnapshot : ModelSnapshot
+    [Migration("20231031032434_AddedCreatedDateInAllTables")]
+    partial class AddedCreatedDateInAllTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,9 @@ namespace API.Migrations
 
                     b.Property<string>("CageId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("CreatedProfileDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
