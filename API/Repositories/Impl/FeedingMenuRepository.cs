@@ -16,6 +16,7 @@ namespace API.Repositories.Impl
 
         public async Task<bool> CreateFeedingMenu(FeedingMenu feedingMenu)
         {
+            feedingMenu.CreatedDate = DateTimeOffset.Now;
             await _dbContext.FeedingMenus.AddAsync(feedingMenu);
             return await Save();
         }
@@ -44,7 +45,7 @@ namespace API.Repositories.Impl
         {
             return await _dbContext.FeedingMenus
                 .Include(fm => fm.FoodInventory)
-                .OrderByDescending(fm => fm.MenuNo)
+                .OrderByDescending(fm => fm.CreatedDate)
                 .ToListAsync();
         }
 
@@ -61,6 +62,7 @@ namespace API.Repositories.Impl
 
             existingFeedingMenu.MenuName = feedingMenu.MenuName;
             existingFeedingMenu.FoodId = feedingMenu.FoodId;
+            existingFeedingMenu.CreatedDate = DateTimeOffset.Now;
             
             _dbContext.FeedingMenus.Update(existingFeedingMenu);
             return await Save();

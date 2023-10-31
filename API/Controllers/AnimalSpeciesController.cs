@@ -5,16 +5,19 @@ using API.Models.Entities;
 using API.Repositories;
 using AutoMapper;
 using API.Models.Dtos;
+using API.Repositories.Impl;
 
 namespace API.Controllers
 {
     public class AnimalSpeciesController : BaseApiController
     {
         private readonly IAnimalSpeciesRepository _speciesRepository;
+        private readonly IAnimalsRepository _animalsRepository;
         private readonly IMapper _mapper;
 
-        public AnimalSpeciesController(IAnimalSpeciesRepository speciesRepository, IMapper mapper)
+        public AnimalSpeciesController(IAnimalSpeciesRepository speciesRepository, IAnimalsRepository animalsRepository, IMapper mapper)
         {
+            _animalsRepository = animalsRepository;
             _speciesRepository = speciesRepository;
             _mapper = mapper;
         }
@@ -107,11 +110,14 @@ namespace API.Controllers
         //[Authorize(Roles = "Trainer")]
         public async Task<IActionResult> DeleteSpecies([FromQuery] int id)
         {
-            if (!await _speciesRepository.DeleteAnimalSpecies(id))
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "An error occurs while deleting species!"
-                });
+            var animalspecies = await _animalsRepository.GetAnimalBySpeciesId(id);
+            if (animalspecies.Any())
+            {
+                return BadRequest(new ProblemDetails { Title = "There are animals in this species" });
+            } else
+            {
+                await _speciesRepository.DeleteAnimalSpecies(id);
+            }
             return NoContent();
         }
     }
