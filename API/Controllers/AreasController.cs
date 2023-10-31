@@ -3,6 +3,7 @@ using API.Models.Entities;
 using API.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace API.Controllers
 {
@@ -63,7 +64,7 @@ namespace API.Controllers
                     AreaId = areaDto.AreaId.ToUpper(),
                     AreaName = areaDto.AreaName,
                     EmployeeId = areaDto.EmployeeId,
-
+                    CreatedDate = DateTime.Now,
                 };
                 await _areasRepo.CreateNewArea(area);
                 areas = await _areasRepo.GetListArea();
@@ -122,16 +123,27 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateAreas([FromQuery] string areaId, [FromBody] AreaDto areaDto)
         {
             var areas = await _areasRepo.GetListArea();
-            var areaEmp = await _areasRepo.GetAreaByEmpId(areaDto.EmployeeId);
-            if(areaEmp != null)
+            var areaEmp = await _areasRepo.GetAreaById(areaDto.AreaId);
+            var areanotEmp = await _areasRepo.GetAreaNotByEmpId(areaEmp.EmployeeId);
+            if (areanotEmp.Where(emp => emp.EmployeeId.Equals(areaEmp.EmployeeId)) == null)
             {
                 return BadRequest(new ProblemDetails { Title = "Area already has a trainer" });
+                
             }
             else
             {
                 await _areasRepo.UpdateArea(areaId, areaDto);
                 return Ok("Update Area Success!");
             }
+            //else if (areas.SingleOrDefault(emp => emp.EmployeeId.Equals(areaDto.EmployeeId)) != null)
+            //{
+            //    await _areasRepo.UpdateArea(areaId, areaDto);
+            //    return Ok("Update Area Success!");
+            //}
+            //else
+            //{
+            //    return BadRequest(new ProblemDetails { Title = "Area already has a trainer" });
+            //}
         }
     }
 }

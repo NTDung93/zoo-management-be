@@ -16,7 +16,7 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Area>> GetListArea()
         {
-            return await _context.Areas.Include(x=>x.Employee).OrderBy(a => a.AreaId).ToListAsync();
+            return await _context.Areas.Include(x=>x.Employee).OrderByDescending(a => a.CreatedDate).ToListAsync();
         }
         public async Task CreateNewArea(Area area)
         {
@@ -35,6 +35,10 @@ namespace API.Repositories.Impl
         {
             return await _context.Areas.Include(x => x.Employee).SingleOrDefaultAsync(area => area.EmployeeId.ToLower().Equals(empId.Trim().ToLower()));
         }
+        public async Task<IEnumerable<Area>> GetAreaNotByEmpId(string empId)
+        {
+            return await _context.Areas.Include(x => x.Employee).Where(area => !area.EmployeeId.ToLower().Equals(empId.Trim().ToLower())).ToListAsync();
+        }
         public async Task DeleteArea(string areaId)
         {
             var currArea = GetAreaById(areaId);
@@ -46,6 +50,7 @@ namespace API.Repositories.Impl
             var currArea = GetAreaById(areaId);
             currArea.Result.AreaName = areaDto.AreaName;
             currArea.Result.EmployeeId = areaDto.EmployeeId;
+            currArea.Result.CreatedDate = DateTimeOffset.Now;
             await _context.SaveChangesAsync();
         }
     }

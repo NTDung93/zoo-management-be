@@ -10,6 +10,7 @@ namespace API.Repositories
         Task<IEnumerable<Area>> SearchAreaByName(string areaName);
         Task<Area> GetAreaById(string areaId);
         Task<Area> GetAreaByEmpId(string empId);
+        Task<IEnumerable<Area>> GetAreaNotByEmpId(string empId);
         Task DeleteArea(string areaId);
         Task UpdateArea(string areaId, AreaDto areaDto);
     }

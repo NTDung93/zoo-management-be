@@ -36,6 +36,7 @@ namespace API.Repositories.Impl
         public async Task<bool> CreateStaff(Employee staff)
         {
             if (staff == null) return false;
+            staff.CreatedDate = DateTimeOffset.Now;
             await _dbContext.Employees.AddAsync(staff);
             return await Save();
         }
@@ -43,6 +44,7 @@ namespace API.Repositories.Impl
         public async Task<bool> CreateTrainer(Employee trainer)
         {
             if (trainer == null) return false;
+            trainer.CreatedDate = DateTimeOffset.Now;
             await _dbContext.Employees.AddAsync(trainer);
             return await Save();
         }
@@ -110,7 +112,7 @@ namespace API.Repositories.Impl
         public async Task<IEnumerable<Employee>> GetStaffAccounts()
         {
             return await _dbContext.Employees
-                .OrderBy(e => e.EmployeeId)
+                .OrderByDescending(e => e.CreatedDate)
                 .Where(e => e.Role.Equals(EmployeeConstraints.STAFF_ROLE))
                 .ToListAsync();
         }
@@ -124,7 +126,7 @@ namespace API.Repositories.Impl
         public async Task<IEnumerable<Employee>> GetTrainers()
         {
             return await _dbContext.Employees
-                .OrderBy(e => e.EmployeeId)
+                .OrderByDescending(e => e.CreatedDate)
                 .Where(e => e.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
                 .ToListAsync();
         }
@@ -154,7 +156,7 @@ namespace API.Repositories.Impl
             existingStaff.PhoneNumber = staff.PhoneNumber;
             existingStaff.Image = staff.Image;
             existingStaff.EmployeeStatus = staff.EmployeeStatus;
-
+            existingStaff.CreatedDate = DateTimeOffset.Now;
             _dbContext.Update(existingStaff);
             return await Save();
         }
@@ -172,7 +174,7 @@ namespace API.Repositories.Impl
             existingTrainer.PhoneNumber = trainer.PhoneNumber;
             existingTrainer.Image = trainer.Image;
             existingTrainer.EmployeeStatus = trainer.EmployeeStatus;
-
+            existingTrainer.CreatedDate = DateTimeOffset.Now;
             _dbContext.Update(existingTrainer);
             return await Save();
         }

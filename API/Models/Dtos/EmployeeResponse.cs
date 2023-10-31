@@ -9,5 +9,7 @@
         public string PhoneNumber { get; set; }
         public string Image { get; set; }
         public byte EmployeeStatus { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+
     }
 }
