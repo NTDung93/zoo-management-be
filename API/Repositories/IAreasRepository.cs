@@ -9,6 +9,7 @@ namespace API.Repositories
         Task CreateNewArea(Area area);
         Task<IEnumerable<Area>> SearchAreaByName(string areaName);
         Task<Area> GetAreaById(string areaId);
+        Task<Area> GetAreaByEmpId(string empId);
         Task DeleteArea(string areaId);
         Task UpdateArea(string areaId, AreaDto areaDto);
     }

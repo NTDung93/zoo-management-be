@@ -43,6 +43,7 @@ namespace API.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<AreaDto>> CreateNewAreas([FromBody] AreaDto areaDto)
         {
+            var areaEmp = await _areasRepo.GetAreaByEmpId(areaDto.EmployeeId);
             var areas = await _areasRepo.GetListArea();
             if (areaDto.AreaId.Length > 1 || char.IsDigit(areaDto.AreaId, 0))
             {
@@ -51,6 +52,9 @@ namespace API.Controllers
             else if (areas.SingleOrDefault(tmp => tmp.AreaId.ToLower().Equals(areaDto.AreaId.ToLower())) != null)
             {
                 return BadRequest(new ProblemDetails { Title = "AreaId is already exist!" });
+            }else if (areaEmp != null)
+            {
+                return BadRequest(new ProblemDetails { Title = "Area already has a trainer" });
             }
             else
             {
@@ -58,6 +62,7 @@ namespace API.Controllers
                 {
                     AreaId = areaDto.AreaId.ToUpper(),
                     AreaName = areaDto.AreaName,
+                    EmployeeId = areaDto.EmployeeId,
 
                 };
                 await _areasRepo.CreateNewArea(area);
@@ -91,25 +96,25 @@ namespace API.Controllers
         }
 
         [HttpDelete("delete-area")]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<AreaDto>> DeleteAreas([FromQuery] string areaId)
+        [ProducesResponseType(204)]
+        public async Task<IActionResult> DeleteAreas([FromQuery] string areaId)
         {
             var listCage = await _cageRepo.GetListCageByAreaId(areaId);
+            var currCage = await _areasRepo.GetAreaById(areaId);
+
             if (listCage.Any())
             {
                 return BadRequest(new ProblemDetails { Title = "There are cages in this area!" });
             }
-            var currCage = await _areasRepo.GetAreaById(areaId);
-            if (currCage != null)
+            else if (currCage != null)
             {
                 await _areasRepo.DeleteArea(areaId);
-                var areas = await _areasRepo.GetListArea();
-                if (!ModelState.IsValid)
-                    BadRequest(ModelState);
-                return CreatedAtRoute("GetAreas", areas);
+                return Ok("Delete Area Success!");
             }
-            return NotFound();
-
+            else
+            {
+                return NoContent();
+            }
         }
 
         [HttpPut("update-area")]
@@ -117,10 +122,10 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateAreas([FromQuery] string areaId, [FromBody] AreaDto areaDto)
         {
             var areas = await _areasRepo.GetListArea();
-            var area = areas.SingleOrDefault(area => area.EmployeeId.Equals(areaDto.EmployeeId));
-            if (area != null)
+            var areaEmp = await _areasRepo.GetAreaByEmpId(areaDto.EmployeeId);
+            if(areaEmp != null)
             {
-                return BadRequest(new ProblemDetails { Title = $"This trainer is trainning for {area.AreaName}" });
+                return BadRequest(new ProblemDetails { Title = "Area already has a trainer" });
             }
             else
             {

@@ -31,6 +31,10 @@ namespace API.Repositories.Impl
         {
             return await _context.Areas.Include(x => x.Employee).SingleOrDefaultAsync(area => area.AreaId.ToLower().Equals(areaId.Trim().ToLower()));
         }
+        public async Task<Area> GetAreaByEmpId(string empId)
+        {
+            return await _context.Areas.Include(x => x.Employee).SingleOrDefaultAsync(area => area.EmployeeId.ToLower().Equals(empId.Trim().ToLower()));
+        }
         public async Task DeleteArea(string areaId)
         {
             var currArea = GetAreaById(areaId);
