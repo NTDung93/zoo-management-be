@@ -293,18 +293,6 @@ namespace API.Models.Data
                         EmployeeStatus = EmployeeConstraints.NOT_DELETED,
                         CreatedDate = DateTimeOffset.Now
                     },
-                    new Employee
-                    {
-                        EmployeeId = "E010",
-                        FullName = "John Doe",
-                        CitizenId = "2502417558",
-                        Email = "johndoeno1@gmail.com",
-                        Password = "1",
-                        PhoneNumber = "0327057920",
-                        Role = EmployeeConstraints.STAFF_ROLE,
-                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
-                        CreatedDate = DateTimeOffset.Now
-                    },
                 };
                 _dbContext.Employees.AddRange(employees);
             }
@@ -458,6 +446,7 @@ namespace API.Models.Data
                         EmployeeId = "E001",
                         CageId = "A0002",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2021, 10, 20),
                         SpeciesId = 7
                     },
@@ -475,6 +464,7 @@ namespace API.Models.Data
                         EmployeeId = "E003",
                         CageId = "B0002",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2022, 9, 30),
                         SpeciesId = 2
                     },
@@ -492,6 +482,7 @@ namespace API.Models.Data
                         EmployeeId = "E003",
                         CageId = "B0002",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2022, 8, 30),
                         SpeciesId = 2
                     },
@@ -509,6 +500,7 @@ namespace API.Models.Data
                         EmployeeId = "E008",
                         CageId = "B0003",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2022, 8, 15),
                         SpeciesId = 8
                     },
@@ -526,6 +518,7 @@ namespace API.Models.Data
                         EmployeeId = "E008",
                         CageId = "B0003",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2021, 7, 12),
                         SpeciesId = 8
                     },
@@ -543,6 +536,7 @@ namespace API.Models.Data
                         EmployeeId = "E006",
                         CageId = "B0001",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2020, 12, 30),
                         SpeciesId = 1
                     },
@@ -560,6 +554,7 @@ namespace API.Models.Data
                         EmployeeId = "E006",
                         CageId = "B0005",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2020, 12, 31),
                         SpeciesId = 9
                     },
@@ -577,6 +572,7 @@ namespace API.Models.Data
                         EmployeeId = "E007",
                         CageId = "B0004",
                         ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2020, 12, 30),
                         SpeciesId = 1
                     },

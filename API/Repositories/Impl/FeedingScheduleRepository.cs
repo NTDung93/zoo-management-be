@@ -62,7 +62,7 @@ namespace API.Repositories.Impl
                 .Include(fs => fs.Animal)
                 .Include(fs => fs.Cage)
                 .Include(fs => fs.Employee)
-                .OrderByDescending(fs => fs.No)
+                .OrderByDescending(fs => fs.CreatedTime)
                 .ToListAsync();
         }
 

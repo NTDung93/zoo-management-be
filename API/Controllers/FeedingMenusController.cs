@@ -72,15 +72,16 @@ namespace API.Controllers
                 });
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _feedingMenuRepository.CreateFeedingMenu(
-                _mapper.Map<FeedingMenu>(feedingMenu)
-                );
+            var mappedFeedingMenu = _mapper.Map<FeedingMenu>(feedingMenu);
+            mappedFeedingMenu.CreatedDate = DateTimeOffset.Now;
+
+            var result = await _feedingMenuRepository.CreateFeedingMenu(mappedFeedingMenu);
             if (!result)
                 return BadRequest(new ProblemDetails
                 {
                     Title = "An error occurs while creating!"
                 });
-            return CreatedAtAction(nameof(GetFeedingMenu), new { scheduleNo = feedingMenu.MenuNo }, _mapper.Map<FeedingMenu>(feedingMenu));
+            return CreatedAtAction(nameof(GetFeedingMenu), new { scheduleNo = feedingMenu.MenuNo }, mappedFeedingMenu);
         }
 
         [HttpDelete("feeding-menu/resource-id")]

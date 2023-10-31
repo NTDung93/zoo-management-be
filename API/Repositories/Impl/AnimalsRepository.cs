@@ -23,7 +23,7 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<Animal>> GetAnimals()
         {
-            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z=>z.AnimalSpecies).OrderBy(a => a.AnimalId).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z=>z.AnimalSpecies).OrderByDescending(a => a.CreatedDate).ToListAsync();
         }
 
         public async Task<bool> HasAnimal(string id)
@@ -42,6 +42,7 @@ namespace API.Repositories.Impl
         }
         public async Task CreateNewAnimal(Animal animal)
         {
+            animal.CreatedDate = DateTimeOffset.Now;
             await _context.Animals.AddAsync(animal);
             await _context.SaveChangesAsync();
         }
@@ -61,6 +62,7 @@ namespace API.Repositories.Impl
             currAnimal.Result.EmployeeId = animalDto.EmployeeId;
             currAnimal.Result.CageId = animalDto.CageId;
             currAnimal.Result.SpeciesId = animalDto.SpeciesId;
+            currAnimal.Result.CreatedDate = DateTimeOffset.Now;
             await _context.SaveChangesAsync();
         }
 

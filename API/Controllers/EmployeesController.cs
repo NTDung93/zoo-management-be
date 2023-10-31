@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿ using Microsoft.AspNetCore.Mvc;
 using API.Repositories;
 using AutoMapper;
 using API.Models.Dtos;
@@ -65,12 +65,12 @@ namespace API.Controllers
                     Title = "Invalid citizen id format!"
                 });
 
-            var result = await _employeeRepository.CheckDuplicateOfEmail(trainer.Email);
-            if (result)
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Duplicate of email!"
-                });
+            //var result = await _employeeRepository.CheckDuplicateOfEmail(trainer.Email);
+            //if (result)
+            //    return BadRequest(new ProblemDetails
+            //    {
+            //        Title = "Duplicate of email!"
+            //    });
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -128,6 +128,7 @@ namespace API.Controllers
             mappedTrainer.Password = EmployeeConstraints.DEFAULT_PASSWORD;
             mappedTrainer.Role = EmployeeConstraints.TRAINER_ROLE;
             mappedTrainer.EmployeeStatus = EmployeeConstraints.NOT_DELETED;
+            mappedTrainer.CreatedDate = DateTimeOffset.Now;
 
             if (!await _employeeRepository.CreateTrainer(mappedTrainer))
                 return BadRequest(new ProblemDetails
@@ -174,7 +175,6 @@ namespace API.Controllers
         // Staff controller's zone
         [HttpGet("staff-accounts")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetStaffAccounts()
         {
             var staffAccounts = await _employeeRepository.GetStaffAccounts();
@@ -185,7 +185,6 @@ namespace API.Controllers
 
         [HttpGet("staff/resource-id")]
         [ProducesResponseType(200)]
-        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<EmployeeResponse>> GetStaff(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) 
@@ -199,7 +198,6 @@ namespace API.Controllers
 
         [HttpPut("staff/resource-id")]
         [ProducesResponseType(204)]
-        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<IActionResult> UpdateStaff(string id, EmployeeResponse staff)
         {
             if (id != staff.EmployeeId)
@@ -220,12 +218,12 @@ namespace API.Controllers
                     Title = "Invalid citizen id format!"
                 });
 
-            var result = await _employeeRepository.CheckDuplicateOfEmail(staff.Email);
-            if (result)
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Duplicate of email!"
-                });
+            //var result = await _employeeRepository.CheckDuplicateOfEmail(staff.Email);
+            //if (result)
+            //    return BadRequest(new ProblemDetails
+            //    {
+            //        Title = "Duplicate of email!"
+            //    });
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -240,7 +238,6 @@ namespace API.Controllers
 
         [HttpPost("staff")]
         [ProducesResponseType(201)]
-        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<ActionResult<IEnumerable<EmployeeResponse>>> CreateStaff(EmployeeRequest staff)
         {
             if (staff == null) return BadRequest(new ProblemDetails
@@ -284,6 +281,7 @@ namespace API.Controllers
             mappedStaff.Password = EmployeeConstraints.DEFAULT_PASSWORD;
             mappedStaff.Role = EmployeeConstraints.STAFF_ROLE;
             mappedStaff.EmployeeStatus = EmployeeConstraints.NOT_DELETED;
+            mappedStaff.CreatedDate = DateTimeOffset.Now;
 
             if (!await _employeeRepository.CreateStaff(mappedStaff))
                 return BadRequest(new ProblemDetails
@@ -296,7 +294,6 @@ namespace API.Controllers
 
         [HttpPut("staff/status/resource-id")]
         [ProducesResponseType(204)]
-        //[Authorize(Roles = EmployeeConstraints.ADMIN_ROLE)]
         public async Task<IActionResult> DeleteStaff(string id)
         {
             if (!await _employeeRepository.HasEmployee(id)) 

@@ -105,7 +105,7 @@ namespace API.Repositories.Impl
         public async Task<Employee> GetStaff(string id)
         {
             return await _dbContext.Employees
-                .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) && 
+                .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) &&
                 e.Role.Equals(EmployeeConstraints.STAFF_ROLE));
         }
 
@@ -165,12 +165,12 @@ namespace API.Repositories.Impl
         {
             var existingTrainer = await _dbContext.Employees
                 .FindAsync(trainer.EmployeeId);
-            if (existingTrainer == null || !existingTrainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE)) 
+            if (existingTrainer == null || !existingTrainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
                 return false;
 
             existingTrainer.FullName = trainer.FullName;
             existingTrainer.CitizenId = trainer.CitizenId;
-            existingTrainer.Email = trainer.Email;
+            //existingTrainer.Email = trainer.Email;
             existingTrainer.PhoneNumber = trainer.PhoneNumber;
             existingTrainer.Image = trainer.Image;
             existingTrainer.EmployeeStatus = trainer.EmployeeStatus;
