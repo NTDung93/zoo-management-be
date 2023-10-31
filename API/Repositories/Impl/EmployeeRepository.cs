@@ -147,6 +147,7 @@ namespace API.Repositories.Impl
         {
             var existingStaff = await _dbContext.Employees
                 .FindAsync(staff.EmployeeId);
+
             if (existingStaff == null || !existingStaff.Role.Equals(EmployeeConstraints.STAFF_ROLE))
                 return false;
 
@@ -165,6 +166,7 @@ namespace API.Repositories.Impl
         {
             var existingTrainer = await _dbContext.Employees
                 .FindAsync(trainer.EmployeeId);
+            
             if (existingTrainer == null || !existingTrainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE)) 
                 return false;
 
