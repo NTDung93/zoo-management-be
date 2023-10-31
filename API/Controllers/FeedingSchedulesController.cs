@@ -83,6 +83,7 @@ namespace API.Controllers
             var mappedFeedingSchedules = _mapper.Map<IEnumerable<FeedingScheduleResponse>>(feedingSchedules);
             return Ok(mappedFeedingSchedules);
         }
+        
         /// <summary>
         /// Create a feeding schedule, 
         /// this action is triggered when a chief trainer wants to create the feeding schedule
@@ -192,8 +193,38 @@ namespace API.Controllers
                 {
                     Title = "The feeding schedule no is not matched!"
                 });
-            // validate StartTime and EndTime > current time
-            // Create Schedule ko cung thoi diem cung 1 cage
+            
+            if (feedingSchedule.StartTime <= feedingSchedule.CreatedTime || feedingSchedule.EndTime <= feedingSchedule.CreatedTime)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Start time and end time must be greater than created time!"
+                });
+            if (feedingSchedule.FeedingAmount <= 0)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Feeding amount must be a positive number!"
+                });
+
+            if (feedingSchedule.AnimalId != null)
+            {
+                var maxFeedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnAnimal(feedingSchedule.AnimalId);
+                if (feedingSchedule.FeedingAmount > maxFeedingQuantity)
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "Feeding amount must be less than or equal to the maximum feeding quantity of the animal!"
+                    });
+            }
+
+            if (feedingSchedule.CageId != null)
+            {
+                var maxFeedingQuantity = await _feedingScheduleRepository.GetMaxFeedingQuantityOnCage(feedingSchedule.CageId);
+                if (feedingSchedule.FeedingAmount > maxFeedingQuantity)
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "Feeding amount must be less than or equal to the maximum feeding quantity of the cage!"
+                    });
+            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var mappedFeedingSchedule = _mapper.Map<FeedingSchedule>(feedingSchedule);
             var result = await _feedingScheduleRepository.UpdateFeedingSchedule(mappedFeedingSchedule);

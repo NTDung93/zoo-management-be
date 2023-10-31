@@ -44,7 +44,7 @@ namespace API.Repositories.Impl
         {
             return await _dbContext.FeedingMenus
                 .Include(fm => fm.FoodInventory)
-                .OrderByDescending(fm => fm.MenuNo)
+                .OrderByDescending(fm => fm.CreatedDate)
                 .ToListAsync();
         }
 

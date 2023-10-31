@@ -114,6 +114,7 @@ namespace API.Repositories.Impl
             return await _dbContext.Employees
                 .OrderByDescending(e => e.CreatedDate)
                 .Where(e => e.Role.Equals(EmployeeConstraints.STAFF_ROLE))
+                .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
         }
 
@@ -128,6 +129,7 @@ namespace API.Repositories.Impl
             return await _dbContext.Employees
                 .OrderByDescending(e => e.CreatedDate)
                 .Where(e => e.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
+                .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
         }
 
@@ -147,16 +149,18 @@ namespace API.Repositories.Impl
         {
             var existingStaff = await _dbContext.Employees
                 .FindAsync(staff.EmployeeId);
+
             if (existingStaff == null || !existingStaff.Role.Equals(EmployeeConstraints.STAFF_ROLE))
                 return false;
 
             existingStaff.FullName = staff.FullName;
             existingStaff.CitizenId = staff.CitizenId;
-            existingStaff.Email = staff.Email;
+            //existingStaff.Email = staff.Email;
             existingStaff.PhoneNumber = staff.PhoneNumber;
             existingStaff.Image = staff.Image;
             existingStaff.EmployeeStatus = staff.EmployeeStatus;
             existingStaff.CreatedDate = DateTimeOffset.Now;
+
             _dbContext.Update(existingStaff);
             return await Save();
         }
@@ -165,16 +169,18 @@ namespace API.Repositories.Impl
         {
             var existingTrainer = await _dbContext.Employees
                 .FindAsync(trainer.EmployeeId);
+            
             if (existingTrainer == null || !existingTrainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE)) 
                 return false;
 
             existingTrainer.FullName = trainer.FullName;
             existingTrainer.CitizenId = trainer.CitizenId;
-            existingTrainer.Email = trainer.Email;
+            //existingTrainer.Email = trainer.Email;
             existingTrainer.PhoneNumber = trainer.PhoneNumber;
             existingTrainer.Image = trainer.Image;
             existingTrainer.EmployeeStatus = trainer.EmployeeStatus;
             existingTrainer.CreatedDate = DateTimeOffset.Now;
+
             _dbContext.Update(existingTrainer);
             return await Save();
         }

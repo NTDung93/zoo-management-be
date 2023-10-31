@@ -153,6 +153,7 @@ namespace API.Controllers
             else
             {
                 var cage = _mapper.Map<Cage>(cageDto);
+                cage.CreatedDate = DateTimeOffset.Now;
                 await _cagesRepo.CreateNewCage(cage);
                 var cages = await _cagesRepo.GetListCage();
                 var cagesDto = _mapper.Map<IEnumerable<CageDto>>(cages);

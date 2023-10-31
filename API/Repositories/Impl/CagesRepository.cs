@@ -17,7 +17,7 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Cage>> GetListCage()
         {
-            return await _context.Cages.Include(x => x.Area).OrderBy(a => a.CageId).ToListAsync();
+            return await _context.Cages.Include(x => x.Area).OrderBy(a => a.CreatedDate).ToListAsync();
         }
         public async Task<IEnumerable<Cage>> GetListCageByAreaId(string areaId)
         {

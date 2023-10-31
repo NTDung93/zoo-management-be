@@ -23,7 +23,7 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<Animal>> GetAnimals()
         {
-            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z=>z.AnimalSpecies).OrderBy(a => a.AnimalId).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z=>z.AnimalSpecies).OrderBy(a => a.ImportDate).ToListAsync();
         }
 
         public async Task<bool> HasAnimal(string id)

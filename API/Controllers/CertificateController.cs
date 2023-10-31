@@ -134,6 +134,7 @@ namespace API.Controllers
             else
             {
                 var certificate = _mapper.Map<Certificate>(certificateDto);
+                certificate.CreatedDate = DateTimeOffset.Now;
                 await _certiRepo.CreateNewCertificate(certificate);
                 
             }
