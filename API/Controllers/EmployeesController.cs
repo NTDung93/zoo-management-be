@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using API.Helpers;
 using API.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using NuGet.DependencyResolver;
 
 namespace API.Controllers
 {
@@ -64,6 +65,13 @@ namespace API.Controllers
                     Title = "Invalid citizen id format!"
                 });
 
+            var result = await _employeeRepository.CheckDuplicateOfEmail(trainer.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
+                });
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -100,6 +108,13 @@ namespace API.Controllers
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Invalid phone number!"
+                });
+
+            var result = await _employeeRepository.CheckDuplicateOfEmail(trainer.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
                 });
 
             if (await _employeeRepository.HasEmployee(trainer.EmployeeId))
@@ -205,6 +220,13 @@ namespace API.Controllers
                     Title = "Invalid citizen id format!"
                 });
 
+            var result = await _employeeRepository.CheckDuplicateOfEmail(staff.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
+                });
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -242,6 +264,13 @@ namespace API.Controllers
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Invalid phone number!"
+                });
+
+            var result = await _employeeRepository.CheckDuplicateOfEmail(staff.Email);
+            if (result)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Duplicate of email!"
                 });
 
             if (await _employeeRepository.HasEmployee(staff.EmployeeId))

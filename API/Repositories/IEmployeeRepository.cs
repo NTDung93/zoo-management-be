@@ -21,6 +21,7 @@ namespace API.Repositories
         Task<bool> HasEmployee(string id);
         Task<bool> Save();
 
+        Task<bool> CheckDuplicateOfEmail(string email);
         Task<Employee> Authenticate(LoginModel account);
         Task<IEnumerable<Employee>> GetEmployeeOfAnArea(string areaId);
     }

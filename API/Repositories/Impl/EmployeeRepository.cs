@@ -26,6 +26,13 @@ namespace API.Repositories.Impl
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<bool> CheckDuplicateOfEmail(string email)
+        {
+            var result = await _dbContext.Employees
+                .AnyAsync(e => e.Email.ToLower() == email.ToLower());
+            return result;
+        }
+
         public async Task<bool> CreateStaff(Employee staff)
         {
             if (staff == null) return false;
