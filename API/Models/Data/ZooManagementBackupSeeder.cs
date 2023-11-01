@@ -706,7 +706,7 @@ namespace API.Models.Data
                     new EmployeeCertificate
                     {
                         EmployeeId = "E001",
-                        CertificateCode = "OESN501H",
+                        CertificateCode = "OESN5O1H",
                     },
                     new EmployeeCertificate
                     {
@@ -731,7 +731,7 @@ namespace API.Models.Data
                     new EmployeeCertificate
                     {
                         EmployeeId = "E006",
-                        CertificateCode = "NIOV300MXB",
+                        CertificateCode = "NIOV30OMXB",
                     },
                 };
                 _dbContext.EmployeeCertificates.AddRange(empCertificates);
@@ -759,7 +759,7 @@ namespace API.Models.Data
                     },
                     new FeedingMenu
                     {
-                        MenuNo = "MNU004",
+                        MenuNo = "MNU003",
                         MenuName = "Elephant 1st week",
                         FoodId = "FD05",
                         SpeciesId = 2,
@@ -767,7 +767,7 @@ namespace API.Models.Data
                     },
                     new FeedingMenu
                     {
-                        MenuNo = "MNU005",
+                        MenuNo = "MNU004",
                         MenuName = "Elephant 1st week",
                         FoodId = "FD06",
                         SpeciesId = 2,
@@ -775,7 +775,7 @@ namespace API.Models.Data
                     },
                     new FeedingMenu
                     {
-                        MenuNo = "MNU006",
+                        MenuNo = "MNU005",
                         MenuName = "Flamingo 1st week",
                         FoodId = "FD09",
                         SpeciesId = 8,
@@ -783,7 +783,7 @@ namespace API.Models.Data
                     },
                     new FeedingMenu
                     {
-                        MenuNo = "MNU007",
+                        MenuNo = "MNU006",
                         MenuName = "Giraffe 1st week",
                         FoodId = "FD01",
                         SpeciesId = 1,
@@ -791,7 +791,7 @@ namespace API.Models.Data
                     },
                     new FeedingMenu
                     {
-                        MenuNo = "MNU008",
+                        MenuNo = "MNU007",
                         MenuName = "Giraffe 1st week",
                         FoodId = "FD02",
                         SpeciesId = 1,
