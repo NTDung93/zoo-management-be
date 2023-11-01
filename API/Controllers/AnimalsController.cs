@@ -55,6 +55,28 @@ namespace API.Controllers
             return animalDto;
         }
 
+        [HttpGet("cages-by-cageId")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<AnimalDto>>> GetCagesByCageId([FromQuery] string cageId)
+        {
+            var cages = await _animalRepo.GetAnimalByCageId(cageId);
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var cagesDto = _mapper.Map<IEnumerable<AnimalDto>>(cages);
+            return Ok(cagesDto);
+        }
+
+        [HttpGet("cages-by-speciesId")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<AnimalDto>>> GetCagesBySpeciesId([FromQuery] int speciesId)
+        {
+            var species = await _animalRepo.GetAnimalBySpeciesId(speciesId);
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var speciesDto = _mapper.Map<IEnumerable<AnimalDto>>(species);
+            return Ok(speciesDto);
+        }
+
         [HttpGet("search-animals")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<IEnumerable<AnimalDto>>> SearchAnimalsByName([FromQuery] string animalName)
