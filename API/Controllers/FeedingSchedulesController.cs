@@ -235,6 +235,23 @@ namespace API.Controllers
                 });
             return NoContent();
         }
+
+        [HttpGet("feeding-schedules/trainer/trainer-id")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<FeedingScheduleResponse>>> GetFeedingScheduleOfATrainer(string trainerId)
+        {
+            if (string.IsNullOrEmpty(trainerId))
+                return ValidationProblem(new ValidationProblemDetails
+                {
+                    Title = "Trainer id is required!"
+                });
+            var feedingSchedules = await _feedingScheduleRepository.GetFeedingScheduleOfATrainer(trainerId);
+            if (!feedingSchedules.Any()) 
+                return NotFound("Feeding schedule is not found!");
+
+            var mappedFeedingSchedules = _mapper.Map<IEnumerable<FeedingScheduleResponse>>(feedingSchedules);
+            return Ok(mappedFeedingSchedules);
+        }
         //[HttpGet("demo-api-01")]
         //[ProducesResponseType((int)HttpStatusCode.NoContent)]
         //public async Task<ActionResult<double>> GetFeedingQuantityOfAnAnimal(string animalId)

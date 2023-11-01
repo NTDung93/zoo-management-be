@@ -139,15 +139,15 @@ namespace API.Models.Data
                 {
                     new Certificate
                     {
-                        CertificateCode = "3FQLO",
-                        CertificateName = "Reptile Specialist",
+                        CertificateCode = "UDYO5UYK",
+                        CertificateName = "Reptile Specilization",
                         Level = "Expert",
                         TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
                         CreatedDate = DateTimeOffset.Now
                     },
                     new Certificate
                     {
-                        CertificateCode = "CER001",
+                        CertificateCode = "Z1XM30E1",
                         CertificateName = "Animal Care Specialist",
                         Level = "Intermeidate",
                         TrainingInstitution = "Nong Lam University",
@@ -155,7 +155,7 @@ namespace API.Models.Data
                     },
                     new Certificate
                     {
-                        CertificateCode = "CER002",
+                        CertificateCode = "4WT7BN49",
                         CertificateName = "Zoologist Certification",
                         Level = "Beginner",
                         TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
@@ -163,7 +163,7 @@ namespace API.Models.Data
                     },
                     new Certificate
                     {
-                        CertificateCode = "CER2ND49",
+                        CertificateCode = "OESN5O1H",
                         CertificateName = "Tiger Training Specilization",
                         Level = "Intermediate",
                         TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
@@ -171,8 +171,24 @@ namespace API.Models.Data
                     },
                     new Certificate
                     {
-                        CertificateCode = "CEREZ769",
+                        CertificateCode = "INZ08ISN",
                         CertificateName = "Elephant Training Certificate",
+                        Level = "Expert",
+                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
+                        CreatedDate = DateTimeOffset.Now
+                    },
+                    new Certificate
+                    {
+                        CertificateCode = "NIOV30OMXB",
+                        CertificateName = "Zebra Training Qualification",
+                        Level = "Intermediate",
+                        TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
+                        CreatedDate = DateTimeOffset.Now
+                    },
+                    new Certificate
+                    {
+                        CertificateCode = "NG8LXLFCX2",
+                        CertificateName = "Herbivore Specilization",
                         Level = "Expert",
                         TrainingInstitution = "Ho Chi Minh City Department of Agriculture and Rural Development",
                         CreatedDate = DateTimeOffset.Now
@@ -293,6 +309,66 @@ namespace API.Models.Data
                         EmployeeStatus = EmployeeConstraints.NOT_DELETED,
                         CreatedDate = DateTimeOffset.Now
                     },
+                    new Employee
+                    {
+                        EmployeeId = "E010",
+                        FullName = "Abigail Scott",
+                        CitizenId = "2402223095",
+                        Email = "parents@verizon.net",
+                        Password = "1",
+                        PhoneNumber = "0954715955",
+                        Role = EmployeeConstraints.TRAINER_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
+                    },
+                    new Employee
+                    {
+                        EmployeeId = "E011",
+                        FullName = "Daniel Harris",
+                        CitizenId = "7383372105",
+                        Email = "sjava@icloud.com",
+                        Password = "3",
+                        PhoneNumber = "0831713773",
+                        Role = EmployeeConstraints.STAFF_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
+                    },
+                    new Employee
+                    {
+                        EmployeeId = "E012",
+                        FullName = "Christopher Wilson",
+                        CitizenId = "4975833434",
+                        Email = "carmena@mac.com",
+                        Password = "3",
+                        PhoneNumber = "0304835408",
+                        Role = EmployeeConstraints.STAFF_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
+                    },
+                    new Employee
+                    {
+                        EmployeeId = "E013",
+                        FullName = "Isabella Hernandez",
+                        CitizenId = "8956520907",
+                        Email = "studyabr@gmail.com",
+                        Password = "4",
+                        PhoneNumber = "0978803964",
+                        Role = EmployeeConstraints.TRAINER_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
+                    },
+                    new Employee
+                    {
+                        EmployeeId = "E014",
+                        FullName = "Sophia Martinez",
+                        CitizenId = "6721102359",
+                        Email = "gslondon@live.com",
+                        Password = "4",
+                        PhoneNumber = "0786008864",
+                        Role = EmployeeConstraints.STAFF_ROLE,
+                        EmployeeStatus = EmployeeConstraints.NOT_DELETED,
+                        CreatedDate = DateTimeOffset.Now
+                    },
                 };
                 _dbContext.Employees.AddRange(employees);
             }
@@ -361,6 +437,13 @@ namespace API.Models.Data
                     {
                         FoodId = "FD09",
                         FoodName = "Mixed beans",
+                        InventoryQuantity = 10,
+                        CreatedDate = DateTimeOffset.Now
+                    },
+                    new FoodInventory
+                    {
+                        FoodId = "FD11",
+                        FoodName = "Corn",
                         InventoryQuantity = 10,
                         CreatedDate = DateTimeOffset.Now
                     },
@@ -574,7 +657,43 @@ namespace API.Models.Data
                         ImportDate = DateTime.Now,
                         CreatedDate = DateTimeOffset.Now,
                         BirthDate = new DateTime(2020, 12, 30),
-                        SpeciesId = 1
+                        SpeciesId = 10
+                    },
+                    new Animal
+                    {
+                        AnimalId = "ANI009",
+                        Name = "Thailand Crocodile",
+                        Region = "Southeast Asia",
+                        Gender = AnimalConstraints.MALE,
+                        Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/aptsdg9ozv3q86ebjrhs.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/pqoetvgxhfjccftwkzzj.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253373/images/thu-duoi-nuoc/alligator/rrcuxxtbrtf6hpudl7g6.jpg]",
+                        HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
+                        IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
+                        Rarity = AnimalConstraints.RARITY_ENDANGERED,
+                        MaxFeedingQuantity = 6,
+                        EmployeeId = "E010",
+                        CageId = "C0002",
+                        ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
+                        BirthDate = new DateTime(2020, 12, 30),
+                        SpeciesId = 6
+                    },
+                    new Animal
+                    {
+                        AnimalId = "ANI010",
+                        Name = "Thailand Crocodile",
+                        Region = "Southeast Asia",
+                        Gender = AnimalConstraints.FEMALE,
+                        Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/aptsdg9ozv3q86ebjrhs.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/pqoetvgxhfjccftwkzzj.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253373/images/thu-duoi-nuoc/alligator/rrcuxxtbrtf6hpudl7g6.jpg]",
+                        HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
+                        IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
+                        Rarity = AnimalConstraints.RARITY_ENDANGERED,
+                        MaxFeedingQuantity = 4,
+                        EmployeeId = "E010",
+                        CageId = "C0002",
+                        ImportDate = DateTime.Now,
+                        CreatedDate = DateTimeOffset.Now,
+                        BirthDate = new DateTime(2020, 12, 30),
+                        SpeciesId = 6
                     },
                 };
                 _dbContext.Animals.AddRange(animals);
@@ -587,22 +706,32 @@ namespace API.Models.Data
                     new EmployeeCertificate
                     {
                         EmployeeId = "E001",
-                        CertificateCode = "3FQLO",
+                        CertificateCode = "OESN501H",
                     },
                     new EmployeeCertificate
                     {
                         EmployeeId = "E001",
-                        CertificateCode = "CER001",
+                        CertificateCode = "4WT7BN49",
                     },
                     new EmployeeCertificate
                     {
                         EmployeeId = "E003",
-                        CertificateCode = "CER2ND49",
+                        CertificateCode = "INZ08ISN",
                     },
                     new EmployeeCertificate
                     {
                         EmployeeId = "E003",
-                        CertificateCode = "CER002",
+                        CertificateCode = "NG8LXLFCX2",
+                    },
+                    new EmployeeCertificate
+                    {
+                        EmployeeId = "E006",
+                        CertificateCode = "UDYO5UYK",
+                    },
+                    new EmployeeCertificate
+                    {
+                        EmployeeId = "E006",
+                        CertificateCode = "NIOV300MXB",
                     },
                 };
                 _dbContext.EmployeeCertificates.AddRange(empCertificates);
@@ -617,6 +746,7 @@ namespace API.Models.Data
                         MenuNo = "MNU001",
                         MenuName = "Tiger 1st week",
                         FoodId = "FD04",
+                        SpeciesId = 7,
                         CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
@@ -624,13 +754,7 @@ namespace API.Models.Data
                         MenuNo = "MNU002",
                         MenuName = "Tiger 1st week",
                         FoodId = "FD03",
-                        CreatedDate = DateTimeOffset.Now
-                    },
-                    new FeedingMenu
-                    {
-                        MenuNo = "MNU003",
-                        MenuName = "Tiger 1st week",
-                        FoodId = "FD07",
+                        SpeciesId = 7,
                         CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
@@ -638,6 +762,7 @@ namespace API.Models.Data
                         MenuNo = "MNU004",
                         MenuName = "Elephant 1st week",
                         FoodId = "FD05",
+                        SpeciesId = 2,
                         CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
@@ -645,6 +770,7 @@ namespace API.Models.Data
                         MenuNo = "MNU005",
                         MenuName = "Elephant 1st week",
                         FoodId = "FD06",
+                        SpeciesId = 2,
                         CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
@@ -652,6 +778,7 @@ namespace API.Models.Data
                         MenuNo = "MNU006",
                         MenuName = "Flamingo 1st week",
                         FoodId = "FD09",
+                        SpeciesId = 8,
                         CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
@@ -659,6 +786,7 @@ namespace API.Models.Data
                         MenuNo = "MNU007",
                         MenuName = "Giraffe 1st week",
                         FoodId = "FD01",
+                        SpeciesId = 1,
                         CreatedDate = DateTimeOffset.Now
                     },
                     new FeedingMenu
@@ -666,6 +794,7 @@ namespace API.Models.Data
                         MenuNo = "MNU008",
                         MenuName = "Giraffe 1st week",
                         FoodId = "FD02",
+                        SpeciesId = 1,
                         CreatedDate = DateTimeOffset.Now
                     },
                 };

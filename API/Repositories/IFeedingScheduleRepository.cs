@@ -12,6 +12,7 @@ namespace API.Repositories
         Task<bool> UpdateFeedingScheduleStatus(FeedingSchedule feedingSchedule);
         Task<double> GetMaxFeedingQuantityOnAnimal(string animalId);
         Task<double> GetMaxFeedingQuantityOnCage(string cageId);
+        Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleOfATrainer(string trainerId);
         Task<bool> DeleteFeedingSchedule(int no);
         Task<bool> UpdateFeedingSchedule(FeedingSchedule feedingSchedule);
         Task<bool> Save();

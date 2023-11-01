@@ -55,6 +55,14 @@ namespace API.Repositories.Impl
                 .FirstOrDefaultAsync(fs => fs.No == no);
         }
 
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleOfATrainer(string trainerId)
+        {
+            return await _dbContext.FeedingSchedules
+                .Where(fs => fs.EmployeeId == trainerId)
+                .OrderByDescending(fs => fs.CreatedTime)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedules()
         {
             return await _dbContext.FeedingSchedules
