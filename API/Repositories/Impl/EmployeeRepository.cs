@@ -130,6 +130,11 @@ namespace API.Repositories.Impl
                 .Where(e => e.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Employee>> GetLeadTrainers()
+        {
+            return await _dbContext.Employees.Include(x => x.Area)
+                .OrderByDescending(e => e.CreatedDate).ToListAsync();        
+        }
 
         public async Task<bool> HasEmployee(string id)
         {

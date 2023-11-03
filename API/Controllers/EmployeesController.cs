@@ -7,6 +7,8 @@ using API.Helpers;
 using API.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.DependencyResolver;
+using System.Collections;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -30,7 +32,43 @@ namespace API.Controllers
             var mappedTrainers = _mapper.Map<IEnumerable<EmployeeResponse>>(trainers);
             return Ok(mappedTrainers);
         }
-        
+
+        [HttpGet("leader-trainers")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<LeadTrainerDto>>> GetLeaderTrainers()
+        {
+            var trainers = await _employeeRepository.GetLeadTrainers();
+            List<Employee> leadTrainers = new List<Employee>();
+            foreach (var tmp in trainers)
+            {
+                if(tmp.Area != null)
+                {
+                    leadTrainers.Add(tmp);
+                }
+            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var leadtrainersDto = _mapper.Map<IEnumerable<LeadTrainerDto>>(leadTrainers);
+            return Ok(leadtrainersDto);
+        }
+
+        [HttpGet("member-trainers")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<LeadTrainerDto>>> GetMemberTrainers()
+        {
+            var trainers = await _employeeRepository.GetLeadTrainers();
+            List<Employee> leadTrainers = new List<Employee>();
+            foreach (var tmp in trainers)
+            {
+                if (tmp.Area == null)
+                {
+                    leadTrainers.Add(tmp);
+                }
+            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var leadtrainersDto = _mapper.Map<IEnumerable<LeadTrainerDto>>(leadTrainers);
+            return Ok(leadtrainersDto);
+        }
+
         [HttpGet("trainers/resource-id")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<EmployeeResponse>> GetTrainer(string id)

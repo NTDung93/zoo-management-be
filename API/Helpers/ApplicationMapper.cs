@@ -11,6 +11,7 @@ namespace API.Helpers
         {
             CreateMap<Employee, EmployeeRequest>().ReverseMap();
             CreateMap<Employee, EmployeeResponse>().ReverseMap();
+            CreateMap<Employee, LeadTrainerDto>().ReverseMap();
             CreateMap<AnimalSpecies, AnimalSpeciesRequest>().ReverseMap();
             CreateMap<AnimalSpecies, AnimalSpeciesResponse>().ReverseMap();
             CreateMap<Employee, EmployeeDto>().ReverseMap();

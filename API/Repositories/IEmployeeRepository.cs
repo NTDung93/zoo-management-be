@@ -7,6 +7,7 @@ namespace API.Repositories
     public interface IEmployeeRepository
     {
         Task<IEnumerable<Employee>> GetTrainers();
+        Task<IEnumerable<Employee>> GetLeadTrainers();
         Task<Employee> GetTrainer(string id);
         Task<bool> CreateTrainer(Employee trainer);
         Task<bool> UpdateTrainer(EmployeeResponse trainer);
