@@ -68,11 +68,11 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<Animal>> GetAnimalByCageId(string id)
         {
-            return await _context.Animals.Include(x=>x.Cage).Where(animal => animal.CageId.ToLower().Equals(id.ToLower().Trim())).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z => z.AnimalSpecies).Where(animal => animal.CageId.ToLower().Equals(id.ToLower().Trim())).ToListAsync();
         }
         public async Task<IEnumerable<Animal>> GetAnimalBySpeciesId(int id)
         {
-            return await _context.Animals.Where(animal => animal.SpeciesId == id).ToListAsync();
+            return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z => z.AnimalSpecies).Where(animal => animal.SpeciesId == id).ToListAsync();
         }
     }
 }
