@@ -7,5 +7,6 @@
         public DateTimeOffset CreatedDate { get; set; }
         public ICollection<News> News { get; set; }
         public ICollection<Animal> Animals { get; set; }
+        public ICollection<FeedingMenu> FeedingMenus { get; set; }
     }
 }

@@ -154,14 +154,14 @@ namespace API.Controllers
 
         [HttpGet("trainers/area/resource-id")]
         [ProducesResponseType(200)] 
-        public async Task<ActionResult<EmployeeResponse>> GetEmployeeOfAnArea(string areaId)
+        public async Task<ActionResult<EmployeeResponse>> GetTrainerOfAnArea(string areaId)
         {
             if (string.IsNullOrEmpty(areaId))
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Area id is empty!"
                 });
-            var employees = await _employeeRepository.GetEmployeeOfAnArea(areaId);
+            var employees = await _employeeRepository.GetTrainerOfAnArea(areaId);
             if (!employees.Any())
                 return NotFound("Employee is not found!");
             var mappedEmployees = employees.Select(e => new EmployeeResponse

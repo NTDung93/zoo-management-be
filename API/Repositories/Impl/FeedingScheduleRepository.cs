@@ -55,6 +55,30 @@ namespace API.Repositories.Impl
                 .FirstOrDefaultAsync(fs => fs.No == no);
         }
 
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleOfAnArea(string areaId)
+        {
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.Cage)
+                .ThenInclude(c => c.Area)
+                .Include(fs => fs.Employee)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.FeedingMenu)
+                .Where(fs => fs.Cage.Area.AreaId == areaId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingScheduleOfATrainer(string trainerId)
+        {
+            return await _dbContext.FeedingSchedules
+                .Include(fs => fs.FeedingMenu)
+                .Include(fs => fs.Animal)
+                .Include(fs => fs.Cage)
+                .Include(fs => fs.Employee)
+                .Where(fs => fs.EmployeeId == trainerId)
+                .OrderByDescending(fs => fs.CreatedTime)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedules()
         {
             return await _dbContext.FeedingSchedules
