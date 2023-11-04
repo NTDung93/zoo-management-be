@@ -50,7 +50,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "A0001",
-                        Name = "Lion",
+                        Name = "Lion Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "A",
@@ -59,7 +59,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "A0002",
-                        Name = "Tiger",
+                        Name = "Tiger Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "A",
@@ -68,7 +68,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "B0001",
-                        Name = "Giraffe",
+                        Name = "Giraffe Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "B",
@@ -77,7 +77,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "B0002",
-                        Name = "Elephant",
+                        Name = "Elephant Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "B",
@@ -86,7 +86,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "B0003",
-                        Name = "Peacook and Flamingo",
+                        Name = "Peacook and Flamingo Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "B",
@@ -95,7 +95,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "B0004",
-                        Name = "Rooster and Parrot",
+                        Name = "Rooster and Parrot Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "B",
@@ -104,7 +104,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "B0005",
-                        Name = "Zebra",
+                        Name = "Zebra Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "B",
@@ -113,7 +113,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "C0001",
-                        Name = "Hippo",
+                        Name = "Hippo Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "C",
@@ -122,7 +122,7 @@ namespace API.Models.Data
                     new Cage
                     {
                         CageId = "C0002",
-                        Name = "Alligator",
+                        Name = "Alligator Enclosure",
                         MaxCapacity = 10,
                         CurrentCapacity = 0,
                         AreaId = "C",
@@ -207,6 +207,7 @@ namespace API.Models.Data
                         FullName = "Nguyen Duc Son",
                         CitizenId = "943370230",
                         Email = "nguyenducson2003@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0981342455",
                         Role = EmployeeConstraints.TRAINER_ROLE,
@@ -219,6 +220,7 @@ namespace API.Models.Data
                         FullName = "Tran Minh Nhat",
                         CitizenId = "841135889",
                         Email = "minhnhat2000@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0981342455",
                         Role = EmployeeConstraints.STAFF_ROLE,
@@ -231,6 +233,7 @@ namespace API.Models.Data
                         FullName = "Nguyen Tien Dung",
                         CitizenId = "590254810",
                         Email = "dungnt93@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0897876321",
                         Role = EmployeeConstraints.TRAINER_ROLE,
@@ -243,6 +246,7 @@ namespace API.Models.Data
                         FullName = "Ta Vu Thanh Van",
                         CitizenId = "6941670627",
                         Email = "thanhvan03@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "2",
                         PhoneNumber = "0923463674",
                         Role = EmployeeConstraints.STAFF_ROLE,
@@ -255,6 +259,7 @@ namespace API.Models.Data
                         FullName = "David Copperfield",
                         CitizenId = "8481289654",
                         Email = "davidcopperfield@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "2",
                         PhoneNumber = "0823458761",
                         Role = EmployeeConstraints.STAFF_ROLE,
@@ -267,6 +272,7 @@ namespace API.Models.Data
                         FullName = "John Doe",
                         CitizenId = "2502417558",
                         Email = "johndoeno1@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0876312334",
                         Role = EmployeeConstraints.TRAINER_ROLE,
@@ -279,6 +285,7 @@ namespace API.Models.Data
                         FullName = "John Smith",
                         CitizenId = "1234567890",
                         Email = "john.smith@example.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0589169697",
                         Role = EmployeeConstraints.TRAINER_ROLE,
@@ -291,6 +298,7 @@ namespace API.Models.Data
                         FullName = "Jane Doe",
                         CitizenId = "9876543210",
                         Email = "jane.doe@example.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0986665343",
                         Role = EmployeeConstraints.TRAINER_ROLE,
@@ -303,6 +311,7 @@ namespace API.Models.Data
                         FullName = "John Doe",
                         CitizenId = "2502417558",
                         Email = "johndoeno1@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0881230814",
                         Role = EmployeeConstraints.STAFF_ROLE,
@@ -315,6 +324,7 @@ namespace API.Models.Data
                         FullName = "Abigail Scott",
                         CitizenId = "2402223095",
                         Email = "parents@verizon.net",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "1",
                         PhoneNumber = "0954715955",
                         Role = EmployeeConstraints.TRAINER_ROLE,
@@ -327,6 +337,7 @@ namespace API.Models.Data
                         FullName = "Daniel Harris",
                         CitizenId = "7383372105",
                         Email = "sjava@icloud.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "3",
                         PhoneNumber = "0831713773",
                         Role = EmployeeConstraints.STAFF_ROLE,
@@ -339,6 +350,7 @@ namespace API.Models.Data
                         FullName = "Christopher Wilson",
                         CitizenId = "4975833434",
                         Email = "carmena@mac.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "3",
                         PhoneNumber = "0304835408",
                         Role = EmployeeConstraints.STAFF_ROLE,
@@ -351,6 +363,7 @@ namespace API.Models.Data
                         FullName = "Isabella Hernandez",
                         CitizenId = "8956520907",
                         Email = "studyabr@gmail.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "4",
                         PhoneNumber = "0978803964",
                         Role = EmployeeConstraints.TRAINER_ROLE,
@@ -363,6 +376,7 @@ namespace API.Models.Data
                         FullName = "Sophia Martinez",
                         CitizenId = "6721102359",
                         Email = "gslondon@live.com",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1699106448/logo/kg0i7lvb0dtygc0hnol5.jpg",
                         Password = "4",
                         PhoneNumber = "0786008864",
                         Role = EmployeeConstraints.STAFF_ROLE,
@@ -516,7 +530,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI001",
-                        Name = "Corbett Tiger",
+                        Name = "Corbett Tiger_M",
                         Region = "Indochina",
                         Behavior = "Indochinese Tigers live solitarily and hide in deep forests with hilly terrain, " +
                         "primarily hunt medium-sized and large ungulate species in the wild",
@@ -536,7 +550,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI002",
-                        Name = "Asian Elephant",
+                        Name = "Asian Elephant_FM",
                         Region = "Indochina",
                         Gender = AnimalConstraints.FEMALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253379/images/thu-an-thuc-vat/elephant/dhjco1vn0rkiscc55uwi.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/oymlhd9odsosig7brife.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/ixro6vpmf4roplkthlzz.jpg]",
@@ -554,7 +568,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI003",
-                        Name = "Asian Elephant",
+                        Name = "Asian Elephant_M",
                         Region = "Indochina",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253379/images/thu-an-thuc-vat/elephant/dhjco1vn0rkiscc55uwi.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/oymlhd9odsosig7brife.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/ixro6vpmf4roplkthlzz.jpg]",
@@ -572,7 +586,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI004",
-                        Name = "Indo Flamingo",
+                        Name = "Indo Flamingo_FM",
                         Region = "Indo",
                         Gender = AnimalConstraints.FEMALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253382/images/thu-an-thuc-vat/flamingo/cykpobgngqjn8velykyc.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/vnghr1qiadnx03oioeef.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/qccsob0qoxdtoiclau6f.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/aobfuhg9wqo2rnpphb5y.jpg]",
@@ -590,7 +604,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI005",
-                        Name = "Indo Flamingo",
+                        Name = "Indo Flamingo_M",
                         Region = "Indo",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253382/images/thu-an-thuc-vat/flamingo/cykpobgngqjn8velykyc.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/vnghr1qiadnx03oioeef.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/qccsob0qoxdtoiclau6f.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/aobfuhg9wqo2rnpphb5y.jpg]",
@@ -608,7 +622,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI006",
-                        Name = "Angola Giraffe",
+                        Name = "Angola Giraffe_M",
                         Region = "South African",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253393/images/thu-an-thuc-vat/giraffe/yoi6zxjqqykoryindntl.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253391/images/thu-an-thuc-vat/giraffe/mlibbgxp756qtpcecn4o.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253391/images/thu-an-thuc-vat/giraffe/ln6w1lbpzm973julylx5.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/giraffe/ah7gnlqazxd7jxlpsk57.jpg]",
@@ -626,7 +640,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI007",
-                        Name = "African Zebra",
+                        Name = "African Zebra_M",
                         Region = "South African",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/zebra/xd7jzximk4clmoyrzaje.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/zebra/w2zfbqlpkxtexs2vhqed.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253389/images/thu-an-thuc-vat/zebra/wpkh0hlq40yd0aykuzpl.jpg]",
@@ -644,7 +658,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI008",
-                        Name = "African Parrot",
+                        Name = "African Parrot_FM",
                         Region = "Africa",
                         Gender = AnimalConstraints.FEMALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253387/images/thu-an-thuc-vat/parrot/myeyqf3wvj2ojyfgvmkl.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253386/images/thu-an-thuc-vat/parrot/lp7fwviqprlpbum0r8pm.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253386/images/thu-an-thuc-vat/parrot/jo1pwznbgslpfsujguqm.jpg]",
@@ -662,7 +676,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI009",
-                        Name = "Thailand Crocodile",
+                        Name = "Thailand Crocodile_M",
                         Region = "Southeast Asia",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/aptsdg9ozv3q86ebjrhs.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/pqoetvgxhfjccftwkzzj.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253373/images/thu-duoi-nuoc/alligator/rrcuxxtbrtf6hpudl7g6.jpg]",
@@ -680,7 +694,7 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI010",
-                        Name = "Thailand Crocodile",
+                        Name = "Thailand Crocodile_FM",
                         Region = "Southeast Asia",
                         Gender = AnimalConstraints.FEMALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/aptsdg9ozv3q86ebjrhs.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/pqoetvgxhfjccftwkzzj.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253373/images/thu-duoi-nuoc/alligator/rrcuxxtbrtf6hpudl7g6.jpg]",
@@ -819,6 +833,43 @@ namespace API.Models.Data
                     },
                 };
                 _dbContext.Tickets.AddRange(tickets);
+            }
+
+            if (!_dbContext.News.Any())
+            {
+                var news = new List<News>()
+                {
+                    new News
+                    {
+                        Title = "Giraffle is coming guys",
+                        Content = "<div>The giraffe, scientifically known as Giraffa camelopardalis, is one of the most iconic and distinctively tall mammals on Earth. Native to the African continent, giraffes are renowned for their long necks, which can reach up to 18 feet in length, allowing them to graze on treetop foliage that is out of reach for most other herbivores. These gentle giants have a unique spotted coat, with irregularly shaped patches that vary in color, acting as a form of camouflage in their natural habitat.</div><div><br></div><div><img src=\"http://res.cloudinary.com/dnk5fcjhn/image/upload/v1698766472/vdkxczjngpimymdt6lpn.jpg\"></div><div><br></div><div>Giraffes are social animals, often found in groups known as towers. They have a calm and peaceful demeanor, relying on their remarkable vision and acute hearing for communication and protection. Their diet primarily consists of leaves, buds, and flowers from acacia and other trees. Despite their towering stature, giraffes are vulnerable to predation, particularly from lions.</div><div>Conservation efforts are crucial to ensure the survival of these majestic creatures, as their populations have declined due to habitat loss and poaching. Giraffes continue to be a symbol of Africa's diverse wildlife and the importance of preserving the natural world.</div><div><br></div><div><img src=\"http://res.cloudinary.com/dnk5fcjhn/image/upload/v1698766524/tg7ydupy5vrspyavrqza.jpg\"></div><div><br></div>",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1698766561/otzqufrhcunztrfvfg1x.jpg",
+                        WritingDate = DateTime.Now,
+                        AnimalId = "ANI006",
+                        SpeciesId = 1,
+                        EmployeeId = "E004"
+                    },
+                    new News
+                    {
+                        Title = "The Majestic Peacock's Vibrant Beauty",
+                        Content = "<div>The peacock, scientifically known as Pavo cristatus, is a magnificent and iconic bird renowned for its striking beauty and vibrant plumage. Native to the Indian subcontinent, this avian species is famous for its resplendent tail feathers, which are adorned with iridescent hues of blue, green, and gold. These stunning feathers are fanned out in an elaborate display during courtship rituals, making the peacock a symbol of grace and elegance. While the male, known as a peacock, boasts these eye-catching plumage, the female, called a peahen, exhibits a more subdued appearance.</div><div><br></div><div><img src=\"http://res.cloudinary.com/dnk5fcjhn/image/upload/v1698844334/s9vvaghqn4vxrsexylks.jpg\"></div><div><br></div><div>Beyond their captivating appearance, peacocks are also known for their distinctive, haunting calls that echo through their natural habitats, creating a harmonious soundscape. These birds have a significant cultural and symbolic presence in many societies, often representing themes of beauty, pride, and renewal. The peacock's striking appearance and symbolic significance continue to captivate and inspire people worldwide, making it one of the most recognized and cherished birds in the avian kingdom.</div><div><br></div><div><img src=\"http://res.cloudinary.com/dnk5fcjhn/image/upload/v1698844374/vgpcef5bnseobn2edwzr.jpg\"></div>",
+                        WritingDate = DateTime.Now,
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1698844280/jojqhcbjbkw283nyp0q0.jpg",
+                        EmployeeId = "E004",
+                        SpeciesId = 3
+                    },
+                    new News
+                    {
+                        Title = "The Graceful Elegance of Red Flamingos",
+                        Content = "<div>The red flamingo, scientifically known as Phoenicopterus ruber, is a remarkable and iconic bird celebrated for its vibrant and striking appearance. Native to the Caribbean, coastal areas of northern South America, and some parts of West Africa, this avian species stands out with its distinctive pinkish-red plumage, long legs, and gracefully curved neck. These flamingos are known for their striking appearance and their unique feeding behavior, often seen standing on one leg in shallow waters. While the flamingos' pink coloration is captivating, the pigments in their diet, including carotenoids, contribute to their vibrant hue.</div><div><br></div><div><img src=\"http://res.cloudinary.com/dnk5fcjhn/image/upload/v1698846056/nrutwjcrdjakwugcjbml.jpg\"></div><div><br></div><div>Beyond their enchanting coloration, red flamingos are a symbol of elegance and grace in the avian world. Their striking appearance and characteristic group formations create a mesmerizing spectacle in their natural habitats. Red flamingos have a significant presence in various cultures and are often associated with themes of beauty, vitality, and unity. Their vivid plumage and graceful demeanor continue to captivate people around the world, making them one of the most recognized and cherished birds in the bird kingdom.</div><div><br></div><div><img src=\"http://res.cloudinary.com/dnk5fcjhn/image/upload/v1698846078/y56i8a8twcop56cututf.webp\"></div>",
+                        WritingDate = DateTime.Now,
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1698846085/uonis6swfpoajbhds0jb.jpg",
+                        EmployeeId = "E002",
+                        SpeciesId = 8,
+                        AnimalId = "ANI005"
+                    }
+                };
+                _dbContext.News.AddRange(news);
             }
             _dbContext.SaveChanges();
         }

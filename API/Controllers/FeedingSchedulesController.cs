@@ -252,6 +252,23 @@ namespace API.Controllers
             var mappedFeedingSchedules = _mapper.Map<IEnumerable<FeedingScheduleResponse>>(feedingSchedules);
             return Ok(mappedFeedingSchedules);
         }
+
+        [HttpGet("feeding-schedules/area/area-id")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<FeedingScheduleResponse>>> GetFeedingScheduleOfAnArea(string areaId)
+        {
+            if (string.IsNullOrEmpty(areaId))
+                return ValidationProblem(new ValidationProblemDetails
+                {
+                    Title = "Area id is required!"
+                });
+            var feedingSchedules = await _feedingScheduleRepository.GetFeedingScheduleOfAnArea(areaId);
+            if (!feedingSchedules.Any())
+                return NotFound("Feeding schedule is not found!");
+
+            var mappedFeedingSchedules = _mapper.Map<IEnumerable<FeedingScheduleResponse>>(feedingSchedules);
+            return Ok(mappedFeedingSchedules);
+        }
         //[HttpGet("demo-api-01")]
         //[ProducesResponseType((int)HttpStatusCode.NoContent)]
         //public async Task<ActionResult<double>> GetFeedingQuantityOfAnAnimal(string animalId)
