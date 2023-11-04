@@ -71,6 +71,7 @@ namespace API.Controllers
                     Title = "Invalid of food id!"
                 });
             if (!ModelState.IsValid) return BadRequest(ModelState);
+            // check duplicate of feeding menu
 
             var mappedFeedingMenu = _mapper.Map<FeedingMenu>(feedingMenu);
             mappedFeedingMenu.CreatedDate = DateTimeOffset.Now;

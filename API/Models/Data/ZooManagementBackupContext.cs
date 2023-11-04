@@ -174,12 +174,7 @@ namespace API.Models.Data
                 .HasOne(n => n.Employee)
                 .WithMany(emp => emp.News)
                 .HasForeignKey(n => n.EmployeeId);
-
-            //modelBuilder.Entity<News>()
-            //    .HasOne(n => n.AnimalSpecies)
-            //    .WithMany(aspecies => aspecies.News)
-            //    .HasForeignKey(n => n.SpeciesId);
-            
+                        
             modelBuilder.Entity<News>()
                 .HasOne(n => n.Animal)
                 .WithMany(a => a.News)
@@ -259,6 +254,12 @@ namespace API.Models.Data
             modelBuilder.Entity<FeedingSchedule>()
                 .Property(fs => fs.Note)
                 .HasColumnType("nvarchar(250)");
+
+            modelBuilder.Entity<FeedingMenu>()
+                .HasOne(fm => fm.AnimalSpecies)
+                .WithMany(species => species.FeedingMenus)
+                .HasForeignKey(fm => fm.SpeciesId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -72,7 +72,7 @@ namespace API.Repositories.Impl
             return await Save();
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeeOfAnArea(string areaId)
+        public async Task<IEnumerable<Employee>> GetTrainerOfAnArea(string areaId)
         {
             var result = await _dbContext.Employees
                 .Join(
@@ -122,6 +122,15 @@ namespace API.Repositories.Impl
             return await _dbContext.Employees
                 .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) && e.Role.Equals(EmployeeConstraints.TRAINER_ROLE));
         }
+
+        //public async Task<IEnumerable<Employee>> GetTrainerOfAnArea(string areaId)
+        //{
+        //    return await _dbContext.Employees
+        //        .Include(e => e.Animals)
+        //        .ThenInclude(a => a.Cage)
+        //        .Where(e => e.Animals.Any(a => a.Cage.AreaId == areaId))
+        //        .ToListAsync();
+        //}
 
         public async Task<IEnumerable<Employee>> GetTrainers()
         {
