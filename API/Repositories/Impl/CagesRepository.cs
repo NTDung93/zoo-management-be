@@ -78,5 +78,10 @@ namespace API.Repositories.Impl
 
             return await _context.SaveChangesAsync() > 0;
         }
+
+        //public async Task<Cage> GetCageByIdWithArea(string cageId)
+        //{
+        //    return await _context.Cages.Include(x=>x.Area).FirstOrDefaultAsync(cage => cage.Id.ToLower().Equals(cageId.Trim().ToLower()));
+        //}
     }
 }
