@@ -18,6 +18,11 @@ namespace API.Repositories.Impl
             await _context.SaveChangesAsync();
         }
 
+        public async Task<TransactionHistory> GetTransactionByOrderId(int orderId)
+        {
+            return await _context.TransactionHistories.FirstOrDefaultAsync(x => x.OrderId == orderId);
+        }
+
         public async Task<IEnumerable<TransactionHistory>> GetTransactions()
         {
             return await _context.TransactionHistories.Include(x=>x.Order.OrderDetails).OrderBy(a => a.TransactionId).ToListAsync();

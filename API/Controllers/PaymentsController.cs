@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 
 namespace API.Controllers
 {
@@ -158,6 +159,9 @@ namespace API.Controllers
                         Console.WriteLine("Transaction total:");
                         Console.WriteLine(transaction.TotalPrice);
                         await _transactionHistoriesRepo.CreateTransaction(transaction);
+
+                        //get transaction history by order id
+                        var transactionHistory = await _transactionHistoriesRepo.GetTransactionByOrderId(lastestOrder.OrderId);
 
                         var htmlCode = "<!DOCTYPE html>" +
                             "<html lang=\"en, id\">" +
@@ -445,6 +449,9 @@ namespace API.Controllers
                             "        <!-- invoice footer -->" +
                             "        <div class=\"invoice-footer\">" +
                             "          <p>Thank you, we are so happy to see you at AmaZoo!</p>" +
+                            " <br/>" +
+                            "          <p>Please give this QR code below to our staff to check in at the entrance!</p>" +
+                            "           <img src=\"https://api.qrserver.com/v1/create-qr-code/?data=" + transactionHistory.TransactionId + ", " + lastestOrder.OrderId + "\" alt=\"QR Code for amazoo@gmail.com\" />" +
                             "        </div>" +
                             "      </div>" +
                             "    </section>" +
@@ -453,8 +460,8 @@ namespace API.Controllers
 
                         string smtpServer = "smtp.office365.com";
                         int smtpPort = 587; // Gmail SMTP port
-                        string smtpUsername = "lily.plantshop@outlook.com";
-                        string smtpPassword = "Password@1234";
+                        string smtpUsername = "funnyamazoo@outlook.com";
+                        string smtpPassword = "Amahahaha@123";
 
                         SmtpClient smtpClient = new SmtpClient(smtpServer);
                         smtpClient.Port = smtpPort;
