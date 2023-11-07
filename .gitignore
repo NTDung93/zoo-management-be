@@ -444,3 +444,4 @@ FodyWeavers.xsd
 /API/obj/Debug/net7.0/refint/API.dll
 /API/obj/project.assets.json
 /API/obj/project.nuget.cache
+/API/obj/Debug/net7.0/API.GeneratedMSBuildEditorConfig.editorconfig

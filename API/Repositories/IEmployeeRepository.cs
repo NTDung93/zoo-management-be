@@ -7,6 +7,7 @@ namespace API.Repositories
     public interface IEmployeeRepository
     {
         Task<IEnumerable<Employee>> GetTrainers();
+        Task<IEnumerable<Employee>> GetTrainerOfAnArea(string areaId);
         Task<Employee> GetTrainer(string id);
         Task<bool> CreateTrainer(Employee trainer);
         Task<bool> UpdateTrainer(EmployeeResponse trainer);
@@ -21,6 +22,7 @@ namespace API.Repositories
         Task<bool> HasEmployee(string id);
         Task<bool> Save();
 
-        Task<Employee> Authenticate(LoginModel account); 
+        Task<bool> CheckDuplicateOfEmail(string email);
+        Task<Employee> Authenticate(LoginModel account);
     }
 }

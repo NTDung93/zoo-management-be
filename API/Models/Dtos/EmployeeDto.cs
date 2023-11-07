@@ -12,5 +12,7 @@ namespace API.Models.Dtos
         public string Image { get; set; }
         public string Role { get; set; }
         public byte EmployeeStatus { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+
     }
 }

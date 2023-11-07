@@ -36,6 +36,9 @@ namespace API.Migrations
                     b.Property<string>("CageId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
 
@@ -54,8 +57,8 @@ namespace API.Migrations
                     b.Property<byte?>("IsDeleted")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("MaxFeedingQuantity")
-                        .HasColumnType("int");
+                    b.Property<decimal>("MaxFeedingQuantity")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -88,6 +91,9 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpeciesId"));
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("SpeciesName")
                         .HasColumnType("nvarchar(max)");
 
@@ -103,6 +109,9 @@ namespace API.Migrations
 
                     b.Property<string>("AreaName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
@@ -123,6 +132,9 @@ namespace API.Migrations
 
                     b.Property<string>("AreaId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("CurrentCapacity")
                         .HasColumnType("int");
@@ -148,6 +160,9 @@ namespace API.Migrations
                     b.Property<string>("CertificateName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Level")
                         .HasColumnType("nvarchar(max)");
 
@@ -166,6 +181,9 @@ namespace API.Migrations
 
                     b.Property<string>("CitizenId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -227,15 +245,23 @@ namespace API.Migrations
                     b.Property<string>("MenuNo")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MenuName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SpeciesId")
+                        .HasColumnType("int");
+
                     b.HasKey("MenuNo");
 
                     b.HasIndex("FoodId");
+
+                    b.HasIndex("SpeciesId");
 
                     b.ToTable("FeedingMenus");
                 });
@@ -254,14 +280,14 @@ namespace API.Migrations
                     b.Property<string>("CageId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("EndTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<decimal>("FeedingAmount")
                         .HasColumnType("decimal(5,2)");
@@ -272,8 +298,11 @@ namespace API.Migrations
                     b.Property<string>("MenuNo")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTimeOffset>("StartTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("No");
 
@@ -292,6 +321,9 @@ namespace API.Migrations
                 {
                     b.Property<string>("FoodId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FoodName")
                         .HasColumnType("nvarchar(max)");
@@ -529,6 +561,14 @@ namespace API.Migrations
                         .WithMany("FeedingSchedules")
                         .HasForeignKey("FoodId");
 
+                    b.HasOne("API.Models.Entities.AnimalSpecies", "AnimalSpecies")
+                        .WithMany("FeedingMenus")
+                        .HasForeignKey("SpeciesId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AnimalSpecies");
+
                     b.Navigation("FoodInventory");
                 });
 
@@ -631,6 +671,8 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Entities.AnimalSpecies", b =>
                 {
                     b.Navigation("Animals");
+
+                    b.Navigation("FeedingMenus");
 
                     b.Navigation("News");
                 });

@@ -74,6 +74,8 @@ namespace API.Controllers
 
             var mappedFood = _mapper.Map<FoodInventory>(food);
             mappedFood.InventoryQuantity = FoodInventoryConstraints.DEFAULT_QUANTITY;
+            mappedFood.CreatedDate = DateTimeOffset.Now;
+
             var result = await _foodInventoryRepository.CreateFood(mappedFood);
             if (!result) return BadRequest(new ProblemDetails
             {

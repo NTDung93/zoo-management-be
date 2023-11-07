@@ -18,11 +18,13 @@ namespace API.Controllers
     public class AnimalsController : BaseApiController
     {
         private readonly IAnimalsRepository _animalRepo;
+        private readonly ICagesRepository _cageRepo;
         private readonly IMapper _mapper;
 
-        public AnimalsController(IAnimalsRepository animalRepo, IMapper mapper)
+        public AnimalsController(IAnimalsRepository animalRepo, ICagesRepository cageRepo, IMapper mapper)
         {
             _animalRepo = animalRepo;
+            _cageRepo = cageRepo;
             _mapper = mapper;
         }
 
@@ -96,16 +98,20 @@ namespace API.Controllers
         [HttpPost("create-animal")]
         [ProducesResponseType(200)]
         public async Task<ActionResult<AnimalDto>> CreateNewAnimals([FromBody] AnimalDto animalDto)
-        {           
-            if (animalDto.Name.Trim().Length == 0 || animalDto.Region.Trim().Length == 0 || animalDto.Behavior.Length == 0)
+        {
+            var animals = await _animalRepo.GetAnimals();
+            if (animals.SingleOrDefault(animal => animal.AnimalId.Equals(animalDto.AnimalId)) != null)
             {
-                return BadRequest(new ProblemDetails { Title = "Do not allow Empty!" });
+                return BadRequest(new ProblemDetails { Title = "AnimalId is exist" });
             }
             else
             {
                 var animal = _mapper.Map<Animal>(animalDto);
                 await _animalRepo.CreateNewAnimal(animal);
-                var animals = await _animalRepo.GetAnimals();
+                var currCage = _cageRepo.GetCageById(animalDto.CageId);
+                currCage.Result.CurrentCapacity++;
+                var currCageDto = _mapper.Map<CageDto>(currCage.Result);
+                await _cageRepo.UpdateCage(currCage.Result.CageId, currCageDto);
                 var animalsDto = _mapper.Map<IEnumerable<AnimalDto>>(animals);
                 return CreatedAtRoute("GetAnimals", animalsDto);
             }
@@ -126,6 +132,16 @@ namespace API.Controllers
                 return Ok("Update Animal Success!");
             }
             return NotFound();
+        }
+
+        [HttpGet("areas/cage/animal/area-id")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAnimalWithBadHealthStatus(string areaId)
+        {
+            var animals = await _animalRepo.GetAnimalWithBadHealthStatus(areaId);
+            if (!animals.Any())
+                return NotFound("Animal is not found!");
+            return Ok(_mapper.Map<IEnumerable<AnimalDto>>(animals));
         }
     }
 }

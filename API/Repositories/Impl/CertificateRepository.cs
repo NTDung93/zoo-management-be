@@ -2,6 +2,8 @@
 using API.Models.Dtos;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+using System.Text.Json;
 
 namespace API.Repositories.Impl
 {
@@ -21,7 +23,9 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<Certificate>> GetCertificates()
         {
-            return await _dbContext.Certificates.ToListAsync();
+            return await _dbContext.Certificates
+                .OrderByDescending(c => c.CreatedDate)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<EmployeeCertificate>> GetEmployeeCertificatesByEmpId(string empId)
@@ -82,5 +86,23 @@ namespace API.Repositories.Impl
             _dbContext.EmployeeCertificates.Remove(currentEmployeeCertificate.Result);
             await _dbContext.SaveChangesAsync();
         }
+
+        //public  Task<IEnumerable<University>> ReadJsonFile(string filePath)
+        //{
+        //    try
+        //    {
+        //        // Read the JSON file as a string
+        //        string jsonContent = System.IO.File.ReadAllText(filePath);
+
+        //        // Deserialize the JSON string into a list of Person objects
+        //        var people = JsonSerializer.Deserialize<IEnumerable<University>>(jsonContent);
+        //        return await people;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"An error occurred: {ex.Message}");
+        //    }
+        //    return new List<University>(); // Return an empty list in case of file not found
+        //}
     }
 }

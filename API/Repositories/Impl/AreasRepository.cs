@@ -16,7 +16,7 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Area>> GetListArea()
         {
-            return await _context.Areas.OrderBy(a => a.AreaId).ToListAsync();
+            return await _context.Areas.Include(x=>x.Employee).OrderByDescending(a => a.CreatedDate).ToListAsync();
         }
         public async Task CreateNewArea(Area area)
         {
@@ -25,11 +25,19 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Area>> SearchAreaByName(string areaName)
         {
-            return await _context.Areas.Where(area => area.AreaName.ToLower().Contains(areaName.Trim().ToLower())).ToListAsync();
+            return await _context.Areas.Include(x => x.Employee).Where(area => area.AreaName.ToLower().Contains(areaName.Trim().ToLower())).ToListAsync();
         }
         public async Task<Area> GetAreaById(string areaId)
         {
-            return await _context.Areas.SingleOrDefaultAsync(area => area.AreaId.ToLower().Equals(areaId.Trim().ToLower()));
+            return await _context.Areas.Include(x => x.Employee).SingleOrDefaultAsync(area => area.AreaId.ToLower().Equals(areaId.Trim().ToLower()));
+        }
+        public async Task<Area> GetAreaByEmpId(string empId)
+        {
+            return await _context.Areas.Include(x => x.Employee).SingleOrDefaultAsync(area => area.EmployeeId.ToLower().Equals(empId.Trim().ToLower()));
+        }
+        public async Task<IEnumerable<Area>> GetAreaNotByEmpId(string empId)
+        {
+            return await _context.Areas.Include(x => x.Employee).Where(area => !area.EmployeeId.ToLower().Equals(empId.Trim().ToLower())).ToListAsync();
         }
         public async Task DeleteArea(string areaId)
         {
@@ -41,6 +49,8 @@ namespace API.Repositories.Impl
         {
             var currArea = GetAreaById(areaId);
             currArea.Result.AreaName = areaDto.AreaName;
+            currArea.Result.EmployeeId = areaDto.EmployeeId;
+            currArea.Result.CreatedDate = DateTimeOffset.Now;
             await _context.SaveChangesAsync();
         }
     }

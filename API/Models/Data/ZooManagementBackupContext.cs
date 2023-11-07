@@ -118,7 +118,7 @@ namespace API.Models.Data
             modelBuilder.Entity<EmployeeCertificate>()
                 .HasOne(ec => ec.Employee)
                 .WithMany(e => e.EmployeeCertificates)
-                .HasForeignKey(ec => ec.EmployeeId);    
+                .HasForeignKey(ec => ec.EmployeeId);
             modelBuilder.Entity<EmployeeCertificate>()
                 .HasOne(ec => ec.Certificate)
                 .WithMany(c => c.EmployeeCertificates)
@@ -174,12 +174,7 @@ namespace API.Models.Data
                 .HasOne(n => n.Employee)
                 .WithMany(emp => emp.News)
                 .HasForeignKey(n => n.EmployeeId);
-
-            //modelBuilder.Entity<News>()
-            //    .HasOne(n => n.AnimalSpecies)
-            //    .WithMany(aspecies => aspecies.News)
-            //    .HasForeignKey(n => n.SpeciesId);
-            
+                        
             modelBuilder.Entity<News>()
                 .HasOne(n => n.Animal)
                 .WithMany(a => a.News)
@@ -251,6 +246,20 @@ namespace API.Models.Data
                 .HasOne(a => a.Employee)
                 .WithOne(e => e.Area)
                 .HasForeignKey<Area>(a => a.EmployeeId);
+
+            modelBuilder.Entity<Animal>()
+                .Property(a => a.MaxFeedingQuantity)
+                .HasColumnType("decimal(5,2)");
+
+            modelBuilder.Entity<FeedingSchedule>()
+                .Property(fs => fs.Note)
+                .HasColumnType("nvarchar(250)");
+
+            modelBuilder.Entity<FeedingMenu>()
+                .HasOne(fm => fm.AnimalSpecies)
+                .WithMany(species => species.FeedingMenus)
+                .HasForeignKey(fm => fm.SpeciesId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace API.Models.Dtos
         public double UnitTotalPrice { get; set; }
         public int OrderId { get; set; }
         public string TicketId { get; set; }
-        public OrderDto Order { get; set; }
+        //public OrderDto Order { get; set; }
         public TicketDto Ticket { get; set; }
     }
 }

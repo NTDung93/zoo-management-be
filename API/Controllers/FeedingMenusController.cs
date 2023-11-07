@@ -32,9 +32,9 @@ namespace API.Controllers
 
         [HttpGet("feeding-menus/resource-id")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<FeedingMenuResponse>> GetFeedingMenu(string scheduleNo)
+        public async Task<ActionResult<FeedingMenuResponse>> GetFeedingMenu(string menuNo)
         {
-            var feedingMenu = await _feedingMenuRepository.GetFeedingMenu(scheduleNo);
+            var feedingMenu = await _feedingMenuRepository.GetFeedingMenu(menuNo);
             if (feedingMenu == null) return NotFound("Feeding menu is not found!");
             var mappedFeedingMenu = _mapper.Map<FeedingMenuResponse>(feedingMenu);
             return Ok(mappedFeedingMenu);
@@ -71,27 +71,29 @@ namespace API.Controllers
                     Title = "Invalid of food id!"
                 });
             if (!ModelState.IsValid) return BadRequest(ModelState);
+            // check duplicate of feeding menu
 
-            var result = await _feedingMenuRepository.CreateFeedingMenu(
-                _mapper.Map<FeedingMenu>(feedingMenu)
-                );
+            var mappedFeedingMenu = _mapper.Map<FeedingMenu>(feedingMenu);
+            mappedFeedingMenu.CreatedDate = DateTimeOffset.Now;
+
+            var result = await _feedingMenuRepository.CreateFeedingMenu(mappedFeedingMenu);
             if (!result)
                 return BadRequest(new ProblemDetails
                 {
                     Title = "An error occurs while creating!"
                 });
-            return CreatedAtAction(nameof(GetFeedingMenu), new { scheduleNo = feedingMenu.MenuNo }, _mapper.Map<FeedingMenu>(feedingMenu));
+            return CreatedAtAction(nameof(GetFeedingMenu), new { scheduleNo = feedingMenu.MenuNo }, mappedFeedingMenu);
         }
 
         [HttpDelete("feeding-menu/resource-id")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> DeleteFeedingMenu(string scheduleNo)
+        public async Task<IActionResult> DeleteFeedingMenu(string menuNo)
         {
-            if (string.IsNullOrEmpty(scheduleNo)) return BadRequest(new ProblemDetails
+            if (string.IsNullOrEmpty(menuNo)) return BadRequest(new ProblemDetails
             {
                 Title = "Schedule no is required!"
             });
-            var result = await _feedingMenuRepository.DeleteFeedingMenu(scheduleNo);
+            var result = await _feedingMenuRepository.DeleteFeedingMenu(menuNo);
             if (!result) return BadRequest(new ProblemDetails
             {
                 Title = "An error occurs while deleting!"
@@ -101,9 +103,9 @@ namespace API.Controllers
 
         [HttpPut("feeding-menu/resource-id")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> UpdateFeedingMenu(string scheduleNo, [FromBody] FeedingMenuRequest feedingMenu)
+        public async Task<IActionResult> UpdateFeedingMenu(string menuNo, [FromBody] FeedingMenuRequest feedingMenu)
         {
-            if (!scheduleNo.Trim().ToLower().Equals(feedingMenu.MenuNo.ToLower().Trim()))
+            if (!menuNo.Trim().ToLower().Equals(feedingMenu.MenuNo.ToLower().Trim()))
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Schedule no does not match!"

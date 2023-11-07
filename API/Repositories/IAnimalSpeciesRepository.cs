@@ -14,5 +14,6 @@ namespace API.Repositories
         Task<bool> UpdateAnimalSpecies(AnimalSpeciesResponse species);
         Task<bool> DeleteAnimalSpecies(int id);
         Task<bool> Save();
+        Task<AnimalSpecies> GetSpecyByCageId(string cageId);
     }
 }

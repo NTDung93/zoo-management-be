@@ -37,6 +37,7 @@ namespace API.Repositories.Impl
         {
             return await _dbContext.FeedingMenus
                 .Include(fm => fm.FoodInventory)
+                .Include(fm => fm.AnimalSpecies)
                 .FirstOrDefaultAsync(fm => fm.MenuNo.ToLower().Trim().Equals(scheduleNo.Trim().ToLower()));
         }
 
@@ -44,7 +45,8 @@ namespace API.Repositories.Impl
         {
             return await _dbContext.FeedingMenus
                 .Include(fm => fm.FoodInventory)
-                .OrderByDescending(fm => fm.MenuNo)
+                .Include(fm => fm.AnimalSpecies)
+                .OrderByDescending(fm => fm.CreatedDate)
                 .ToListAsync();
         }
 
@@ -61,7 +63,8 @@ namespace API.Repositories.Impl
 
             existingFeedingMenu.MenuName = feedingMenu.MenuName;
             existingFeedingMenu.FoodId = feedingMenu.FoodId;
-            
+            existingFeedingMenu.SpeciesId = feedingMenu.SpeciesId;
+
             _dbContext.FeedingMenus.Update(existingFeedingMenu);
             return await Save();
         }
