@@ -50,7 +50,7 @@ namespace API.Repositories.Impl
         public async Task<IEnumerable<FoodInventory>> GetFoods()
         {
             return await _dbContext.FoodInventories
-                .OrderByDescending(f => f.FoodId)
+                .OrderByDescending(f => f.CreatedDate)
                 .ToListAsync();
         }
 

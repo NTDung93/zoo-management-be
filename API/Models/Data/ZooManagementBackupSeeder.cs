@@ -758,7 +758,7 @@ namespace API.Models.Data
                     new FeedingMenu
                     {
                         MenuNo = "MNU001",
-                        MenuName = "Tiger 1st week",
+                        MenuName = "Breakfast for Tiger in 1st week of November",
                         FoodId = "FD04",
                         SpeciesId = 7,
                         CreatedDate = DateTimeOffset.Now
@@ -766,7 +766,7 @@ namespace API.Models.Data
                     new FeedingMenu
                     {
                         MenuNo = "MNU002",
-                        MenuName = "Tiger 1st week",
+                        MenuName = "Afternoon for Tiger 1st week of November",
                         FoodId = "FD03",
                         SpeciesId = 7,
                         CreatedDate = DateTimeOffset.Now
@@ -774,7 +774,7 @@ namespace API.Models.Data
                     new FeedingMenu
                     {
                         MenuNo = "MNU003",
-                        MenuName = "Elephant 1st week",
+                        MenuName = "Breakfast for Elephant in 1st week of November",
                         FoodId = "FD05",
                         SpeciesId = 2,
                         CreatedDate = DateTimeOffset.Now
@@ -782,7 +782,7 @@ namespace API.Models.Data
                     new FeedingMenu
                     {
                         MenuNo = "MNU004",
-                        MenuName = "Elephant 1st week",
+                        MenuName = "Lunch for Elephant in 1st week of November",
                         FoodId = "FD06",
                         SpeciesId = 2,
                         CreatedDate = DateTimeOffset.Now
@@ -798,7 +798,7 @@ namespace API.Models.Data
                     new FeedingMenu
                     {
                         MenuNo = "MNU006",
-                        MenuName = "Giraffe 1st week",
+                        MenuName = "Breakfast for Giraffe 1st week of November",
                         FoodId = "FD01",
                         SpeciesId = 1,
                         CreatedDate = DateTimeOffset.Now
@@ -806,7 +806,7 @@ namespace API.Models.Data
                     new FeedingMenu
                     {
                         MenuNo = "MNU007",
-                        MenuName = "Giraffe 1st week",
+                        MenuName = "Lunch for Giraffe in 1st week of November",
                         FoodId = "FD02",
                         SpeciesId = 1,
                         CreatedDate = DateTimeOffset.Now

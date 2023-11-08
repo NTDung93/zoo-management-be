@@ -59,11 +59,10 @@ namespace API.Repositories.Impl
         {
             return await _dbContext.FeedingSchedules
                 .Include(fs => fs.Cage)
-                .ThenInclude(c => c.Area)
                 .Include(fs => fs.Employee)
                 .Include(fs => fs.Animal)
                 .Include(fs => fs.FeedingMenu)
-                .Where(fs => fs.Cage.Area.AreaId == areaId)
+                .Where(fs => fs.Cage.Area.AreaId == areaId || fs.Animal.Cage.Area.AreaId == areaId)
                 .ToListAsync();
         }
 
@@ -152,7 +151,22 @@ namespace API.Repositories.Impl
             existingFeedingSchedule.StartTime = feedingSchedule.StartTime;
             existingFeedingSchedule.EndTime = feedingSchedule.EndTime;
             existingFeedingSchedule.FeedingAmount = feedingSchedule.FeedingAmount;
+            existingFeedingSchedule.FeedingStatus = feedingSchedule.FeedingStatus;
             existingFeedingSchedule.Note = feedingSchedule.Note;
+
+            if (existingFeedingSchedule.FeedingStatus == FeedingScheduleConstraints.FEEDING_STATUS_COMPLETED)
+            {
+                var feedingFood = await _dbContext.FoodInventories
+                    .FindAsync(existingFeedingSchedule.FeedingMenu.FoodId);
+                if (feedingFood == null) return false;
+                // get the current food quantity in food inventory
+                var currentFoodQuantity = feedingFood.InventoryQuantity;
+                var feedingQuantity = existingFeedingSchedule.FeedingAmount;
+                var updatedFoodQuantity = currentFoodQuantity - feedingQuantity;
+
+                feedingFood.InventoryQuantity = updatedFoodQuantity;
+                _dbContext.FoodInventories.Update(feedingFood);
+            }
 
             _dbContext.FeedingSchedules.Update(existingFeedingSchedule);
             return await Save();
