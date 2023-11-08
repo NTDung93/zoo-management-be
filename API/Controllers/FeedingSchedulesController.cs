@@ -84,12 +84,7 @@ namespace API.Controllers
             return Ok(mappedFeedingSchedules);
         }
         
-        /// <summary>
-        /// Create a feeding schedule, 
-        /// this action is triggered when a chief trainer wants to create the feeding schedule
-        /// </summary>
-        /// <param name="feedingSchedule"></param>
-        /// <returns></returns>
+        
         [HttpPost("feeding-schedule")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<ActionResult<FeedingScheduleResponse>> CreateFeedingSchedule([FromBody] FeedingScheduleRequest feedingSchedule)
@@ -108,6 +103,11 @@ namespace API.Controllers
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Start time and end time must be greater than created time!"
+                });
+            if (feedingSchedule.StartTime == feedingSchedule.EndTime)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Start time and end time must be different!"
                 });
             if (feedingSchedule.FeedingAmount <= 0)
                 return BadRequest(new ProblemDetails
@@ -198,6 +198,11 @@ namespace API.Controllers
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Start time and end time must be greater than created time!"
+                });
+            if (feedingSchedule.StartTime == feedingSchedule.EndTime)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Start time and end time must be different!"
                 });
             if (feedingSchedule.FeedingAmount <= 0)
                 return BadRequest(new ProblemDetails
