@@ -16,6 +16,7 @@ namespace API.Repositories.Impl
 
         public async Task<bool> CreateFeedingMenu(FeedingMenu feedingMenu)
         {
+            feedingMenu.CreatedDate = DateTimeOffset.Now;
             await _dbContext.FeedingMenus.AddAsync(feedingMenu);
             return await Save();
         }

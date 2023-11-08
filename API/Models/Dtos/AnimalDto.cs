@@ -15,6 +15,7 @@ namespace API.Models.Dtos
         public byte? HealthStatus { get; set; }
         public string Rarity { get; set; }
         public byte? IsDeleted { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
         public string EmployeeId { get; set; }
         public string CageId { get; set; }
         public int SpeciesId { get; set; }

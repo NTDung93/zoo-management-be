@@ -17,6 +17,7 @@ namespace API.Repositories.Impl
         public async Task<bool> CreateFood(FoodInventory food)
         {
             if (food == null) return false;
+            food.CreatedDate = DateTimeOffset.Now;
             await _dbContext.FoodInventories.AddAsync(food);
             return await Save();
         }
@@ -73,6 +74,7 @@ namespace API.Repositories.Impl
             if (existingFood == null) return false;
 
             existingFood.FoodName = food.FoodName;
+            existingFood.CreatedDate = DateTimeOffset.Now;
             _dbContext.FoodInventories.Update(existingFood);
             return await Save();
         }

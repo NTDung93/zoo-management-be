@@ -23,9 +23,7 @@ namespace API.Repositories.Impl
 
         public async Task<IEnumerable<Certificate>> GetCertificates()
         {
-            return await _dbContext.Certificates
-                .OrderByDescending(c => c.CreatedDate)
-                .ToListAsync();
+            return await _dbContext.Certificates.OrderByDescending(x => x.CreatedDate).ToListAsync();
         }
 
         public async Task<IEnumerable<EmployeeCertificate>> GetEmployeeCertificatesByEmpId(string empId)
@@ -40,6 +38,7 @@ namespace API.Repositories.Impl
 
         public async Task CreateNewCertificate(Certificate certificate)
         {
+            certificate.CreatedDate = DateTimeOffset.Now;
             await _dbContext.Certificates.AddAsync(certificate);
             await _dbContext.SaveChangesAsync();
         }
@@ -64,6 +63,7 @@ namespace API.Repositories.Impl
             currentCertificate.Result.CertificateName = certificateDto.CertificateName;
             currentCertificate.Result.TrainingInstitution = certificateDto.TrainingInstitution;
             currentCertificate.Result.Level = certificateDto.Level;
+            currentCertificate.Result.CreatedDate = DateTimeOffset.Now;
             await _dbContext.SaveChangesAsync();
         }
         public async Task UpdateEmployeeCertificate(int no, EmployeeCertificateDto employeeCertificateDto)
