@@ -105,7 +105,7 @@ namespace API.Repositories.Impl
         public async Task<Employee> GetStaff(string id)
         {
             return await _dbContext.Employees
-                .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) && 
+                .FirstOrDefaultAsync(e => e.EmployeeId.Equals(id.Trim()) &&
                 e.Role.Equals(EmployeeConstraints.STAFF_ROLE));
         }
 
@@ -114,7 +114,6 @@ namespace API.Repositories.Impl
             return await _dbContext.Employees
                 .OrderByDescending(e => e.CreatedDate)
                 .Where(e => e.Role.Equals(EmployeeConstraints.STAFF_ROLE))
-                .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
         }
 
@@ -138,8 +137,12 @@ namespace API.Repositories.Impl
             return await _dbContext.Employees
                 .OrderByDescending(e => e.CreatedDate)
                 .Where(e => e.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
-                .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
+        }
+        public async Task<IEnumerable<Employee>> GetLeadTrainers()
+        {
+            return await _dbContext.Employees.Include(x => x.Area)
+                .OrderByDescending(e => e.CreatedDate).Where(e => e.Role.Equals(EmployeeConstraints.TRAINER_ROLE)).ToListAsync();        
         }
 
         public async Task<bool> HasEmployee(string id)
@@ -158,18 +161,16 @@ namespace API.Repositories.Impl
         {
             var existingStaff = await _dbContext.Employees
                 .FindAsync(staff.EmployeeId);
-
             if (existingStaff == null || !existingStaff.Role.Equals(EmployeeConstraints.STAFF_ROLE))
                 return false;
 
             existingStaff.FullName = staff.FullName;
             existingStaff.CitizenId = staff.CitizenId;
-            //existingStaff.Email = staff.Email;
+            existingStaff.Email = staff.Email;
             existingStaff.PhoneNumber = staff.PhoneNumber;
             existingStaff.Image = staff.Image;
             existingStaff.EmployeeStatus = staff.EmployeeStatus;
             existingStaff.CreatedDate = DateTimeOffset.Now;
-
             _dbContext.Update(existingStaff);
             return await Save();
         }
@@ -178,8 +179,7 @@ namespace API.Repositories.Impl
         {
             var existingTrainer = await _dbContext.Employees
                 .FindAsync(trainer.EmployeeId);
-            
-            if (existingTrainer == null || !existingTrainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE)) 
+            if (existingTrainer == null || !existingTrainer.Role.Equals(EmployeeConstraints.TRAINER_ROLE))
                 return false;
 
             existingTrainer.FullName = trainer.FullName;
@@ -189,7 +189,6 @@ namespace API.Repositories.Impl
             existingTrainer.Image = trainer.Image;
             existingTrainer.EmployeeStatus = trainer.EmployeeStatus;
             existingTrainer.CreatedDate = DateTimeOffset.Now;
-
             _dbContext.Update(existingTrainer);
             return await Save();
         }

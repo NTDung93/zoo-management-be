@@ -6,5 +6,7 @@ namespace API.Repositories
     {
         Task CreateTransaction(TransactionHistory transaction);
         Task<IEnumerable<TransactionHistory>> GetTransactions();
+
+        Task<TransactionHistory> GetTransactionByOrderId(int orderId);
     }
 }

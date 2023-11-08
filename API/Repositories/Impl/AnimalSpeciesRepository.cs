@@ -18,6 +18,7 @@ namespace API.Repositories.Impl
         public async Task<bool> CreateAnimalSpecies(AnimalSpecies species)
         {
             if (species == null) return false;
+            species.CreatedDate = DateTimeOffset.Now;
             await _dbContext.AddAsync(species);
             return await Save();
         }
@@ -39,7 +40,7 @@ namespace API.Repositories.Impl
         public async Task<IEnumerable<AnimalSpecies>> GetAnimalSpecies()
         {
             return await _dbContext.AnimalSpecies
-                .OrderBy(a => a.SpeciesId)
+                .OrderByDescending(a => a.CreatedDate)
                 .ToListAsync();
         }
 
@@ -62,6 +63,11 @@ namespace API.Repositories.Impl
                 .ToListAsync();
         }
 
+        public Task<AnimalSpecies> GetSpecyByCageId(string cageId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> Save()
         {
             var saved = _dbContext.SaveChangesAsync();
@@ -72,7 +78,7 @@ namespace API.Repositories.Impl
         {
             var existingSpecies = await GetAnimalSpecies(species.SpeciesId);
             if (existingSpecies == null) return false;
-
+            existingSpecies.CreatedDate = DateTimeOffset.Now;
             existingSpecies.SpeciesName = species.SpeciesName;
             _dbContext.Update(existingSpecies);
             return await Save();

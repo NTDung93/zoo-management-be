@@ -17,7 +17,7 @@ namespace API.Repositories.Impl
         }
         public async Task<IEnumerable<Cage>> GetListCage()
         {
-            return await _context.Cages.Include(x => x.Area).OrderBy(a => a.CreatedDate).ToListAsync();
+            return await _context.Cages.Include(x => x.Area).OrderByDescending(a => a.CreatedDate).ToListAsync();
         }
         public async Task<IEnumerable<Cage>> GetListCageByAreaId(string areaId)
         {
@@ -39,6 +39,7 @@ namespace API.Repositories.Impl
         }
         public async Task CreateNewCage(Cage cage)
         {
+            cage.CreatedDate = DateTimeOffset.Now;
             await _context.Cages.AddAsync(cage);
             await _context.SaveChangesAsync();
         }
@@ -48,6 +49,7 @@ namespace API.Repositories.Impl
             currCage.Result.Name = cageDto.Name.Trim();
             currCage.Result.MaxCapacity = cageDto.MaxCapacity;
             currCage.Result.AreaId = cageDto.AreaId;
+            currCage.Result.CreatedDate = DateTimeOffset.Now;
             await _context.SaveChangesAsync();
         }
 
@@ -78,5 +80,10 @@ namespace API.Repositories.Impl
 
             return await _context.SaveChangesAsync() > 0;
         }
+
+        //public async Task<Cage> GetCageByIdWithArea(string cageId)
+        //{
+        //    return await _context.Cages.Include(x=>x.Area).FirstOrDefaultAsync(cage => cage.Id.ToLower().Equals(cageId.Trim().ToLower()));
+        //}
     }
 }
