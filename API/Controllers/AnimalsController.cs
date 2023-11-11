@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using API.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using API.Repositories;
 using API.Models.Dtos;
-using Microsoft.AspNetCore.Authorization;
 using API.Models.Entities;
-using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
@@ -156,14 +147,14 @@ namespace API.Controllers
             return NotFound();
         }
 
-        //[HttpGet("areas/cage/animal/area-id")]
-        //[ProducesResponseType(200)]
-        //public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAnimalWithBadHealthStatus(string areaId)
-        //{
-        //    var animals = await _animalRepo.GetAnimalWithBadHealthStatus(areaId);
-        //    if (!animals.Any())
-        //        return NotFound("Animal is not found!");
-        //    return Ok(_mapper.Map<IEnumerable<AnimalDto>>(animals));
-        //}
+        [HttpGet("areas/cage/animal/area-id")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAnimalWithBadHealthStatus(string areaId)
+        {
+            var animals = await _animalRepo.GetAnimalWithBadHealthStatus(areaId);
+            if (!animals.Any())
+                return NotFound("Animal is not found!");
+            return Ok(_mapper.Map<IEnumerable<AnimalDto>>(animals));
+        }
     }
 }
