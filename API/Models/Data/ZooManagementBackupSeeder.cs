@@ -530,10 +530,9 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI001",
-                        Name = "Corbett Tiger_M",
+                        Name = "Corbett Tiger",
                         Region = "Indochina",
-                        Behavior = "Indochinese Tigers live solitarily and hide in deep forests with hilly terrain, " +
-                        "primarily hunt medium-sized and large ungulate species in the wild",
+                        Behavior = "The Corbett Tiger, a subspecies of the Bengal tiger, is native to India's Corbett National Park. These solitary nocturnal predators are territorial and fiercely protect their domains. They are excellent swimmers, often crossing rivers in search of prey. Their diet consists mainly of deer and wild boar, hunted stealthily from within tall grass.",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253396/images/thu-an-thit/tiger/g8iszebifjsocj92xae2.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253395/images/thu-an-thit/tiger/sj2qglno6netfrt9ki3j.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253395/images/thu-an-thit/tiger/mr7xtin4sirnqri0rzqq.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253395/images/thu-an-thit/tiger/z4bhexybccpmzmqlvnx8.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
@@ -550,9 +549,10 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI002",
-                        Name = "Asian Elephant_FM",
+                        Name = "Asian Elephant (Luna)",
                         Region = "Indochina",
                         Gender = AnimalConstraints.FEMALE,
+                        Behavior = "Asian elephants are known for their strong sense of community and social bonds. They often travel in close-knit family groups, led by the oldest female, and communicate through vocalizations, body language, and tactile interactions. Their intelligence is remarkable, allowing them to problem-solve, learn from experience, and even display self-awareness.",
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253379/images/thu-an-thuc-vat/elephant/dhjco1vn0rkiscc55uwi.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/oymlhd9odsosig7brife.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/ixro6vpmf4roplkthlzz.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
                         IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
@@ -568,8 +568,9 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI003",
-                        Name = "Asian Elephant_M",
+                        Name = "Asian Elephant (Leo)",
                         Region = "Indochina",
+                        Behavior = "Asian elephants are known for their strong sense of community and social bonds. They often travel in close-knit family groups, led by the oldest female, and communicate through vocalizations, body language, and tactile interactions. Their intelligence is remarkable, allowing them to problem-solve, learn from experience, and even display self-awareness.",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253379/images/thu-an-thuc-vat/elephant/dhjco1vn0rkiscc55uwi.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/oymlhd9odsosig7brife.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253378/images/thu-an-thuc-vat/elephant/ixro6vpmf4roplkthlzz.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
@@ -586,8 +587,9 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI004",
-                        Name = "Indo Flamingo_FM",
+                        Name = "Indo Flamingo (Daisy)",
                         Region = "Indo",
+                        Behavior = "The Indo Flamingo, or the Greater Flamingo (Phoenicopterus roseus), is a striking and elegant wading bird known for its vivid pink plumage and distinct long, slender legs. These birds are primarily found in the Indian subcontinent and some parts of Africa and Europe. Indo Flamingos are characterized by their graceful behavior and their affinity for shallow, saline wetlands.",
                         Gender = AnimalConstraints.FEMALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253382/images/thu-an-thuc-vat/flamingo/cykpobgngqjn8velykyc.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/vnghr1qiadnx03oioeef.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/qccsob0qoxdtoiclau6f.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/aobfuhg9wqo2rnpphb5y.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
@@ -604,8 +606,9 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI005",
-                        Name = "Indo Flamingo_M",
+                        Name = "Indo Flamingo (Buddy)",
                         Region = "Indo",
+                        Behavior = "The Indo Flamingo, or the Greater Flamingo (Phoenicopterus roseus), is a striking and elegant wading bird known for its vivid pink plumage and distinct long, slender legs. These birds are primarily found in the Indian subcontinent and some parts of Africa and Europe. Indo Flamingos are characterized by their graceful behavior and their affinity for shallow, saline wetlands.",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253382/images/thu-an-thuc-vat/flamingo/cykpobgngqjn8velykyc.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/vnghr1qiadnx03oioeef.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/qccsob0qoxdtoiclau6f.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/aobfuhg9wqo2rnpphb5y.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
@@ -622,7 +625,8 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI006",
-                        Name = "Angola Giraffe_M",
+                        Name = "Angola Giraffe",
+                        Behavior = "The Angola Giraffe, scientifically known as Giraffa camelopardalis angolensis, is a captivating subspecies of giraffe primarily found in southwestern Africa, particularly in Angola and parts of Namibia. These gentle giants are known for their unique and intricate spotted coat, characterized by irregular and jagged patterns.",
                         Region = "South African",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253393/images/thu-an-thuc-vat/giraffe/yoi6zxjqqykoryindntl.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253391/images/thu-an-thuc-vat/giraffe/mlibbgxp756qtpcecn4o.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253391/images/thu-an-thuc-vat/giraffe/ln6w1lbpzm973julylx5.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/giraffe/ah7gnlqazxd7jxlpsk57.jpg]",
@@ -640,8 +644,9 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI007",
-                        Name = "African Zebra_M",
+                        Name = "African Zebra",
                         Region = "South African",
+                        Behavior = "The African Zebra, part of the Equus zebra species, is an iconic and unmistakable creature native to the grasslands and savannahs of Africa. Renowned for their striking black and white striped coats, these herbivorous animals are characterized by their social and spirited behavior.",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/zebra/xd7jzximk4clmoyrzaje.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253390/images/thu-an-thuc-vat/zebra/w2zfbqlpkxtexs2vhqed.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253389/images/thu-an-thuc-vat/zebra/wpkh0hlq40yd0aykuzpl.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
@@ -658,7 +663,8 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI008",
-                        Name = "African Parrot_FM",
+                        Name = "African Parrot",
+                        Behavior = "The African Parrot, a diverse group of colorful and intelligent parrot species, graces the forests and savannahs of Africa with its vibrant plumage and lively behavior. These avian wonders are celebrated for their charming personalities and impressive vocal abilities.",
                         Region = "Africa",
                         Gender = AnimalConstraints.FEMALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253387/images/thu-an-thuc-vat/parrot/myeyqf3wvj2ojyfgvmkl.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253386/images/thu-an-thuc-vat/parrot/lp7fwviqprlpbum0r8pm.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253386/images/thu-an-thuc-vat/parrot/jo1pwznbgslpfsujguqm.jpg]",
@@ -676,8 +682,9 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI009",
-                        Name = "Thailand Crocodile_M",
+                        Name = "Thailand Crocodile (Charlie)",
                         Region = "Southeast Asia",
+                        Behavior = "The Thailand Crocodile, scientifically known as Crocodylus siamensis, is a critically endangered reptile native to Southeast Asia, including Thailand. These crocodiles are semi-aquatic, spending much of their time in and around freshwater habitats. They exhibit a solitary nature, with adult individuals leading independent lives, and they can be territorial during the breeding season.",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/aptsdg9ozv3q86ebjrhs.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/pqoetvgxhfjccftwkzzj.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253373/images/thu-duoi-nuoc/alligator/rrcuxxtbrtf6hpudl7g6.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
@@ -694,9 +701,10 @@ namespace API.Models.Data
                     new Animal
                     {
                         AnimalId = "ANI010",
-                        Name = "Thailand Crocodile_FM",
+                        Name = "Thailand Crocodile (Sophie)",
                         Region = "Southeast Asia",
                         Gender = AnimalConstraints.FEMALE,
+                        Behavior = "The Thailand Crocodile, scientifically known as Crocodylus siamensis, is a critically endangered reptile native to Southeast Asia, including Thailand. These crocodiles are semi-aquatic, spending much of their time in and around freshwater habitats. They exhibit a solitary nature, with adult individuals leading independent lives, and they can be territorial during the breeding season.",
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/aptsdg9ozv3q86ebjrhs.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253374/images/thu-duoi-nuoc/alligator/pqoetvgxhfjccftwkzzj.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253373/images/thu-duoi-nuoc/alligator/rrcuxxtbrtf6hpudl7g6.jpg]",
                         HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
                         IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
@@ -823,12 +831,14 @@ namespace API.Models.Data
                     {
                         TicketId = "AMA_ENTRANCE_01",
                         Type = "Adult",
+                        Description = "Entrance ticket for adult",
                         UnitPrice = 100000
                     },
                     new Ticket
                     {
                         TicketId = "AMA_ENTRANCE_02",
                         Type = "Child",
+                        Description = "Entrance ticket for child",
                         UnitPrice = 60000
                     },
                 };
