@@ -190,25 +190,25 @@ namespace API.Controllers
             return NoContent();
         }
 
-        //[HttpGet("trainers/area/resource-id")]
-        //[ProducesResponseType(200)] 
-        //public async Task<ActionResult<EmployeeResponse>> GetTrainerOfAnArea(string areaId)
-        //{
-        //    if (string.IsNullOrEmpty(areaId))
-        //        return BadRequest(new ProblemDetails
-        //        {
-        //            Title = "Area id is empty!"
-        //        });
-        //    var employees = await _employeeRepository.GetTrainerOfAnArea(areaId);
-        //    if (!employees.Any())
-        //        return NotFound("Employee is not found!");
-        //    var mappedEmployees = employees.Select(e => new EmployeeResponse
-        //    {
-        //        EmployeeId = e.EmployeeId,
-        //        FullName = e.FullName,
-        //    });
-        //    return Ok(mappedEmployees);
-        //}
+        [HttpGet("trainers/area/resource-id")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<EmployeeResponse>> GetTrainerOfAnArea(string areaId)
+        {
+            if (string.IsNullOrEmpty(areaId))
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Area id is empty!"
+                });
+            var employees = await _employeeRepository.GetTrainerOfAnArea(areaId);
+            if (!employees.Any())
+                return NotFound("Employee is not found!");
+            var mappedEmployees = employees.Select(e => new EmployeeResponse
+            {
+                EmployeeId = e.EmployeeId,
+                FullName = e.FullName,
+            });
+            return Ok(mappedEmployees);
+        }
 
         // Staff controller's zone
         [HttpGet("staff-accounts")]

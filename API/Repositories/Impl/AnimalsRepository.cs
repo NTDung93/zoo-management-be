@@ -76,16 +76,6 @@ namespace API.Repositories.Impl
             return await _context.Animals.Include(x => x.Cage).Include(y => y.Employee).Include(z => z.AnimalSpecies).Where(animal => animal.SpeciesId == id).ToListAsync();
         }
 
-        //public async Task<IEnumerable<Animal>> GetAnimalWithBadHealthStatus(string areaId)
-        //{
-        //    return await _context.Animals
-        //        .Join(_context.Cages, a => a.CageId, c => c.CageId, (a, c) => new {Animal = a, Cage = c})
-        //        .Join(_context.Areas, ac => ac.Cage.AreaId, ar => ar.AreaId, (ac, ar) => new {ac.Animal, ac.Cage, Area = ar})
-        //        .Where(result => result.Area.AreaId == areaId && result.Animal.HealthStatus == AnimalConstraints.HEALTH_STATUS_BAD)
-        //        .Select(result => result.Animal) 
-        //        .ToListAsync();
-        //}
-
         public async Task<IEnumerable<Animal>> GetAnimalWithBadHealthStatus(string areaId)
         {
             return await _context.Animals
