@@ -14,7 +14,7 @@ namespace API.Repositories
         Task UpdateAnimal(string animalId, AnimalDto animalDto);
         Task<IEnumerable<Animal>> GetAnimalByCageId(string id);
         Task<IEnumerable<Animal>> GetAnimalBySpeciesId(int id);
-
+        Task<Animal> GetSpeciesId(string cageId);
         Task<IEnumerable<Animal>> GetAnimalWithBadHealthStatus(string areaId);
     }
 }

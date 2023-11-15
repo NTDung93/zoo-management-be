@@ -112,10 +112,16 @@ namespace API.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<AnimalDto>> CreateNewAnimals([FromBody] AnimalDto animalDto)
         {
+            var species = await _animalRepo.GetSpeciesId(animalDto.CageId);
+            animalDto.SpeciesId = species.SpeciesId;
             var animals = await _animalRepo.GetAnimals();
             if (animals.SingleOrDefault(animal => animal.AnimalId.Equals(animalDto.AnimalId)) != null)
             {
                 return BadRequest(new ProblemDetails { Title = "AnimalId is exist" });
+            }
+            else if (animalDto.BirthDate > animalDto.ImportDate)
+            {
+                return BadRequest(new ProblemDetails { Title = "Require ImportDate greater than BirthDate" });
             }
             else
             {

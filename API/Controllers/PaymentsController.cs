@@ -460,8 +460,8 @@ namespace API.Controllers
 
                         string smtpServer = "smtp.office365.com";
                         int smtpPort = 587; // Gmail SMTP port
-                        string smtpUsername = "funnyamazoo@outlook.com";
-                        string smtpPassword = "Amahahaha@123";
+                        string smtpUsername = "amazoo.official@outlook.com";
+                        string smtpPassword = "Nopass@1234";
 
                         SmtpClient smtpClient = new SmtpClient(smtpServer);
                         smtpClient.Port = smtpPort;

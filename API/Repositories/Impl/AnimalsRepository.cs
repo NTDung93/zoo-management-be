@@ -16,6 +16,10 @@ namespace API.Repositories.Impl
         {
             _context = context;
         }
+        public async Task<Animal> GetSpeciesId(string cageId)
+        {
+            return _context.Animals.First(animals => animals.CageId.Equals(cageId));
+        }
 
         public async Task<Animal> GetAnimalById(string id)
         {
