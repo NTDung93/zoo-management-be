@@ -611,7 +611,7 @@ namespace API.Models.Data
                         Behavior = "The Indo Flamingo, or the Greater Flamingo (Phoenicopterus roseus), is a striking and elegant wading bird known for its vivid pink plumage and distinct long, slender legs. These birds are primarily found in the Indian subcontinent and some parts of Africa and Europe. Indo Flamingos are characterized by their graceful behavior and their affinity for shallow, saline wetlands.",
                         Gender = AnimalConstraints.MALE,
                         Image = "[https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253382/images/thu-an-thuc-vat/flamingo/cykpobgngqjn8velykyc.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/vnghr1qiadnx03oioeef.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/qccsob0qoxdtoiclau6f.jpg, https://res.cloudinary.com/dnk5fcjhn/image/upload/v1696253381/images/thu-an-thuc-vat/flamingo/aobfuhg9wqo2rnpphb5y.jpg]",
-                        HealthStatus = AnimalConstraints.HEALTH_STATUS_OK,
+                        HealthStatus = AnimalConstraints.HEALTH_STATUS_BAD,
                         IsDeleted = AnimalConstraints.ANIMAL_NOT_DELETED,
                         Rarity = AnimalConstraints.RARITY_NORMAL,
                         MaxFeedingQuantity = 12,
@@ -832,6 +832,7 @@ namespace API.Models.Data
                         TicketId = "AMA_ENTRANCE_01",
                         Type = "Adult",
                         Description = "Entrance ticket for adult",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1698412937/dq5alv2boskm2js9tgab.png",
                         UnitPrice = 100000
                     },
                     new Ticket
@@ -839,6 +840,7 @@ namespace API.Models.Data
                         TicketId = "AMA_ENTRANCE_02",
                         Type = "Child",
                         Description = "Entrance ticket for child",
+                        Image = "https://res.cloudinary.com/dnk5fcjhn/image/upload/v1698413005/xm9gpmwzoxukxjdt1rio.png",
                         UnitPrice = 60000
                     },
                 };
