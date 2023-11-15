@@ -44,6 +44,7 @@ namespace API.Controllers
             });
 
             var mappedImport = _mapper.Map<ImportHistory>(import);
+            mappedImport.ImportDate = DateTime.Now;
             var result = await _importHistoryRepository.ImportAFood(mappedImport);
             if (!result) return BadRequest(new ProblemDetails
             {
