@@ -207,11 +207,19 @@ namespace API.Controllers
                 {
                     Title = "Start time and end time must be greater than created time!"
                 });
-            if (feedingSchedule.StartTime == feedingSchedule.EndTime)
+            if (feedingSchedule.StartTime == feedingSchedule.EndTime || feedingSchedule.StartTime > feedingSchedule.EndTime
+                || feedingSchedule.EndTime < feedingSchedule.StartTime)
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Start time and end time must be different!"
                 });
+
+            // validate the duration of feeding time
+            TimeSpan duration = feedingSchedule.EndTime - feedingSchedule.StartTime;
+            if (duration.TotalHours > 1) return BadRequest(new ProblemDetails
+            {
+                Title = "The time duration must not exceeds one hour!"
+            });
             if (feedingSchedule.FeedingAmount <= 0)
                 return BadRequest(new ProblemDetails
                 {
