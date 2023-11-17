@@ -1,0 +1,18 @@
+- guest:
+	+ view thong tin (animal, news, ve) 											(Van)
+	+ buy ticket, xem thong ke 												(Dung)
+
+- staff:
+	+ area -> cage -> species -> animal 											(Son)
+	+ tao trainer (role staff)-> tao cert (role staff) -> tu gan cert (trainer role) 					(Son)
+	+ tao food -> tao import food -> tao menu										(Nhat)
+	+ xem tt -> tao 1 lich an moi cho 1 chuong (cheaf trainer)								(Long)
+	+ xem tt lich an (normal trainer) -> update status -> thay doi quantity trong kho 			  		(Long)
+	+ thay doi health status 1 con thanh bad -> tao 1 lich an danh rieng cho con thu bi benh (cheaf trainer)-> xem tt 	(Long)   
+	
+- admin:
+	+ quan li staff va ve													(Nhat)
+
+- sub-flow: 
+	+ tao news (staff vua tao o admin)											(Dung)
+	+ xem thay doi o guest													(Van)
